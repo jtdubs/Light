@@ -1,7 +1,13 @@
 {-# LANGUAGE TypeFamilies #-}
 
 module Light.Data.Point
-	( Point, point, toList
+    -- ADT
+	( Point
+
+	-- Construction
+	, point, toList, fromList
+
+	-- Default Instances
     , origin
 
 	-- Data.AffineSpace
@@ -10,28 +16,33 @@ module Light.Data.Point
 where
 
 import Data.AffineSpace (AffineSpace(..), (.-^), distanceSq, distance)
+import Data.List        (intersperse)
+
 import qualified Light.Data.Vector as V
 
-data Point = Point { px :: !Float, py :: !Float, pz :: !Float }
+data Point = Point !Float !Float !Float
 
-point :: [Float] -> Point
-point [x, y, z]    = Point  x     y     z
-point [0, 0, 0, 0] = Point  0     0     0
-point [x, y, z, w] = Point (x/w) (y/w) (z/w)
+point :: Float -> Float -> Float -> Point
+point = Point
+
+fromList :: [Float] -> Point
+fromList [x, y, z]    = Point  x     y     z
+fromList [0, 0, 0, 0] = Point  0     0     0
+fromList [x, y, z, w] = Point (x/w) (y/w) (z/w)
 
 toList :: Point -> [Float]
 toList (Point x y z) = [x, y, z, 1]
 
 origin :: Point
-origin = point [0, 0, 0]
+origin = point 0 0 0
 
 instance Eq Point where
   u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
 
 instance Show Point where
-  show (Point a b c) = concat ["#P(", show a, ", ", show b, ", ", show c, ")"]
+  show v = "#P(" ++ (concat . intersperse ", " . map show . toList) v ++ ")"
 
 instance AffineSpace Point where
   type Diff Point = V.Vector
-  p .-. q = V.vector $ zipWith (-) (toList p) (  toList q)
-  p .+^ v = point    $ zipWith (+) (toList p) (V.toList v)
+  p .-. q = V.fromList $ zipWith (-) (toList p) (  toList q)
+  p .+^ v =   fromList $ zipWith (+) (toList p) (V.toList v)

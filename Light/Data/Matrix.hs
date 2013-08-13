@@ -1,11 +1,20 @@
 {-# LANGUAGE TypeFamilies, ParallelListComp #-}
 
 module Light.Data.Matrix
-	( Matrix, matrix
-    , zeroMatrix, identityMatrix
+	-- ADT
+	( Matrix
+
+	-- Construction
+	, matrix
+
+	-- Default Instances
+    , zero, identity
+
+	-- Element Access
     , element, (!!), row, col, rows, cols
-    , transpose
-    , (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (^*|), (.*|)
+
+	-- Arithmetic
+    , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (^*|), (.*|)
 	)
 where
 
@@ -22,17 +31,17 @@ data Matrix = Matrix !(UArray Int Float)
 
 matrix fs = Matrix $ array (0, 15) $ zip [0..] fs
 
-zeroMatrix :: Matrix
-zeroMatrix     = matrix [0, 0, 0, 0,
-                         0, 0, 0, 0,
-                         0, 0, 0, 0,
-                         0, 0, 0, 0]
+zero :: Matrix
+zero = matrix [ 0, 0, 0, 0
+              , 0, 0, 0, 0
+              , 0, 0, 0, 0
+              , 0, 0, 0, 0 ]
 
-identityMatrix :: Matrix
-identityMatrix = matrix [1, 0, 0, 0,
-                         0, 1, 0, 0,
-                         0, 0, 1, 0,
-                         0, 0, 0, 1]
+identity :: Matrix
+identity = matrix [ 1, 0, 0, 0
+                  , 0, 1, 0, 0
+                  , 0, 0, 1, 0
+                  , 0, 0, 0, 1 ]
 
 element :: Matrix -> (Int, Int) -> Float
 element (Matrix m) (row, col) = m ! (row*4 + col)
@@ -69,16 +78,16 @@ m |/ s = matrix $ map (/ s) (toList m)
 m |*| n = matrix [ row `dot` col | row <- rows m, col <- cols n ]
 
 (|*^) :: Matrix -> V.Vector -> V.Vector
-m |*^ v = V.vector $ map (`dot` V.toList v) (rows m)
+m |*^ v = V.fromList $ map (`dot` V.toList v) (rows m)
 
 (^*|) :: V.Vector -> Matrix -> V.Vector
-v ^*| m = V.vector $ map (V.toList v `dot`) (cols m)
+v ^*| m = V.fromList $ map (V.toList v `dot`) (cols m)
 
 (|*.) :: Matrix -> P.Point -> P.Point
-m |*. p = P.point $ map (`dot` P.toList p) (rows m)
+m |*. p = P.fromList $ map (`dot` P.toList p) (rows m)
 
 (.*|) :: P.Point -> Matrix -> P.Point
-p .*| m = P.point $ map (P.toList p `dot`) (cols m)
+p .*| m = P.fromList $ map (P.toList p `dot`) (cols m)
 
 instance Eq Matrix where
   u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
