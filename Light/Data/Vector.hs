@@ -36,7 +36,7 @@ unitY = vector [0, 1, 0]
 unitZ = vector [0, 0, 1]
 
 instance Eq Vector where
-  u == v = all (< 0.00001) $ map abs $ zipWith (-) (toList u) (toList v)
+  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
 
 instance Show Vector where
   show (Vector a b c) = concat ["#V(", show a, ", ", show b, ", ", show c, ")"]

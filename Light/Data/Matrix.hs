@@ -66,7 +66,7 @@ m |* s = matrix $ map (* s) (toList m)
 m |/ s = matrix $ map (/ s) (toList m)
 
 (|*|) :: Matrix -> Matrix -> Matrix
-m |*| n = matrix [ row `dot` col | row <- rows m | col <- cols n ]
+m |*| n = matrix [ row `dot` col | row <- rows m, col <- cols n ]
 
 (|*^) :: Matrix -> V.Vector -> V.Vector
 m |*^ v = V.vector $ map (`dot` V.toList v) (rows m)
@@ -81,7 +81,7 @@ m |*. p = P.point $ map (`dot` P.toList p) (rows m)
 p .*| m = P.point $ map (P.toList p `dot`) (cols m)
 
 instance Eq Matrix where
-  u == v = all (< 0.00001) $ map abs $ zipWith (-) (toList u) (toList v)
+  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
 
 instance Show Matrix where
   show m = let showRow   = concat . intersperse ", "  . map show . (row  m)

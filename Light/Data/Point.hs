@@ -16,6 +16,7 @@ data Point = Point { px :: !Float, py :: !Float, pz :: !Float }
 
 point :: [Float] -> Point
 point [x, y, z]    = Point  x     y     z
+point [0, 0, 0, 0] = Point  0     0     0
 point [x, y, z, w] = Point (x/w) (y/w) (z/w)
 
 toList :: Point -> [Float]
@@ -25,7 +26,7 @@ origin :: Point
 origin = point [0, 0, 0]
 
 instance Eq Point where
-  u == v = all (< 0.00001) $ map abs $ zipWith (-) (toList u) (toList v)
+  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
 
 instance Show Point where
   show (Point a b c) = concat ["#P(", show a, ", ", show b, ", ", show c, ")"]
