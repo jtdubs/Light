@@ -1,69 +1,79 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Light.Data.Vector
     -- ADT
-	( Vector
+    ( Vector, vector, dx, dy, dz
 
-	-- Construction
-	, vector, toList, fromList
+    -- Default Instances
+    , zero, unitX, unitY, unitZ
 
-	-- Default Instances
-    , unitX, unitY, unitZ
-
-	-- Data.AdditiveGroup
-    , AdditiveGroup(..), (^-^), sumV
-
-	-- Data.Cross
-    , HasCross3(..)
-
-	-- Data.VectorSpace
-    , VectorSpace(..), (^*), magnitudeSq, magnitude, normalized
-    , InnerSpace(..)
-	)
+    -- Arithmetic
+    , (^+^), (^-^), (^.^), (*^), (^*), (^/)
+    , negateV, magnitude, magnitudeSq, normalize, cross
+    )
 where
 
-import Data.AdditiveGroup (AdditiveGroup(..), (^-^), sumV)
-import Data.Basis         (HasBasis(..))
-import Data.Cross         (HasCross3(..))
-import Data.VectorSpace   (VectorSpace(..), InnerSpace(..), (*^), (^*), (<.>), magnitudeSq, magnitude, normalized)
-import Data.List          (intersperse)
+import Prelude hiding      (sum)
+import Data.Foldable       (Foldable(..), sum)
+import Control.Applicative (liftA2, Applicative(..))
+import Control.Lens        ((^.))
+import Control.Lens.TH     (makeLenses)
 
-data Vector = Vector !Float !Float !Float
+data Vector a = Vector { _dx :: !a, _dy :: !a, _dz :: !a }
 
-vector :: Float -> Float -> Float -> Vector
 vector = Vector
 
-toList :: Vector -> [Float]
-toList (Vector x y z) = [x, y, z, 0]
+makeLenses ''Vector
 
-fromList :: [Float] -> Vector
-fromList [x, y, z]    = vector x y z
-fromList [x, y, z, 0] = vector x y z
+instance (Show a) => Show (Vector a) where
+  show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
 
-unitX, unitY, unitZ :: Vector
+instance Functor Vector where
+  fmap f (Vector x y z) = Vector (f x) (f y) (f z)
+
+instance Applicative Vector where
+  pure x = vector x x x
+  (Vector fx fy fz) <*> (Vector x y z) = Vector (fx x) (fy y) (fz z)
+  (*>) = flip const
+  (<*) = const
+
+instance Foldable Vector where
+  foldr f s (Vector x y z) = x `f` (y `f` (z `f` s))
+
+instance (Num a, Ord a, Fractional a) => Eq (Vector a) where
+  u == v = magnitudeSq (u ^-^ v) < 0.00001
+
+zero, unitX, unitY, unitZ :: (Num a) => Vector a
+zero  = vector 0 0 0
 unitX = vector 1 0 0
 unitY = vector 0 1 0
 unitZ = vector 0 0 1
 
-instance Eq Vector where
-  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
+(^+^), (^-^) :: (Num a) => Vector a -> Vector a -> Vector a
+(^+^) = liftA2 (+)
+(^-^) = liftA2 (-)
 
-instance Show Vector where
-  show v = "#V(" ++ (concat . intersperse ", " . map show . toList) v ++ ")"
+(^.^) :: (Num a) => Vector a -> Vector a -> a
+u ^.^ v = sum $ liftA2 (*) u v
 
-instance AdditiveGroup Vector where
-  zeroV = vector 0 0 0
-  u ^+^ v = fromList $ zipWith (+) (toList u) (toList v)
-  negateV = fromList . map negate . toList
+(^*) :: (Num a) => Vector a -> a -> Vector a
+v ^* s = fmap (*s) v
 
-instance VectorSpace Vector where
-  type Scalar Vector =  Float
-  s *^ v = fromList $ map (*s) $ toList v
+(^/) :: (Num a, Fractional a) => Vector a -> a -> Vector a
+v ^/ s = fmap (/s) v
 
-instance InnerSpace Vector where
-  u <.> v = sum $ zipWith (*) (toList u) (toList v)
+(*^) = flip (^*)
 
-instance HasCross3 Vector where
-  cross3 u v = let [ux, uy, uz, _] = toList u
-                   [vx, vy, vz, _] = toList v
-                 in vector (uy*vz - uz*vy) (uz*vx - ux*vz) (ux*vy - uy*vx)
+negateV :: (Num a) => Vector a -> Vector a
+negateV = fmap negate
+
+magnitude = sqrt . magnitudeSq
+magnitudeSq v = v ^.^ v
+
+normalize v
+ | magnitudeSq v == 0 = v
+ | otherwise          = v ^/ magnitude v
+
+cross u v = vector (u^.dy * v^.dz - u^.dz * v^.dy)
+                   (u^.dz * v^.dx - u^.dx * v^.dz)
+                   (u^.dx * v^.dy - u^.dy * v^.dx)

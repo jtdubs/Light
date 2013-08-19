@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Light.Data.Quaternion
 	-- ADT
@@ -12,24 +12,33 @@ module Light.Data.Quaternion
 
 	-- Arithmetic
 	, magnitude, magnitudeSq, conjugate, (@*@), (@*^), (@*.)
+
+	-- Transformations
+	, rotate, rotate3
 	)
 where
 
-import Light.Data.Point  (Point(..), origin, (.-.), (.+^))
-import Light.Data.Matrix (Matrix(..), matrix)
-import Light.Data.Vector (Vector(..), vector, normalized, zeroV, (^*))
+import Light.Data.Point   (Point(..), origin, (.-.), (.+^))
+import Light.Data.Matrix  (Matrix(..), matrix)
+import Light.Data.Vector  (Vector(..), vector, normalized, zeroV, (^*))
+import Data.Lens.Common   ((^.))
+import Data.Lens.Template (makeLens)
+import Data.List          (intersperse)
+
 import qualified Light.Data.Vector as V
 
-data Quaternion = Quaternion !Float !Float !Float !Float
+data Quaternion = Quaternion { _x :: !Float, _y :: !Float, _z :: !Float, _w :: !Float }
+
+$(makeLens ''Quaternion)
 
 quaternion :: Float -> Float -> Float -> Float -> Quaternion
 quaternion x y z w = normalize $ Quaternion x y z w
 
-fromList :: [Float] -> Quaternion
-fromList [x, y, z, w] = quaternion x y z w
-
 toList :: Quaternion -> [Float]
 toList (Quaternion x y z w) = [x, y, z, w]
+
+fromList :: [Float] -> Quaternion
+fromList [x, y, z, w] = Quaternion x y z w
 
 toMatrix :: Quaternion -> Matrix
 toMatrix (Quaternion x y z w) = matrix [ 1 - 2 * (yy + zz),     2 * (xy - wz),     2 * (xz + wy), 0,
@@ -77,6 +86,19 @@ q @*^ v
 
 (@*.) :: Quaternion -> Point -> Point
 q @*. p = origin .+^ (q @*^ (p .-. origin))
+
+rotate :: Float -> Vector -> Quaternion
+rotate angle axis = quaternion ((n^.V.x)*s) ((n^.V.y)*s) ((n^.V.z)*s) c
+  where s = sin (angle/2); c = cos (angle/2); n = V.normalized axis
+
+rotate3 :: Float -> Float -> Float -> Quaternion
+rotate3 pitch yaw roll = quaternion (sr*cp*cy - cr*sp*sy)
+                                    (cr*sp*cy + sr*cp*sy)
+                                    (cr*cp*sy - sr*sp*cy)
+                                    (cr*cp*cy + sr*sp*sy)
+  where p = pitch/2; y = yaw/2; r = roll/2
+        sp = sin p; sy = sin y; sr = sin r;
+        cp = cos p; cy = cos y; cr = cos r
 
 instance Eq Quaternion where
   u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)

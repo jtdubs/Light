@@ -1,48 +1,56 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Light.Data.Point
     -- ADT
-	( Point
-
-	-- Construction
-	, point, toList, fromList
+	( Point, point, x, y, z
 
 	-- Default Instances
     , origin
 
-	-- Data.AffineSpace
-	, AffineSpace(..), (.-^), distanceSq, distance
+	-- Arithmetic
+	, (.-.), (.+^), (.-^), distance, distanceSq
 	)
 where
 
-import Data.AffineSpace (AffineSpace(..), (.-^), distanceSq, distance)
-import Data.List        (intersperse)
+import Data.Foldable       (Foldable(..))
+import Control.Applicative (Applicative(..))
+import Control.Lens        ((^.))
+import Control.Lens.TH     (makeLenses)
+import Light.Data.Vector   (Vector, vector, dx, dy, dz, magnitude, magnitudeSq)
 
-import qualified Light.Data.Vector as V
+data Point a = Point { _x :: !a, _y :: !a, _z :: !a }
 
-data Point = Point !Float !Float !Float
-
-point :: Float -> Float -> Float -> Point
 point = Point
 
-fromList :: [Float] -> Point
-fromList [x, y, z]    = Point  x     y     z
-fromList [0, 0, 0, 0] = Point  0     0     0
-fromList [x, y, z, w] = Point (x/w) (y/w) (z/w)
+makeLenses ''Point
 
-toList :: Point -> [Float]
-toList (Point x y z) = [x, y, z, 1]
+instance (Show a) => Show (Point a) where
+  show (Point x y z) = concat ["#P(", show x, ", ", show y, ", ", show z, ")"]
 
-origin :: Point
+instance Functor Point where
+  fmap f (Point x y z) = Point (f x) (f y) (f z)
+
+instance Applicative Point where
+  pure x = point x x x
+  (Point fx fy fz) <*> (Point x y z) = Point (fx x) (fy y) (fz z)
+  (*>) = flip const
+  (<*) = const
+
+instance Foldable Point where
+  foldr f s (Point x y z) = x `f` (y `f` (z `f` s))
+
+instance (Num a, Ord a, Fractional a) => Eq (Point a) where
+  u == v = distanceSq u v < 0.00001
+
+origin :: (Num a) => Point a
 origin = point 0 0 0
 
-instance Eq Point where
-  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
+(.-.) :: (Num a) => Point a -> Point a -> Vector a
+p .-. q = vector (p^.x - q^.x) (p^.y - q^.y) (p^.z - q^.z)
 
-instance Show Point where
-  show v = "#P(" ++ (concat . intersperse ", " . map show . toList) v ++ ")"
+(.+^), (.-^) :: (Num a) => Point a -> Vector a -> Point a
+p .+^ v = point (p^.x + v^.dx) (p^.y + v^.dy) (p^.z + v^.dz)
+p .-^ v = point (p^.x - v^.dx) (p^.y + v^.dy) (p^.z + v^.dz)
 
-instance AffineSpace Point where
-  type Diff Point = V.Vector
-  p .-. q = V.fromList $ zipWith (-) (toList p) (  toList q)
-  p .+^ v =   fromList $ zipWith (+) (toList p) (V.toList v)
+distance   p q = magnitude   (p .-. q)
+distanceSq p q = magnitudeSq (p .-. q)
