@@ -2,7 +2,7 @@
 
 module Light.Data.Vector
     -- ADT
-    ( Vector, vector, dx, dy, dz
+    ( Vector, vector, dx, dy, dz, ds, toList, fromList
 
     -- Default Instances
     , zero, unitX, unitY, unitZ
@@ -13,59 +13,45 @@ module Light.Data.Vector
     )
 where
 
-import Prelude hiding      (sum)
-import Data.Foldable       (Foldable(..), sum)
-import Control.Applicative (liftA2, Applicative(..))
-import Control.Lens        ((^.))
-import Control.Lens.TH     (makeLenses)
+import Control.Lens    (Lens', traverse, (*~), (//~), (^.), lens, sumOf)
+import Control.Lens.TH (makeLenses)
 
-data Vector a = Vector { _dx :: !a, _dy :: !a, _dz :: !a }
+data Vector = Vector { _dx :: Float, _dy :: Float, _dz :: Float }
 
 vector = Vector
 
 makeLenses ''Vector
 
-instance (Show a) => Show (Vector a) where
-  show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
+toList (Vector x y z) = [x, y, z, 0]
 
-instance Functor Vector where
-  fmap f (Vector x y z) = Vector (f x) (f y) (f z)
+fromList [x, y, z] = Vector x y z
+fromList [x, y, z, 0] = Vector x y z
 
-instance Applicative Vector where
-  pure x = vector x x x
-  (Vector fx fy fz) <*> (Vector x y z) = Vector (fx x) (fy y) (fz z)
-  (*>) = flip const
-  (<*) = const
+ds :: Lens' Vector [Float]
+ds = lens toList (\v l -> fromList l)
 
-instance Foldable Vector where
-  foldr f s (Vector x y z) = x `f` (y `f` (z `f` s))
-
-instance (Num a, Ord a, Fractional a) => Eq (Vector a) where
+instance Eq Vector where
   u == v = magnitudeSq (u ^-^ v) < 0.00001
 
-zero, unitX, unitY, unitZ :: (Num a) => Vector a
+instance Show Vector where
+  show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
+
 zero  = vector 0 0 0
 unitX = vector 1 0 0
 unitY = vector 0 1 0
 unitZ = vector 0 0 1
 
-(^+^), (^-^) :: (Num a) => Vector a -> Vector a -> Vector a
-(^+^) = liftA2 (+)
-(^-^) = liftA2 (-)
+vv op (Vector x y z) (Vector a b c) = Vector (op x a) (op y b) (op z c)
 
-(^.^) :: (Num a) => Vector a -> Vector a -> a
-u ^.^ v = sum $ liftA2 (*) u v
-
-(^*) :: (Num a) => Vector a -> a -> Vector a
-v ^* s = fmap (*s) v
-
-(^/) :: (Num a, Fractional a) => Vector a -> a -> Vector a
-v ^/ s = fmap (/s) v
-
+(^+^) = vv (+)
+(^-^) = vv (-)
+v ^* s = ds.traverse *~  s $ v
+v ^/ s = ds.traverse //~ s $ v
 (*^) = flip (^*)
 
-negateV :: (Num a) => Vector a -> Vector a
-negateV = fmap negate
+u ^.^ v = sum $ toList $ vv (*) u v
+
+negateV v = v ^* (-1)
 
 magnitude = sqrt . magnitudeSq
 magnitudeSq v = v ^.^ v

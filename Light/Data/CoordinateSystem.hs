@@ -2,33 +2,28 @@
 
 module Light.Data.CoordinateSystem
 	-- ADT
-	( CoordinateSystem
-
-	-- Construction
-	, coordinateSystem, origin, rotation
+	( CoordinateSystem, coordinateSystem, origin, rotation
 
 	-- Default Instances
     , defaultCoordinateSystem
 	)
 where
 
-import Data.Lens.Template    (makeLens)
-import Data.Lens.Common      ((^.))
+import Control.Lens          (Lens', traverse, (*~), (//~), (^.), lens, traversed)
+import Control.Lens.TH       (makeLenses)
 import Light.Data.Point      (Point)
-import Light.Data.Quaternion (Quaternion)
+import Light.Data.Quaternion (Quaternion, identity)
 
 import qualified Light.Data.Point      as P
 import qualified Light.Data.Quaternion as Q
 
 data CoordinateSystem = CoordinateSystem { _origin :: Point, _rotation :: Quaternion } deriving (Eq)
 
-$(makeLens ''CoordinateSystem)
+makeLenses ''CoordinateSystem
 
-coordinateSystem :: Point -> Quaternion -> CoordinateSystem
 coordinateSystem = CoordinateSystem
 
-defaultCoordinateSystem :: CoordinateSystem
-defaultCoordinateSystem = coordinateSystem P.origin Q.identity
+defaultCoordinateSystem = coordinateSystem P.origin identity
 
 instance Show CoordinateSystem where
   show cs = concat ["#CS(", show (cs^.origin), ", ", show (cs^.rotation), ")"]
