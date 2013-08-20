@@ -68,7 +68,7 @@ q @*^ v
                $ V.fromList
                $ take 3
                $ toList ( q
-                      @*@ (fromList $ (++ [0]) $ V.toList $ V.normalize v)
+                      @*@ (fromList $ V.toList $ V.normalize v)
                       @*@ (conjugate q))
 
 q @*. p = origin .+^ (q @*^ (p .-. origin))
