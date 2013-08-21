@@ -5,7 +5,7 @@ module Light.Data.Point
 	( Point, point, x, y, z, ps, toList, fromList
 
 	-- Default Instances
-    , origin
+    , originPoint
 
 	-- Arithmetic
 	, (.-.), (.+^), (.-^), distance, distanceSq
@@ -36,7 +36,7 @@ instance Eq Point where
 instance Show Point where
   show (Point x y z) = concat ["#P(", show x, ", ", show y, ", ", show z, ")"]
 
-origin = point 0 0 0
+originPoint = point 0 0 0
 
 pv op (Point x y z) v = point  (op x (v^.dx)) (op y (v^.dy)) (op z (v^.dz))
 pp op (Point a b c) p = vector (op a (p^.x))  (op b (p^.y))  (op c (p^.z))

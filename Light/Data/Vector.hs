@@ -5,7 +5,7 @@ module Light.Data.Vector
     ( Vector, vector, dx, dy, dz, ds, toList, fromList
 
     -- Default Instances
-    , zero, unitX, unitY, unitZ
+    , zeroVector, unitXVector, unitYVector, unitZVector
 
     -- Arithmetic
     , (^+^), (^-^), (^.^), (*^), (^*), (^/)
@@ -36,10 +36,10 @@ instance Eq Vector where
 instance Show Vector where
   show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
 
-zero  = vector 0 0 0
-unitX = vector 1 0 0
-unitY = vector 0 1 0
-unitZ = vector 0 0 1
+zeroVector  = vector 0 0 0
+unitXVector = vector 1 0 0
+unitYVector = vector 0 1 0
+unitZVector = vector 0 0 1
 
 vv op (Vector x y z) (Vector a b c) = Vector (op x a) (op y b) (op z c)
 

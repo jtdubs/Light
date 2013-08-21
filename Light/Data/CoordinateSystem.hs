@@ -9,8 +9,8 @@ module Light.Data.CoordinateSystem
 
 	-- Arithmetic
 	, modelMatrix, viewMatrix
-	, translateLocal, translateGlobal
-	, rotateLocal, rotateGlobal
+	, translateL, translateG
+	, rotateL, rotateG
 
 	-- Orientation
 	, Orientable(..)
@@ -22,10 +22,7 @@ import Control.Lens.TH       (makeLenses)
 import Light.Data.Vector     (Vector)
 import Light.Data.Point      (Point, (.-.), (.+^))
 import Light.Data.Quaternion (Quaternion, identity, toMatrix, conjugate, (@*@), (@*^), (@*.))
-import Light.Data.Matrix     ((|*|), translate)
-
-import qualified Light.Data.Point      as P
-import qualified Light.Data.Quaternion as Q
+import Light.Data.Matrix     ((|*|), translation)
 
 data CoordinateSystem = CoordinateSystem { _origin :: Point, _rotation :: Quaternion } deriving (Eq)
 
@@ -33,17 +30,16 @@ makeLenses ''CoordinateSystem
 
 coordinateSystem = CoordinateSystem
 
-defaultCoordinateSystem = coordinateSystem P.origin identity
+defaultCoordinateSystem = coordinateSystem originPoint identity
 
-modelMatrix c = (toMatrix $ conjugate (c^.rotation)) |*| translate ((c^.origin) .-. P.origin)
+modelMatrix c = (toMatrix $ conjugate (c^.rotation)) |*| translate ((c^.origin) .-. originPoint)
+viewMatrix  c = (toMatrix $            c^.rotation) |*| translate ((c^.origin) .-. originPoint)
 
-viewMatrix c = (toMatrix $ c^.rotation) |*| translate ((c^.origin) .-. P.origin)
+translateL v c = (origin %~ (.+^ ((c^.rotation) @*^ v))) c
+translateG v c = (origin %~ (.+^ v)) c
 
-translateLocal v c = (origin %~ (.+^ ((c^.rotation) @*^ v))) c
-translateGlobal v c = (origin %~ (.+^ v)) c
-
-rotateLocal q c = (rotation %~ (@*@ q)) c
-rotateGlobal q c = (rotation %~ (q @*@)) . (origin %~ (q @*.)) $ c
+rotateL q c = (rotation %~ (@*@ q)) c
+rotateG q c = (rotation %~ (q @*@)) . (origin %~ (q @*.)) $ c
 
 class Orientable a where
   toGlobal :: CoordinateSystem -> a -> a
@@ -55,7 +51,7 @@ instance Orientable Vector where
 
 instance Orientable Point where
   toGlobal c p = (c^.origin) .+^ ((c^.rotation) @*^ (p .-. (c^.origin)))
-  toLocal  c p = P.origin .+^ (conjugate (c^.rotation) @*^ (p .-. P.origin))
+  toLocal  c p = originPoint .+^ (conjugate (c^.rotation) @*^ (p .-. originPoint))
 
 instance Orientable Quaternion where
   toGlobal c q = (c^.rotation) @*@ q

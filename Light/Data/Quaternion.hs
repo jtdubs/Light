@@ -15,9 +15,9 @@ module Light.Data.Quaternion
 	)
 where
 
-import Light.Data.Point   (Point(..), origin, (.-.), (.+^))
+import Light.Data.Point   (Point(..), originPoint, (.-.), (.+^))
 import Light.Data.Matrix  (Matrix(..), matrix)
-import Light.Data.Vector  (Vector(..), vector, dx, dy, dz, zero, (^*))
+import Light.Data.Vector  (Vector(..), vector, dx, dy, dz, zeroVector, (^*))
 import Control.Lens       (Lens', traverse, (*~), (//~), (^.), lens, traversed)
 import Control.Lens.TH    (makeLenses)
 import Data.List          (intersperse)
@@ -63,7 +63,7 @@ conjugate (Quaternion x y z w) = fromList [-x, -y, -z, w]
            , qw*rw - qx*rx - qy*ry - qz*rz ]
 
 q @*^ v
-  | v == zero = v
+  | v == zeroVector = v
   | otherwise  = (^* (V.magnitude v))
                $ V.fromList
                $ take 3
@@ -71,7 +71,7 @@ q @*^ v
                       @*@ (fromList $ V.toList $ V.normalize v)
                       @*@ (conjugate q))
 
-q @*. p = origin .+^ (q @*^ (p .-. origin))
+q @*. p = originPoint .+^ (q @*^ (p .-. originPoint))
 
 rotate angle axis = quaternion ((n^.dx)*s) ((n^.dy)*s) ((n^.dz)*s) c
   where s = sin (angle/2); c = cos (angle/2); n = V.normalize axis

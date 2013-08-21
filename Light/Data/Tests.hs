@@ -18,45 +18,45 @@ instance QC.Arbitrary Matrix where
   arbitrary = QC.vector 16 >>= return . matrix
 
 prop_VectorAdditiveIdentity :: Vector -> Bool
-prop_VectorAdditiveIdentity v = v == (v ^+^ zeroV)
-                             && v == (v ^-^ zeroV)
+prop_VectorAdditiveIdentity v = v == (v ^+^ zeroVector)
+                             && v == (v ^-^ zeroVector)
 
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool
-prop_CrossProductIsOrthogonal u v = u == zeroV
-                                 || v == zeroV
-                                 || ( abs ((cross3 (normalized u) (normalized v)) <.> u) < 0.0001
-                                   && abs ((cross3 (normalized u) (normalized v)) <.> v) < 0.0001 )
+prop_CrossProductIsOrthogonal u v = u == zeroVector
+                                 || v == zeroVector
+                                 || ( abs ((cross (normalize u) (normalize v)) ^.^ u) < 0.0001
+                                   && abs ((cross (normalize u) (normalize v)) ^.^ v) < 0.0001 )
 
 prop_MatrixMultiplicitiveIdentity :: Matrix -> Bool
-prop_MatrixMultiplicitiveIdentity m = m |*| identity == m
-                                   && identity |*| m == m
+prop_MatrixMultiplicitiveIdentity m = m |*| identityMatrix == m
+                                   && identityMatrix |*| m == m
 
 prop_MatrixMultiplicitiveZero :: Matrix -> Bool
-prop_MatrixMultiplicitiveZero m = m |*| zero == zero
-                               && zero |*| m == zero
+prop_MatrixMultiplicitiveZero m = m |*| zeroMatrix == zeroMatrix
+                               && zeroMatrix |*| m == zeroMatrix
 
 prop_MatrixAdditiveIdentity :: Matrix -> Bool
-prop_MatrixAdditiveIdentity m = m |+| zero == m
-                             && zero |+| m == m
+prop_MatrixAdditiveIdentity m = m |+| zeroMatrix == m
+                             && zeroMatrix |+| m == m
 
 prop_MatrixTranspose :: Matrix -> Bool
 prop_MatrixTranspose m = transpose (transpose m) == m
 
 prop_VectorTimesZero :: Vector -> Bool
-prop_VectorTimesZero v = v ^*| zero == zeroV
-                      && zero |*^ v == zeroV
+prop_VectorTimesZero v = v ^*| zeroMatrix == zeroVector
+                      && zeroMatrix |*^ v == zeroVector
 
 prop_PointTimesZero :: Point -> Bool
-prop_PointTimesZero p = p .*| zero == origin
-                     && zero |*. p == origin
+prop_PointTimesZero p = p .*| zeroMatrix == originPoint
+                     && zeroMatrix |*. p == originPoint
 
 prop_VectorTimesIdentity :: Vector -> Bool
-prop_VectorTimesIdentity v = v ^*| identity == v
-                          && identity |*^ v == v
+prop_VectorTimesIdentity v = v ^*| identityMatrix == v
+                          && identityMatrix |*^ v == v
 
 prop_PointTimesIdentity :: Point -> Bool
-prop_PointTimesIdentity p = p .*| identity == p
-                         && identity |*. p == p
+prop_PointTimesIdentity p = p .*| identityMatrix == p
+                         && identityMatrix |*. p == p
 
 main = do
   QC.quickCheck prop_VectorAdditiveIdentity
