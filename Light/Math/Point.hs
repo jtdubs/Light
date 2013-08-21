@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
-module Light.Data.Point
+module Light.Math.Point
     -- ADT
 	( Point, point, x, y, z, ps, toList, fromList
 
@@ -14,7 +14,7 @@ where
 
 import Control.Lens      ((^.), Lens', lens)
 import Control.Lens.TH   (makeLenses)
-import Light.Data.Vector (vector, dx, dy, dz, magnitude, magnitudeSq)
+import Light.Math.Vector (vector, dx, dy, dz, magnitude, magnitudeSq)
 
 data Point = Point { _x :: Float, _y :: Float, _z :: Float }
 

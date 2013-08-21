@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
-module Light.Data.Quaternion
+module Light.Math.Quaternion
 	-- ADT
 	( Quaternion, quaternion, qx, qy, qz, qw, qs, toList, fromList, toMatrix, toAngleAxis
 
@@ -15,14 +15,14 @@ module Light.Data.Quaternion
 	)
 where
 
-import Light.Data.Point   (Point(..), originPoint, (.-.), (.+^))
-import Light.Data.Matrix  (Matrix(..), matrix)
-import Light.Data.Vector  (Vector(..), vector, dx, dy, dz, zeroVector, (^*))
+import Light.Math.Point   (Point(..), originPoint, (.-.), (.+^))
+import Light.Math.Matrix  (Matrix(..), matrix)
+import Light.Math.Vector  (Vector(..), vector, dx, dy, dz, zeroVector, (^*))
 import Control.Lens       (Lens', traverse, (*~), (//~), (^.), lens, traversed)
 import Control.Lens.TH    (makeLenses)
 import Data.List          (intersperse)
 
-import qualified Light.Data.Vector as V
+import qualified Light.Math.Vector as V
 
 data Quaternion = Quaternion { _qx :: Float, _qy :: Float, _qz :: Float, _qw :: Float }
 
@@ -36,6 +36,12 @@ fromList [x, y, z, w] = Quaternion x y z w
 
 qs :: Lens' Quaternion [Float]
 qs = lens toList (\q l -> fromList l)
+
+instance Eq Quaternion where
+  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
+
+instance Show Quaternion where
+  show q = "#Q(" ++ (concat . intersperse ", " . map show . toList) q ++ ")"
 
 identity = quaternion 0 0 0 1
 
@@ -83,9 +89,3 @@ rotate3 pitch yaw roll = quaternion (sr*cp*cy - cr*sp*sy)
   where p = pitch/2; y = yaw/2; r = roll/2
         sp = sin p; sy = sin y; sr = sin r;
         cp = cos p; cy = cos y; cr = cos r
-
-instance Eq Quaternion where
-  u == v = all (< 0.0001) $ map abs $ zipWith (-) (toList u) (toList v)
-
-instance Show Quaternion where
-  show q = "#Q(" ++ (concat . intersperse ", " . map show . toList) q ++ ")"

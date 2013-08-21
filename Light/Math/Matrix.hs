@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies, ParallelListComp #-}
 
-module Light.Data.Matrix
+module Light.Math.Matrix
 	-- ADT
 	( Matrix, matrix, elems, ix, row, col, rows, cols
 
@@ -24,8 +24,8 @@ import Data.Array.IArray  (array, (!))
 import Data.Array.Unboxed (UArray(..))
 import Data.List          (intersperse)
 import Control.Lens       ((^.), (.~), (*~), (//~), Lens', lens, traversed)
-import Light.Data.Vector  (Vector, dx, dy, dz, ds)
-import Light.Data.Point   (Point, x, y, z, ps)
+import Light.Math.Vector  (Vector, dx, dy, dz, ds)
+import Light.Math.Point   (Point, x, y, z, ps)
 
 import qualified Data.Array.IArray as A
 import qualified Data.List         as L

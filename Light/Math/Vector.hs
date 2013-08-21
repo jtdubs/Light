@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Data.Vector
+module Light.Math.Vector
     -- ADT
     ( Vector, vector, dx, dy, dz, ds, toList, fromList
 
