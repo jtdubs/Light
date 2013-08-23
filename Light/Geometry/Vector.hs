@@ -1,19 +1,20 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Math.Vector
+module Light.Geometry.Vector
     -- ADT
-    ( Vector, vector, dx, dy, dz, ds, toList, fromList
+    ( Vector, vector, dx, dy, dz, ds
 
     -- Default Instances
     , zeroVector, unitXVector, unitYVector, unitZVector
 
     -- Arithmetic
     , (^+^), (^-^), (^.^), (*^), (^*), (^/)
-    , negateV, magnitude, magnitudeSq, normalize, cross
+    , negateVector, magnitude, magnitudeSquared, normalize, cross
+    , angleBetween
     )
 where
 
-import Control.Lens    (Lens', traverse, (*~), (//~), (^.), lens, sumOf)
+import Control.Lens    (Lens', traverse, (*~), (//~), (^.), lens)
 import Control.Lens.TH (makeLenses)
 
 data Vector = Vector { _dx :: Float, _dy :: Float, _dz :: Float }
@@ -22,16 +23,11 @@ vector = Vector
 
 makeLenses ''Vector
 
-toList (Vector x y z) = [x, y, z, 0]
-
-fromList [x, y, z] = Vector x y z
-fromList [x, y, z, 0] = Vector x y z
-
 ds :: Lens' Vector [Float]
-ds = lens toList (\v l -> fromList l)
+ds = lens (\ (Vector x y z) -> [x, y, z, 0]) (\v [x, y, z, 0] -> Vector x y z)
 
 instance Eq Vector where
-  u == v = magnitudeSq (u ^-^ v) < 0.00001
+  u == v = magnitudeSquared (u ^-^ v) < 0.00001
 
 instance Show Vector where
   show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
@@ -49,17 +45,19 @@ v ^* s = ds.traverse *~  s $ v
 v ^/ s = ds.traverse //~ s $ v
 (*^) = flip (^*)
 
-u ^.^ v = sum $ toList $ vv (*) u v
+u ^.^ v = sum $ (vv (*) u v)^.ds
 
-negateV v = v ^* (-1)
+negateVector v = v ^* (-1)
 
-magnitude = sqrt . magnitudeSq
-magnitudeSq v = v ^.^ v
+magnitude = sqrt . magnitudeSquared
+magnitudeSquared v = v ^.^ v
 
 normalize v
- | magnitudeSq v == 0 = v
- | otherwise          = v ^/ magnitude v
+ | magnitudeSquared v == 0 = v
+ | otherwise               = v ^/ magnitude v
 
 cross u v = vector (u^.dy * v^.dz - u^.dz * v^.dy)
                    (u^.dz * v^.dx - u^.dx * v^.dz)
                    (u^.dx * v^.dy - u^.dy * v^.dx)
+
+angleBetween v w = acos $ (v ^.^ w) / ((magnitude v) * (magnitude w))

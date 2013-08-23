@@ -1,20 +1,20 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
-module Light.Math.Point
+module Light.Geometry.Point
     -- ADT
-	( Point, point, x, y, z, ps, toList, fromList
+	( Point, point, x, y, z, ps
 
 	-- Default Instances
     , originPoint
 
 	-- Arithmetic
-	, (.-.), (.+^), (.-^), distance, distanceSq
+	, (.-.), (.+^), (.-^), distance, distanceSquared
 	)
 where
 
-import Control.Lens      ((^.), Lens', lens)
-import Control.Lens.TH   (makeLenses)
-import Light.Math.Vector (vector, dx, dy, dz, magnitude, magnitudeSq)
+import Control.Lens          ((^.), Lens', lens)
+import Control.Lens.TH       (makeLenses)
+import Light.Geometry.Vector (vector, dx, dy, dz, magnitude, magnitudeSquared)
 
 data Point = Point { _x :: Float, _y :: Float, _z :: Float }
 
@@ -22,16 +22,11 @@ point = Point
 
 makeLenses ''Point
 
-toList (Point x y z) = [x, y, z, 1]
-
-fromList [x, y, z] = Point x y z
-fromList [x, y, z, w] = Point (x/w) (y/w) (z/w)
-
 ps :: Lens' Point [Float]
-ps = lens toList (\p l -> fromList l)
+ps = lens (\ (Point x y z) -> [x, y, z, 1]) (\p [x, y, z, w] -> Point (x/w) (y/w) (z/w))
 
 instance Eq Point where
-  u == v = distanceSq u v < 0.00001
+  u == v = distanceSquared u v < 0.00001
 
 instance Show Point where
   show (Point x y z) = concat ["#P(", show x, ", ", show y, ", ", show z, ")"]
@@ -45,5 +40,5 @@ pp op (Point a b c) p = vector (op a (p^.x))  (op b (p^.y))  (op c (p^.z))
 (.+^) = pv (+)
 (.-^) = pv (-)
 
-distance   p q = magnitude   (p .-. q)
-distanceSq p q = magnitudeSq (p .-. q)
+distance        p q = magnitude   (p .-. q)
+distanceSquared p q = magnitudeSquared (p .-. q)

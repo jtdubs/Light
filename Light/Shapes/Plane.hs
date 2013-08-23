@@ -11,6 +11,7 @@ where
 
 import Control.Lens      ((%~))
 import Control.Lens.TH   (makeLenses)
+import Light.Entity.Ray  (Ray, origin, direction, RayTestable(..))
 import Light.Math.Vector (Vector, unitXVector, unitYVector, unitZVector)
 import Light.Math.Basis  (defaultBasis, Basis, HasBasis(..), Orientable(..))
 
@@ -33,3 +34,14 @@ instance Orientable Plane where
 xyPlane = plane unitZVector 0
 xzPlane = plane unitYVector 0
 yzPlane = plane unitXVector 0
+
+instance RayTestable Plane where
+  rayTest r p = if d == 0 || t < 0
+                  then Nothing
+                  else Just (t, if side < 0 then Back else Front, r `atTime` t)
+    where n = (p^.normal ^.^ (r^.origin .-. originPoint)) + p^.distance
+          d = p^.normal ^.^ r^.direction
+          t = -n/d
+          side = p^.normal ^.^ (r^.origin .-. originPoint)
+
+  rayTest :: Ray -> a -> Maybe (Float, SurfaceType, Point)

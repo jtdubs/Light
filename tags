@@ -1,0 +1,48 @@
+*^	.\Light\Data\Vector.hs	50;"	v
+.+^	Light\Data\Point.hs	45;"	v
+.-.	Light\Data\Point.hs	44;"	v
+.-^	Light\Data\Point.hs	46;"	v
+Point	Light\Data\Point.hs	19;"	d	file:
+Point	Light\Data\Point.hs	19;"	t
+Vector	.\Light\Data\Vector.hs	19;"	d	file:
+Vector	.\Light\Data\Vector.hs	19;"	t
+^*	.\Light\Data\Vector.hs	48;"	v
+^+^	.\Light\Data\Vector.hs	46;"	v
+^-^	.\Light\Data\Vector.hs	47;"	v
+^.^	.\Light\Data\Vector.hs	52;"	v
+^/	.\Light\Data\Vector.hs	49;"	v
+_dx	.\Light\Data\Vector.hs	19;"	v	file:
+_dy	.\Light\Data\Vector.hs	19;"	v	file:
+_dz	.\Light\Data\Vector.hs	19;"	v	file:
+_x	Light\Data\Point.hs	19;"	v	file:
+_y	Light\Data\Point.hs	19;"	v	file:
+_z	Light\Data\Point.hs	19;"	v	file:
+cross	.\Light\Data\Vector.hs	63;"	v
+distance	Light\Data\Point.hs	48;"	v
+distanceSq	Light\Data\Point.hs	49;"	v
+ds	.\Light\Data\Vector.hs	31;"	v
+dx	.\Light\Data\Vector.hs	23;"	v
+dy	.\Light\Data\Vector.hs	23;"	v
+dz	.\Light\Data\Vector.hs	23;"	v
+fromList	.\Light\Data\Vector.hs	27;"	v
+fromList	Light\Data\Point.hs	27;"	v
+magnitude	.\Light\Data\Vector.hs	56;"	v
+magnitudeSq	.\Light\Data\Vector.hs	57;"	v
+negateV	.\Light\Data\Vector.hs	54;"	v
+normalize	.\Light\Data\Vector.hs	59;"	v
+originPoint	Light\Data\Point.hs	39;"	v
+point	Light\Data\Point.hs	21;"	v
+pp	Light\Data\Point.hs	42;"	v	file:
+ps	Light\Data\Point.hs	31;"	v
+pv	Light\Data\Point.hs	41;"	v	file:
+toList	.\Light\Data\Vector.hs	25;"	v
+toList	Light\Data\Point.hs	25;"	v
+unitXVector	.\Light\Data\Vector.hs	40;"	v
+unitYVector	.\Light\Data\Vector.hs	41;"	v
+unitZVector	.\Light\Data\Vector.hs	42;"	v
+vector	.\Light\Data\Vector.hs	21;"	v
+vv	.\Light\Data\Vector.hs	44;"	v	file:
+x	Light\Data\Point.hs	23;"	v
+y	Light\Data\Point.hs	23;"	v
+z	Light\Data\Point.hs	23;"	v
+zeroVector	.\Light\Data\Vector.hs	39;"	v

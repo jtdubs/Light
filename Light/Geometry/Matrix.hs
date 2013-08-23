@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies, ParallelListComp #-}
 
-module Light.Math.Matrix
+module Light.Geometry.Matrix
 	-- ADT
 	( Matrix, matrix, elems, ix, row, col, rows, cols
 
@@ -11,7 +11,7 @@ module Light.Math.Matrix
     , (!!), (//)
 
 	-- Arithmetic
-    , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (^*|), (.*|)
+    , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (|*!), (^*|), (.*|), (!*|)
 
 	-- Transformation Matricies
 	, scaleMatrix, translationMatrix, rotationMatrix, frustumMatrix, perspectiveMatrix, orthoMatrix
@@ -24,8 +24,9 @@ import Data.Array.IArray  (array, (!))
 import Data.Array.Unboxed (UArray(..))
 import Data.List          (intersperse)
 import Control.Lens       ((^.), (.~), (*~), (//~), Lens', lens, traversed)
-import Light.Math.Vector  (Vector, dx, dy, dz, ds)
-import Light.Math.Point   (Point, x, y, z, ps)
+import Light.Geometry.Vector  (Vector, dx, dy, dz, ds)
+import Light.Geometry.Normal  (Normal, nx, ny, nz, ns)
+import Light.Geometry.Point   (Point, x, y, z, ps)
 
 import qualified Data.Array.IArray as A
 import qualified Data.List         as L
@@ -92,6 +93,9 @@ m |/ s = (elems.traversed //~ s) m
 
 m |*^ v = (ds .~ map (`dot` (v^.ds)) (m^.rows)) v
 v ^*| m = (ds .~ map (`dot` (v^.ds)) (m^.cols)) v
+
+m |*! n = (ns .~ map (`dot` (n^.ns)) (m^.rows)) n
+n !*| m = (ns .~ map (`dot` (n^.ns)) (m^.cols)) n
 
 m |*. p =  (ps .~ map (`dot` (p^.ps)) (m^.rows)) p
 p .*| m =  (ps .~ map (`dot` (p^.ps)) (m^.cols)) p
