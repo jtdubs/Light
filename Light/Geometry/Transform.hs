@@ -9,7 +9,8 @@ module Light.Geometry.Transform
 
 	-- Arithmetic
 	, inverse, compose, composeAll
-  , translation, scale, rotationQ, rotation, rotation3
+  , translation, scaling, rotationQ, rotation, rotation3
+  , translate, scale, rotate, rotate3, rotateQ
 
   -- Transformable(..)
   , Transformable(..)
@@ -43,7 +44,7 @@ translation v = Transform m m'
   where m  = translationMatrix v
         m' = translationMatrix (negateVector v)
 
-scale v = Transform m m'
+scaling v = Transform m m'
   where m  = scaleMatrix v
         m' = scaleMatrix (vector (1/v^.dx) (1/v^.dy) (1/v^.dz))
 
@@ -53,6 +54,12 @@ rotationQ q = Transform m m'
 
 rotation  angle axis     = rotationQ $ rotationQuaternion angle axis
 rotation3 pitch yaw roll = rotationQ $ rotationQuaternion3 pitch yaw roll
+
+translate t v   = transform (translation v) t
+scale t s       = transform (scaling s) t
+rotate t a x    = transform (rotation a x) t
+rotate3 t p y r = transform (rotation3 p y r) t
+rotateQ t q     = transform (rotationQ q) t
 
 class Transformable a where
   transform :: Transform -> a -> a
@@ -67,7 +74,7 @@ instance Transformable Normal where
   transform t n = transpose (_mInv t) |*! n
 
 instance Transformable Ray where
-  transform t r = ray (transform t $ r^.origin) (transform t $ r^.direction)
+  transform t r = ray (transform t $ r^.rayOrigin) (transform t $ r^.rayDirection)
 
 instance Transformable AABB where
   transform t b = fromPoints $ map (transform t) (corners b)

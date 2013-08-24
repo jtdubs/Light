@@ -1,33 +1,60 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Entity.Sphere
+module Light.Shapes.Sphere
     -- ADT
-    ( Sphere, sphere, center, radius
+    ( Sphere, sphere, sphereTransform, sphereRadius
 
     -- Default Instances
     , unitSphere
     )
 where
 
-import Control.Lens     ((%~))
-import Control.Lens.TH  (makeLenses)
-import Light.Math.Point (Point, originPoint)
-import Light.Math.Basis (Basis, defaultBasis, HasBasis(..), Orientable(..))
+import Control.Monad
+import Control.Lens hiding (transform)
+import Control.Lens.TH
+import Data.List
 
-data Sphere = Sphere { _sphereBasis :: Basis, _center :: Point, _radius :: Float } deriving (Eq)
+import Light.Geometry.AABB
+import Light.Geometry.Point
+import Light.Geometry.Ray
+import Light.Geometry.Transform
+import Light.Geometry.Vector
+import Light.Shapes.Shape
 
-sphere = Sphere defaultBasis
+data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float }
+
+sphere = Sphere identityTransform
 
 makeLenses ''Sphere
 
+unitSphere = sphere 1
+
 instance Show Sphere where
-  show (Sphere b c r) = concat ["#S(", show b, ", ", show c, ", ", show r, ")"]
+  show (Sphere t r) = concat ["#S(", show t, ", ", show r, ")"]
 
-instance HasBasis Sphere where
-  basis = sphereBasis
+instance Transformable Sphere where
+  transform t' (Sphere t r) = Sphere (compose t' t) r
 
-instance Orientable Sphere where
-  outOf c = basis %~ outOf c 
-  into  c = basis %~ into  c
+instance Shape Sphere where
+  shapeTransform = sphereTransform
 
-unitSphere = sphere originPoint 1
+  shapeBound (Sphere _ r) = fromPoints [ point (-r) (-r) (-r), point r r r ]
+
+  shapeSurfaceArea (Sphere _ r) = 4 * pi * r * r
+
+  shapeIntersect ray (Sphere t r) = do
+    ts <- liftM (filter (> 0)) $ quadratic a b c
+    guard  $ length ts > 0
+    return $ head ts
+    where r' = transform (inverse t) ray
+          a  = magnitudeSquaredV $ r'^.rayDirection
+          b  = 2 * ((r'^.rayDirection) ^.^ ((r'^.rayOrigin) .-. originPoint))
+          c  = (distanceSquared (r'^.rayOrigin) originPoint) - (r*r)
+
+quadratic a b c = if d < 0
+                  then Nothing
+                  else Just $ sort $ [ q/a, c/q ]
+  where d = b*b - 4*a*c
+        q = if b < 0
+            then -(b - sqrt d)/2
+            else -(b + sqrt d)/2

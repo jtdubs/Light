@@ -2,7 +2,7 @@
 
 module Light.Geometry.Ray
     -- ADT
-    ( Ray, ray, origin, direction
+    ( Ray, ray, rayOrigin, rayDirection
 
     -- Default Instances
     , xAxisRay, yAxisRay, zAxisRay
@@ -18,7 +18,7 @@ import Control.Lens.TH
 import Light.Geometry.Point
 import Light.Geometry.Vector
 
-data Ray = Ray { _origin :: Point, _direction :: Vector } deriving (Eq)
+data Ray = Ray { _rayOrigin :: Point, _rayDirection :: Vector } deriving (Eq)
 
 ray = Ray
 
@@ -33,4 +33,4 @@ zAxisRay = Ray originPoint unitZVector
 
 atTime (Ray o d) t = o .+^ (d ^* t)
 
-negateRay = direction %~ negateVector
+negateRay = rayDirection %~ negateVector
