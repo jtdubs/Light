@@ -5,17 +5,18 @@ module Light.Geometry.Ray
     ( Ray, ray, origin, direction
 
     -- Default Instances
-    , xAxis, yAxis, zAxis
+    , xAxisRay, yAxisRay, zAxisRay
 
     -- Arithmetic
     , atTime, negateRay
     )
 where
 
-import Control.Lens          ((%~), (^.))
-import Control.Lens.TH       (makeLenses)
-import Light.Geometry.Point  (Point, originPoint, (.+^))
-import Light.Geometry.Vector (Vector, unitXVector, unitYVector, unitZVector, negateVector, (^*))
+import Control.Lens
+import Control.Lens.TH
+
+import Light.Geometry.Point
+import Light.Geometry.Vector
 
 data Ray = Ray { _origin :: Point, _direction :: Vector } deriving (Eq)
 
@@ -26,10 +27,10 @@ makeLenses ''Ray
 instance Show Ray where
   show (Ray o d) = concat ["#R(", show o, ", ", show d, ")"]
 
-xAxis = ray originPoint unitXVector
-yAxis = ray originPoint unitYVector
-zAxis = ray originPoint unitZVector
+xAxisRay = Ray originPoint unitXVector
+yAxisRay = Ray originPoint unitYVector
+zAxisRay = Ray originPoint unitZVector
 
-atTime r t = (r^.origin) .+^ ((r^.direction) ^* t)
+atTime (Ray o d) t = o .+^ (d ^* t)
 
 negateRay = direction %~ negateVector

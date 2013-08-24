@@ -1,92 +1,81 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
-module Light.Math.Quaternion
-	-- ADT
-	( Quaternion, quaternion, qx, qy, qz, qw, qs, toMatrix, toAngleAxis
+module Light.Geometry.Quaternion
+  -- ADT
+  ( Quaternion, quaternion, qv, qw, toRotationMatrix, toAngleAxis
 
-	-- Default Instances
-    , identityQuaternion
+  -- Default Instances
+  , identityQuaternion
 
-	-- Arithmetic
-	, magnitude, magnitudeSquared, conjugate, (@*@), (@*^), (@*.), (@*!)
+  -- Arithmetic
+  , normalizeQ, magnitudeQ, magnitudeSquaredQ, conjugate, (@*@), (@+@), (@-@), (@.@), (@*^)
 
-	-- Transformations
-	, rotate, rotate3
-	)
+  -- Transformations
+  , rotationQuaternion, rotationQuaternion3
+  )
 where
 
-import Light.Geometry.Point  (originPoint, (.-.), (.+^))
-import Light.Geometry.Matrix (matrix)
-import Light.Geometry.Vector (vector, dx, dy, dz, zeroVector, (^*))
-import Light.Geometry.Normal (normal, nx, ny, nz, (!*))
-import Control.Lens          (Lens', (^.), lens, traversed, (//~))
-import Control.Lens.TH       (makeLenses)
-import Data.List             (intersperse)
+import Control.Lens
+import Control.Lens.TH
+import Data.List
 
-import qualified Light.Geometry.Vector as V
-import qualified Light.Geometry.Normal as N
+import Light.Geometry.Point
+import Light.Geometry.Matrix
+import Light.Geometry.Vector
+import Light.Geometry.Normal
 
-data Quaternion = Quaternion { _qx :: Float, _qy :: Float, _qz :: Float, _qw :: Float }
+data Quaternion = Quaternion { _qv :: Vector, _qw :: Float }
 
 makeLenses ''Quaternion
 
-qs :: Lens' Quaternion [Float]
-qs = lens (\ (Quaternion x y z w) -> [x, y, z, w]) (\q [x, y, z, w] -> Quaternion x y z w)
+normalizeQ q@(Quaternion v w) = Quaternion (v^/s) (w/s)
+  where s = magnitudeSquaredQ q
 
-normalize q = (qs.traversed //~ (magnitudeSquared q)) q
-
-quaternion x y z w = normalize $ Quaternion x y z w
+quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
 
 instance Eq Quaternion where
-  u == v = all (< 0.0001) $ map abs $ zipWith (-) (u^.qs) (v^.qs)
+  u == v = (u^.qv == v^.qv) && abs (u^.qw - v^.qw) < 0.0001
 
 instance Show Quaternion where
-  show q = "#Q(" ++ (concat . intersperse ", " . map show) (q^.qs) ++ ")"
+  show (Quaternion v w) = concat ["#Q(", show v, ", ", show w, ")"]
 
 identityQuaternion = quaternion 0 0 0 1
 
-toMatrix (Quaternion x y z w) = matrix [ 1 - 2 * (yy + zz),     2 * (xy - wz),     2 * (xz + wy), 0,
-        		                             2 * (xy + wz), 1 - 2 * (xx + zz),     2 * (yz - wx), 0,
-        		                             2 * (xz - wy),     2 * (yz + wx), 1 - 2 * (xx + yy), 0,
-        		                                         0,                 0,                 0, 1 ]
-        	where xx = x * x; yy = y * y; zz = z * z
-        	      xy = x * y; xz = x * z; yz = y * z
-        	      wx = w * x; wy = w * y; wz = w * z
+toRotationMatrix (Quaternion v w) =
+  matrix [ 1 - 2 * (yy + zz),     2 * (xy - wz),     2 * (xz + wy), 0
+         , 2 * (xy + wz)    , 1 - 2 * (xx + zz),     2 * (yz - wx), 0
+         , 2 * (xz - wy)    ,     2 * (yz + wx), 1 - 2 * (xx + yy), 0
+         , 0                ,                 0,                 0, 1 ]
+  where x = (v^.dx); y = (v^.dy); z = (v^.dz)
+        xx = x * x; yy = y * y; zz = z * z
+        xy = x * y; xz = x * z; yz = y * z
+        wx = w * x; wy = w * y; wz = w * z
 
-toAngleAxis (Quaternion x y z w) = (acos(w) * 2, V.normalize $ vector x y z)
+toAngleAxis q@(Quaternion v w) = (acos(w) * 2, normalizeV v)
 
-magnitude = sqrt . magnitudeSquared
-magnitudeSquared q = sum $ map (\x -> x*x) (q^.qs)
+magnitudeQ = sqrt . magnitudeSquaredQ
+magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
 
-conjugate (Quaternion x y z w) = Quaternion (-x) (-y) (-z) w
+conjugate (Quaternion v w) = Quaternion (negateVector v) w
 
-(Quaternion qx qy qz qw) @*@ (Quaternion rx ry rz rw) =
-  Quaternion (qw*rx + qx*rw + qy*rz - qz*ry)
-             (qw*ry + qy*rw + qz*rx - qx*rz)
-             (qw*rz + qz*rw + qx*ry - qy*rx)
-             (qw*rw - qx*rx - qy*ry - qz*rz)
+(Quaternion qv qw) @*@ (Quaternion rv rw) =
+  Quaternion ((cross qv rv) ^+^ (qw *^ rv) ^+^ (rw *^ qv))
+             ((qw*rw) - (qv ^.^ rv))
 
-toQuaternionV v = Quaternion (v^.dx) (v^.dy) (v^.dz) 1
-toQuaternionN n = Quaternion (n^.nx) (n^.ny) (n^.nz) 1
-
-toVector q = vector (q^.qx) (q^.qy) (q^.qz)
-toNormal q = normal (q^.qx) (q^.qy) (q^.qz)
+(Quaternion qv qw) @+@ (Quaternion rv rw) = Quaternion (qv ^+^ rv) (qw+rw)
+(Quaternion qv qw) @-@ (Quaternion rv rw) = Quaternion (qv ^-^ rv) (qw+rw)
+(Quaternion qv qw) @.@ (Quaternion rv rw) = (qv ^.^ rv) + (qw*rw)
 
 q @*^ v
   | v == zeroVector = zeroVector
-  | otherwise       = toVector (q @*@ (toQuaternionV $ V.normalize v) @*@ (conjugate q)) ^* (V.magnitude v)
+  | otherwise       = (q @*@ (Quaternion v 0) @*@ (conjugate q))^.qv
 
-q @*! n = toNormal (q @*@ (toQuaternionN $ N.normalize n) @*@ (conjugate q)) !* (N.magnitude n)
+rotationQuaternion angle axis = Quaternion ((normalizeV axis) ^* sin (angle/2)) (cos (angle/2))
 
-q @*. p = originPoint .+^ (q @*^ (p .-. originPoint))
-
-rotate angle axis = quaternion ((n^.dx)*s) ((n^.dy)*s) ((n^.dz)*s) c
-  where s = sin (angle/2); c = cos (angle/2); n = V.normalize axis
-
-rotate3 pitch yaw roll = quaternion (sr*cp*cy - cr*sp*sy)
-                                    (cr*sp*cy + sr*cp*sy)
-                                    (cr*cp*sy - sr*sp*cy)
-                                    (cr*cp*cy + sr*sp*sy)
+rotationQuaternion3 pitch yaw roll = quaternion (sr*cp*cy - cr*sp*sy)
+                                                (cr*sp*cy + sr*cp*sy)
+                                                (cr*cp*sy - sr*sp*cy)
+                                                (cr*cp*cy + sr*sp*sy)
   where p = pitch/2; y = yaw/2; r = roll/2
-        sp = sin p; sy = sin y; sr = sin r;
+        sp = sin p; sy = sin y; sr = sin r
         cp = cos p; cy = cos y; cr = cos r

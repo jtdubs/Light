@@ -2,7 +2,7 @@
 
 module Light.Geometry.Point
     -- ADT
-	( Point, point, x, y, z, ps
+	( Point, point, px, py, pz, ps
 
 	-- Default Instances
     , originPoint
@@ -12,11 +12,12 @@ module Light.Geometry.Point
 	)
 where
 
-import Control.Lens          ((^.), Lens', lens)
-import Control.Lens.TH       (makeLenses)
-import Light.Geometry.Vector (vector, dx, dy, dz, magnitude, magnitudeSquared)
+import Control.Lens
+import Control.Lens.TH
 
-data Point = Point { _x :: Float, _y :: Float, _z :: Float }
+import Light.Geometry.Vector
+
+data Point = Point { _px :: Float, _py :: Float, _pz :: Float }
 
 point = Point
 
@@ -33,12 +34,9 @@ instance Show Point where
 
 originPoint = point 0 0 0
 
-pv op (Point x y z) v = point  (op x (v^.dx)) (op y (v^.dy)) (op z (v^.dz))
-pp op (Point a b c) p = vector (op a (p^.x))  (op b (p^.y))  (op c (p^.z))
+(Point x y z) .-. (Point  a b c) = vector (x-a) (y-b) (z-c)
+(Point x y z) .-^ v = Point (x - v^.dx) (y - v^.dy) (z - v^.dz)
+(Point x y z) .+^ v = Point (x + v^.dx) (y + v^.dy) (z + v^.dz)
 
-(.-.) = pp (-)
-(.+^) = pv (+)
-(.-^) = pv (-)
-
-distance        p q = magnitude   (p .-. q)
-distanceSquared p q = magnitudeSquared (p .-. q)
+distance        p q = magnitudeV        (p .-. q)
+distanceSquared p q = magnitudeSquaredV (p .-. q)

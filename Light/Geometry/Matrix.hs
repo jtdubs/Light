@@ -18,15 +18,16 @@ module Light.Geometry.Matrix
 	)
 where
 
-import Prelude hiding     ((!!))
+import Prelude hiding ((!!))
 
-import Data.Array.IArray  (array, (!))
-import Data.Array.Unboxed (UArray(..))
-import Data.List          (intersperse)
-import Control.Lens       ((^.), (.~), (*~), (//~), Lens', lens, traversed)
-import Light.Geometry.Vector  (Vector, dx, dy, dz, ds)
-import Light.Geometry.Normal  (Normal, nx, ny, nz, ns)
-import Light.Geometry.Point   (Point, x, y, z, ps)
+import Data.Array.IArray hiding ((//), elems)
+import Data.Array.Unboxed hiding (elems, (//))
+import Data.List hiding (transpose, (!!))
+import Control.Lens hiding (ix)
+
+import Light.Geometry.Vector
+import Light.Geometry.Normal
+import Light.Geometry.Point
 
 import qualified Data.Array.IArray as A
 import qualified Data.List         as L
@@ -107,10 +108,10 @@ scaleMatrix v = matrix [ v^.dx,     0,     0, 0
                        ,     0,     0,     0, 1 ]
 
 translationMatrix :: Vector -> Matrix
-translationMatrix v = matrix [ 0, 0, 0, v^.dx
-                             , 0, 0, 0, v^.dy
-                             , 0, 0, 0, v^.dz
-                             , 0, 0, 0,     0 ]
+translationMatrix v = matrix [ 1, 0, 0, v^.dx
+                             , 0, 1, 0, v^.dy
+                             , 0, 0, 1, v^.dz
+                             , 0, 0, 0,     1 ]
 
 rotationMatrix :: Float -> Vector -> Matrix
 rotationMatrix angle axis = matrix [ u*u*(1-c)+c,   u*v*(1-c)-w*s, u*w*(1-c)+v*s, 0
