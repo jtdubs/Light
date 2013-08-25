@@ -1,47 +1,56 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Entity.Plane
+module Light.Shape.Plane
     -- ADT
-    ( Plane, plane, normal, distance
+    ( Plane, plane, planeTransform, planeHalfWidth, planeHalfDepth
 
     -- Default Instances
-    , xyPlane, xzPlane, yzPlane
+    , unitPlane
     )
 where
 
-import Control.Lens      ((%~))
-import Control.Lens.TH   (makeLenses)
-import Light.Entity.Ray  (Ray, origin, direction, RayTestable(..))
-import Light.Math.Vector (Vector, unitXVector, unitYVector, unitZVector)
-import Light.Math.Basis  (defaultBasis, Basis, HasBasis(..), Orientable(..))
+import Control.Monad
+import Control.Lens hiding (transform)
+import Control.Lens.TH
+import Data.List
 
-data Plane = Plane { _planeBasis :: Basis, _normal :: Vector, _distance :: Float } deriving (Eq)
+import Light.Math
+import Light.Geometry.AABB
+import Light.Geometry.Point
+import Light.Geometry.Ray
+import Light.Geometry.Transform
+import Light.Geometry.Vector
+import Light.Shape.Shape
 
-plane = Plane defaultBasis
+data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Float, _planeHalfDepth :: Float }
+
+plane = Plane identityTransform
 
 makeLenses ''Plane
 
+unitPlane = plane 1 1
+
 instance Show Plane where
-  show (Plane b n d) = concat ["#P(", show b, ", ", show n, ", ", show d, ")"]
+  show (Plane t w d) = concat ["#D(", show t, ", ", show w, ", ", show d, ")"]
 
-instance HasBasis Plane where
-  basis = planeBasis
+instance Transformable Plane where
+  transform t' (Plane t w d) = Plane (compose t' t) w d
 
-instance Orientable Plane where
-  outOf c = basis %~ outOf c 
-  into  c = basis %~ into  c
+instance Shape Plane where
+  shapeTransform = planeTransform
 
-xyPlane = plane unitZVector 0
-xzPlane = plane unitYVector 0
-yzPlane = plane unitXVector 0
+  bound (Plane _ w d) = fromPoints [ point (-w) (-d) 0, point w d 0 ]
 
-instance RayTestable Plane where
-  rayTest r p = if d == 0 || t < 0
-                  then Nothing
-                  else Just (t, if side < 0 then Back else Front, r `atTime` t)
-    where n = (p^.normal ^.^ (r^.origin .-. originPoint)) + p^.distance
-          d = p^.normal ^.^ r^.direction
-          t = -n/d
-          side = p^.normal ^.^ (r^.origin .-. originPoint)
+  surfaceArea (Plane _ w d) = 4 * w *d
 
-  rayTest :: Ray -> a -> Maybe (Float, SurfaceType, Point)
+  intersect ray (Plane t w d) = do
+    guard $ abs rdz > 0.0001
+    let t = -roz / rdz
+    guard $ t >= 0
+    let rt = r' `atTime` t
+    guard $ abs (rt^.px) <= w
+    guard $ abs (rt^.py) <= d
+    return t
+    where r' = transform (inverse t) ray
+          rdz = r'^.rayDirection.dz
+          roz = r'^.rayOrigin.pz

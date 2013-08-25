@@ -8,6 +8,7 @@ import Light.Shape.Shape
 import Light.Shape.Sphere
 import Light.Shape.Cylinder
 import Light.Shape.Disc
+import Light.Shape.Plane
 
 import Light.Geometry.AABB
 import Light.Geometry.Matrix
