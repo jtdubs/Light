@@ -2,7 +2,7 @@
 
 module Light.Shape.Cylinder
     -- ADT
-    ( Cylinder, cylinder, cylinderTransform, cylinderRadius, cylinderHalfHeight
+    ( Cylinder, cylinder, cylinderTransform, cylinderRadius, cylinderHeight
 
     -- Default Instances
     , unitCylinder
@@ -22,7 +22,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHalfHeight :: Float }
+data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHeight :: Float }
 
 cylinder = Cylinder identityTransform
 
@@ -39,9 +39,9 @@ instance Transformable Cylinder where
 instance Shape Cylinder where
   shapeTransform = cylinderTransform
 
-  bound (Cylinder _ r h) = fromPoints [ point (-r) (-r) (-h), point r r h ]
+  bound (Cylinder _ r h) = fromPoints [ point (-r) (-r) 0, point r r h ]
 
-  surfaceArea (Cylinder _ r h) = 4 * pi * r * h
+  surfaceArea (Cylinder _ r h) = 2 * pi * r * h
 
   intersect ray (Cylinder t r h) = do
     ts <- liftM (filter f) $ quadratic a b c
@@ -55,4 +55,5 @@ instance Shape Cylinder where
           a  = (rdx*rdx) + (rdy*rdy)
           b  = 2 * (rdx*rox) + (rdy*roy)
           c  = (rox*rox) + (roy*roy) - r*r
-          f t = t > 0 && abs ((r' `atTime` t)^.pz) <= h
+          f t = let rz = (r' `atTime` t)^.pz
+                in t > 0 && rz >= 0 && rz <= h

@@ -5,3 +5,4 @@ import Light.Shape.Sphere
 import Light.Shape.Cylinder
 import Light.Shape.Disc
 import Light.Shape.Plane
+import Light.Shape.Cone
