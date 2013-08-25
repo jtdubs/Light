@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Shapes.Sphere
+module Light.Shape.Sphere
     -- ADT
     ( Sphere, sphere, sphereTransform, sphereRadius
 
@@ -14,12 +14,13 @@ import Control.Lens hiding (transform)
 import Control.Lens.TH
 import Data.List
 
+import Light.Math
 import Light.Geometry.AABB
 import Light.Geometry.Point
 import Light.Geometry.Ray
 import Light.Geometry.Transform
 import Light.Geometry.Vector
-import Light.Shapes.Shape
+import Light.Shape.Shape
 
 data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float }
 
@@ -38,11 +39,11 @@ instance Transformable Sphere where
 instance Shape Sphere where
   shapeTransform = sphereTransform
 
-  shapeBound (Sphere _ r) = fromPoints [ point (-r) (-r) (-r), point r r r ]
+  bound (Sphere _ r) = fromPoints [ point (-r) (-r) (-r), point r r r ]
 
-  shapeSurfaceArea (Sphere _ r) = 4 * pi * r * r
+  surfaceArea (Sphere _ r) = 4 * pi * r * r
 
-  shapeIntersect ray (Sphere t r) = do
+  intersect ray (Sphere t r) = do
     ts <- liftM (filter (> 0)) $ quadratic a b c
     guard  $ length ts > 0
     return $ head ts
@@ -50,11 +51,3 @@ instance Shape Sphere where
           a  = magnitudeSquaredV $ r'^.rayDirection
           b  = 2 * ((r'^.rayDirection) ^.^ ((r'^.rayOrigin) .-. originPoint))
           c  = (distanceSquared (r'^.rayOrigin) originPoint) - (r*r)
-
-quadratic a b c = if d < 0
-                  then Nothing
-                  else Just $ sort $ [ q/a, c/q ]
-  where d = b*b - 4*a*c
-        q = if b < 0
-            then -(b - sqrt d)/2
-            else -(b + sqrt d)/2

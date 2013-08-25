@@ -1,8 +1,12 @@
 module Light
 where
 
-import Light.Shapes.Shape
-import Light.Shapes.Sphere
+import Light.Math
+
+import Light.Shape
+import Light.Shape.Shape
+import Light.Shape.Sphere
+import Light.Shape.Cylinder
 
 import Light.Geometry.AABB
 import Light.Geometry.Matrix
