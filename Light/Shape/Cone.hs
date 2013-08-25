@@ -54,8 +54,8 @@ instance Shape Cone where
           rox = r'^.rayOrigin.px
           roy = r'^.rayOrigin.py
           roz = r'^.rayOrigin.pz
-          a   = (h*h*rdx*rdx + h*h*rdy*rdy - rdz*rdz) / (r*r)
-          b   = (2*h*h*rox*rdx + 2*h*h*roy*rdy - 2*roz*rdz + 2*rdz*h) / (r*r)
-          c   = (h*h*rox*rox + h*h*roy*roy - roz*roz + 2*h*roz - h*h) / (r*r)
+          a   = (  h*h*rdx*rdx +   h*h*rdy*rdy)/(r*r) + (  -rdz*rdz)
+          b   = (2*h*h*rox*rdx + 2*h*h*roy*rdy)/(r*r) + (-2*roz*rdz + 2*rdz*h)
+          c   = (  h*h*rox*rox +   h*h*roy*roy)/(r*r) + (  -roz*roz + 2*roz*h - h*h)
           f t = let rz = (r' `atTime` t)^.pz
                 in t > 0 && rz >= 0 && rz <= h
