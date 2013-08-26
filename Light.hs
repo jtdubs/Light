@@ -21,3 +21,7 @@ import Light.Geometry.Quaternion
 import Light.Geometry.Ray
 import Light.Geometry.Transform
 import Light.Geometry.Vector
+
+import Light.Camera.Film
+import Light.Camera.Camera
+import Light.Camera.OrthographicCamera
