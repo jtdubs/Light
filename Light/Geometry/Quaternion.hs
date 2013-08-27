@@ -72,9 +72,9 @@ q @*^ v
 
 rotationQuaternion angle axis = Quaternion ((normalizeV axis) ^* sin (angle/2)) (cos (angle/2))
 
-rotationQuaternion3 pitch yaw roll = quaternion (sr*cp*cy - cr*sp*sy)
-                                                (cr*sp*cy + sr*cp*sy)
+rotationQuaternion3 pitch yaw roll = quaternion (cr*sp*cy + sr*cp*sy)
                                                 (cr*cp*sy - sr*sp*cy)
+                                                (sr*cp*cy - cr*sp*sy)
                                                 (cr*cp*cy + sr*sp*sy)
   where p = pitch/2; y = yaw/2; r = roll/2
         sp = sin p; sy = sin y; sr = sin r
