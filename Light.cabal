@@ -16,6 +16,7 @@ cabal-version:       >=1.8
 library
   build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*
   ghc-options:         -Wall -O -fllvm
+  hs-source-dirs:      src
   exposed-modules:     Light.Camera.Camera
                        Light.Camera.Film
                        Light.Camera.OrthographicCamera
@@ -40,8 +41,13 @@ library
                        Light.Geometry
                        Light.Math
                        Light.Shape
-                       Light
 
 executable Light
-  main-is:             Main.hs
+  hs-source-dirs:      src
+  main-is:             App\Light.hs
+  build-depends:       base ==4.5.*, QuickCheck ==2.6.*, lens ==3.9.*, array ==0.4.*
+
+executable CameraDiagrams
+  hs-source-dirs:      src
+  main-is:             App\CameraDiagrams.hs
   build-depends:       base ==4.5.*, QuickCheck ==2.6.*, lens ==3.9.*, array ==0.4.*
