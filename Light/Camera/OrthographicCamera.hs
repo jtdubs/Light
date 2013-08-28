@@ -33,5 +33,5 @@ instance Camera OrthographicCamera where
   cameraRay (OrthographicCamera t (Film fw fh) s) (fx, fy) = transform (inverse t) (ray o d)
     where o = point (x*s) (y*s) 0
           d = unitZVector
-          x = (fromIntegral fx) - ((fromIntegral (fw-1)) / 2)
-          y = (fromIntegral fy) - ((fromIntegral (fh-1)) / 2)
+          x = fx - ((fromIntegral (fw-1)) / 2)
+          y = fy - ((fromIntegral (fh-1)) / 2)
