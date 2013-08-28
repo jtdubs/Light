@@ -27,16 +27,16 @@ makeLenses ''AABB
 
 instance Show AABB where
   show EmptyAABB  = "#AABB()"
-  show (AABB n x) = "#AABB(" ++ (show n) ++ ", " ++ (show x) ++ ")"
+  show (AABB n x) = "#AABB(" ++ show n ++ ", " ++ show x ++ ")"
 
-fromPoint  p  = addPoint  EmptyAABB p
-fromPoints ps = addPoints EmptyAABB ps
+fromPoint  = addPoint  EmptyAABB
+fromPoints = addPoints EmptyAABB
 
 addPoint EmptyAABB  p = AABB p p
 addPoint (AABB n x) p = AABB (point (min (n^.px) (p^.px)) (min (n^.py) (p^.py)) (min (n^.pz) (p^.pz)))
                              (point (max (n^.px) (p^.px)) (max (n^.py) (p^.py)) (max (n^.pz) (p^.pz)))
 
-addPoints b ps = foldl addPoint b ps
+addPoints = foldl addPoint
 
 aabbUnion EmptyAABB b = b
 aabbUnion b EmptyAABB = b

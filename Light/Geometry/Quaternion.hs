@@ -46,12 +46,12 @@ toRotationMatrix (Quaternion v w) =
          , 2 * (xy + wz)    , 1 - 2 * (xx + zz),     2 * (yz - wx), 0
          , 2 * (xz - wy)    ,     2 * (yz + wx), 1 - 2 * (xx + yy), 0
          , 0                ,                 0,                 0, 1 ]
-  where x = (v^.dx); y = (v^.dy); z = (v^.dz)
+  where x = v^.dx; y = v^.dy; z = v^.dz
         xx = x * x; yy = y * y; zz = z * z
         xy = x * y; xz = x * z; yz = y * z
         wx = w * x; wy = w * y; wz = w * z
 
-toAngleAxis q@(Quaternion v w) = (acos(w) * 2, normalizeV v)
+toAngleAxis q@(Quaternion v w) = (acos w * 2, normalizeV v)
 
 magnitudeQ = sqrt . magnitudeSquaredQ
 magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
@@ -59,8 +59,8 @@ magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
 conjugate (Quaternion v w) = Quaternion (negateVector v) w
 
 (Quaternion qv qw) @*@ (Quaternion rv rw) =
-  Quaternion ((cross qv rv) ^+^ (qw *^ rv) ^+^ (rw *^ qv))
-             ((qw*rw) - (qv ^.^ rv))
+  Quaternion (cross qv rv ^+^ (qw *^ rv) ^+^ (rw *^ qv))
+             (qw*rw - (qv ^.^ rv))
 
 (Quaternion qv qw) @+@ (Quaternion rv rw) = Quaternion (qv ^+^ rv) (qw+rw)
 (Quaternion qv qw) @-@ (Quaternion rv rw) = Quaternion (qv ^-^ rv) (qw+rw)
@@ -68,9 +68,9 @@ conjugate (Quaternion v w) = Quaternion (negateVector v) w
 
 q @*^ v
   | v == zeroVector = zeroVector
-  | otherwise       = (q @*@ (Quaternion v 0) @*@ (conjugate q))^.qv
+  | otherwise       = (q @*@ Quaternion v 0 @*@ conjugate q)^.qv
 
-rotationQuaternion angle axis = Quaternion ((normalizeV axis) ^* sin (angle/2)) (cos (angle/2))
+rotationQuaternion angle axis = Quaternion (normalizeV axis ^* sin (angle/2)) (cos (angle/2))
 
 rotationQuaternion3 pitch yaw roll = quaternion (cr*sp*cy + sr*cp*sy)
                                                 (cr*cp*sy - sr*sp*cy)

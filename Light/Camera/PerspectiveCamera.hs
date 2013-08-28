@@ -33,7 +33,7 @@ instance Camera PerspectiveCamera where
   cameraRay (PerspectiveCamera t (Film fw fh) fovY) (fx, fy) = transform (inverse t) (ray o d)
     where o = originPoint
           d = normalizeV $ vector (nx*sx) (ny*sy) 1
-          sx = (tan (fovY / 2)) * (fromIntegral (fw-1) / fromIntegral fw) * (fromIntegral fw / fromIntegral fh)
-          sy = (tan (fovY / 2)) * (fromIntegral (fh-1) / fromIntegral fh)
+          sx = tan (fovY / 2) * (fromIntegral (fw-1) / fromIntegral fw) * (fromIntegral fw / fromIntegral fh)
+          sy = tan (fovY / 2) * (fromIntegral (fh-1) / fromIntegral fh)
           nx = (fx / fromIntegral (fw-1)) * 2 - 1
           ny = (fy / fromIntegral (fh-1)) * 2 - 1

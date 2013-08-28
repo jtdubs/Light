@@ -37,7 +37,7 @@ data Matrix = Matrix (UArray Int Float)
 matrix = Matrix . array (0, 15) . zip [0..]
 
 (Matrix m) !! (r, c) = m ! (r*4 + c)
-(Matrix m) // u      = Matrix $ m A.// (map (\((r, c), f) -> (r*4+c, f)) u)
+(Matrix m) // u      = Matrix $ m A.// map (\((r, c), f) -> (r*4+c, f)) u
 
 elems :: Lens' Matrix [Float]
 elems = lens (\m -> m^.rows.traversed)
@@ -67,8 +67,8 @@ instance Eq Matrix where
   u == v = all (< 0.0001) $ map abs $ zipWith (-) (u^.elems) (v^.elems)
 
 instance Show Matrix where
-  show m = let showRow   = concat . intersperse ", "    . map show .  (\n -> m^.(row n))
-               showRows  = concat $ intersperse "\n   " $ map showRow [0..3]
+  show m = let showRow   = intercalate ", "    . map show .  (\n -> m^.row n)
+               showRows  = intercalate "\n   " $ map showRow [0..3]
              in "#M(" ++ showRows ++ ")"
 
 zeroMatrix = matrix [ 0, 0, 0, 0

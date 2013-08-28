@@ -60,4 +60,4 @@ cross (Vector ux uy uz) (Vector vx vy vz) =
          (uz*vx - ux*vz)
          (ux*vy - uy*vx)
 
-angleBetween v w = acos $ (v ^.^ w) / ((magnitudeV v) * (magnitudeV w))
+angleBetween v w = acos $ (v ^.^ w) / (magnitudeV v * magnitudeV w)

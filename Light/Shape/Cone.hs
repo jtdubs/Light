@@ -45,7 +45,7 @@ instance Shape Cone where
 
   intersect ray (Cone t r h) = do
     ts <- liftM (filter f) $ quadratic a b c
-    guard  $ length ts > 0
+    guard  $ not (null ts)
     return $ head ts
     where r' = transform (inverse t) ray
           rdx = r'^.rayDirection.dx

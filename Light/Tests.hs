@@ -1,13 +1,11 @@
 module Light.Data.Tests (main) where
 
 import qualified Test.QuickCheck as QC
+import Control.Monad
 
-import Light.Data.Vector hiding (fromList)
-import Light.Data.Point  hiding (fromList)
-import Light.Data.Matrix
-import qualified Light.Data.Vector as V
-import qualified Light.Data.Point  as P
+import Light.Geometry
 
+{-
 instance QC.Arbitrary Vector where
   arbitrary = QC.vector 3 >>= return . V.fromList
 
@@ -70,3 +68,4 @@ main = do
   QC.quickCheck prop_VectorTimesIdentity
   QC.quickCheck prop_PointTimesIdentity
   QC.quickCheck prop_MatrixTranspose
+-}

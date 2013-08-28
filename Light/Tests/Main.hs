@@ -1,5 +1,3 @@
-{-# LANGUAGE ParallelListComp #-}
-
 module Main
 where
 
@@ -34,7 +32,7 @@ main = do
 
 drawPerspectivePlot ix title camera = let fovY        = camera^.perspectiveVerticalFOV
                                           (Film _ fy) = camera^.cameraFilm
-                                      in drawPlot ix title camera ((fromIntegral fy) / (2 * tan (fovY/2)))
+                                      in drawPlot ix title camera (fromIntegral fy / (2 * tan (fovY/2)))
 
 drawOrthographicPlot ix title camera = let (Film fx fy) = camera^.cameraFilm
 									   in drawPlot ix title camera (fromIntegral (min fx fy))
@@ -44,7 +42,7 @@ drawPlot ix title camera imagePlaneHeight = do
   let (Film fx' fy') = camera^.cameraFilm
   let fx             = fromIntegral fx'
   let fy             = fromIntegral fy'
-  let dim            = (foldl max 0 [fx, fy, imagePlaneHeight]) + 4
+  let dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
   let rays           = getRays camera
   let ox             = map (^.rayOrigin.px) rays
   let oy             = map (^.rayOrigin.py) rays
@@ -54,24 +52,24 @@ drawPlot ix title camera imagePlaneHeight = do
   let vz             = map (\r -> (r^.rayDirection.dz)*imagePlaneHeight*1.2/(r^.rayDirection.dz)) rays
 
   putStrLn $ "figure (" ++ show ix ++ ");"
-  putStrLn $ "x = linspace (" ++ concat (intersperse ", " (map show [-fx/2, fx/2, fx+1])) ++ ");"
-  putStrLn $ "y = linspace (" ++ concat (intersperse ", " (map show [-fy/2, fy/2, fy+1])) ++ ");"
-  putStrLn $ "[xx, yy] = meshgrid(x, y);"
-  putStrLn $ "zz = (xx.*0).+" ++ (show imagePlaneHeight) ++ ";"
-  putStrLn $ "mesh (xx, yy, zz);"
-  putStrLn $ "hold on;"
-  putStrLn $ "grid off;"
-  putStrLn $ "box off;"
-  putStrLn $ "axis ([" ++ concat (intersperse ", " (map show [-dim/2, dim/2, -dim/2, dim/2, 0, dim])) ++ "], \"square\");"
-  putStrLn $ "daspect ([1, 1, 1]);"
-  putStrLn $ "pbaspect ([1, 1, 1]);"
+  putStrLn $ "x = linspace (" ++ intercalate ", " (map show [-fx/2, fx/2, fx+1]) ++ ");"
+  putStrLn $ "y = linspace (" ++ intercalate ", " (map show [-fy/2, fy/2, fy+1]) ++ ");"
+  putStrLn   "[xx, yy] = meshgrid(x, y);"
+  putStrLn $ "zz = (xx.*0).+" ++ show imagePlaneHeight ++ ";"
+  putStrLn   "mesh (xx, yy, zz);"
+  putStrLn   "hold on;"
+  putStrLn   "grid off;"
+  putStrLn   "box off;"
+  putStrLn $ "axis ([" ++ intercalate ", " (map show [-dim/2, dim/2, -dim/2, dim/2, 0, dim]) ++ "], \"square\");"
+  putStrLn   "daspect ([1, 1, 1]);"
+  putStrLn   "pbaspect ([1, 1, 1]);"
   putStrLn $ "title (\"" ++ title ++ "\");"
-  putStrLn $ "ox = [" ++ concat (intersperse ", " (map show ox)) ++ "];"
-  putStrLn $ "oy = [" ++ concat (intersperse ", " (map show oy)) ++ "];"
-  putStrLn $ "oz = [" ++ concat (intersperse ", " (map show oz)) ++ "];"
-  putStrLn $ "dx = [" ++ concat (intersperse ", " (map show vx)) ++ "];"
-  putStrLn $ "dy = [" ++ concat (intersperse ", " (map show vy)) ++ "];"
-  putStrLn $ "dz = [" ++ concat (intersperse ", " (map show vz)) ++ "];"
-  putStrLn $ "q = quiver3 (ox, oy, oz, dx, dy, dz, 0);"
-  putStrLn $ "set (q, \"maxheadsize\", 0);"
-  putStrLn $ "hold off;"
+  putStrLn $ "ox = [" ++ intercalate ", " (map show ox) ++ "];"
+  putStrLn $ "oy = [" ++ intercalate ", " (map show oy) ++ "];"
+  putStrLn $ "oz = [" ++ intercalate ", " (map show oz) ++ "];"
+  putStrLn $ "dx = [" ++ intercalate ", " (map show vx) ++ "];"
+  putStrLn $ "dy = [" ++ intercalate ", " (map show vy) ++ "];"
+  putStrLn $ "dz = [" ++ intercalate ", " (map show vz) ++ "];"
+  putStrLn   "q = quiver3 (ox, oy, oz, dx, dy, dz, 0);"
+  putStrLn   "set (q, \"maxheadsize\", 0);"
+  putStrLn   "hold off;"

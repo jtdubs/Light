@@ -45,9 +45,9 @@ instance Shape Sphere where
 
   intersect ray (Sphere t r) = do
     ts <- liftM (filter (> 0)) $ quadratic a b c
-    guard  $ length ts > 0
+    guard  $ not (null ts)
     return $ head ts
     where r' = transform (inverse t) ray
           a  = magnitudeSquaredV $ r'^.rayDirection
           b  = 2 * ((r'^.rayDirection) ^.^ ((r'^.rayOrigin) .-. originPoint))
-          c  = (distanceSquared (r'^.rayOrigin) originPoint) - (r*r)
+          c  = distanceSquared (r'^.rayOrigin) originPoint - r*r

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies, FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies, FlexibleInstances #-}
 
 module Light.Geometry.Transform
 	-- ADT
@@ -38,7 +38,7 @@ inverse (Transform m m') = Transform m' m
 
 compose (Transform m m') (Transform n n') = Transform (m |*| n) (n' |*| m')
 
-composeAll ts = foldl compose identityTransform ts
+composeAll = foldl compose identityTransform
 
 translation v = Transform m m'
   where m  = translationMatrix v
@@ -65,10 +65,10 @@ class Transformable a where
   transform :: Transform -> a -> a
 
 instance Transformable Point where
-  transform t p = (_m t) |*. p
+  transform t p = _m t |*. p
 
 instance Transformable Vector where
-  transform t v = (_m t) |*^ v
+  transform t v = _m t |*^ v
 
 instance Transformable Normal where
   transform t n = transpose (_mInv t) |*! n
