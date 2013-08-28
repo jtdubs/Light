@@ -1,13 +1,13 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Light.Geometry.Normal
-    -- ADT
-	( Normal, normal, nx, ny, nz, ns, fromVector
+  -- ADT
+  ( Normal, normal, nx, ny, nz, ns, fromVector
 
-	-- Arithmetic
-	, (!-!), (!+!), (!*), (!/), (*!), (!.!), negateNormal
-    , normalizeN, magnitudeN, magnitudeSquaredN, faceForward
-	)
+  -- Arithmetic
+  , (!-!), (!+!), (!*), (!/), (*!), (!.!), negateNormal
+  , normalizeN, magnitudeN, magnitudeSquaredN, faceForward
+  )
 where
 
 import Control.Lens

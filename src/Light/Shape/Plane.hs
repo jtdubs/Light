@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Plane
-    -- ADT
-    ( Plane, plane, planeTransform, planeHalfWidth, planeHalfDepth
+  -- ADT
+  ( Plane, plane, planeTransform, planeHalfWidth, planeHalfDepth
 
-    -- Default Instances
-    , unitPlane
-    )
+  -- Default Instances
+  , unitPlane
+  )
 where
 
 import Control.Monad

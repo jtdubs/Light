@@ -1,15 +1,15 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Light.Geometry.Point
-    -- ADT
-	( Point, point, px, py, pz, ps
+  -- ADT
+  ( Point, point, px, py, pz, ps
 
-	-- Default Instances
-    , originPoint
+  -- Default Instances
+  , originPoint
 
-	-- Arithmetic
-	, (.-.), (.+^), (.-^), distance, distanceSquared
-	)
+  -- Arithmetic
+  , (.-.), (.+^), (.-^), distance, distanceSquared
+  )
 where
 
 import Control.Lens

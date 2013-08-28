@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Paraboloid
-    -- ADT
-    ( Paraboloid, paraboloid, paraboloidTransform, paraboloidRadius, paraboloidHeight
+  -- ADT
+  ( Paraboloid, paraboloid, paraboloidTransform, paraboloidRadius, paraboloidHeight
 
-    -- Default Instances
-    , unitParaboloid
-    )
+  -- Default Instances
+  , unitParaboloid
+  )
 where
 
 import Control.Monad

@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Sphere
-    -- ADT
-    ( Sphere, sphere, sphereTransform, sphereRadius
+  -- ADT
+  ( Sphere, sphere, sphereTransform, sphereRadius
 
-    -- Default Instances
-    , unitSphere
-    )
+  -- Default Instances
+  , unitSphere
+  )
 where
 
 import Control.Monad

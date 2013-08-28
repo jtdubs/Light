@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Cylinder
-    -- ADT
-    ( Cylinder, cylinder, cylinderTransform, cylinderRadius, cylinderHeight
+  -- ADT
+  ( Cylinder, cylinder, cylinderTransform, cylinderRadius, cylinderHeight
 
-    -- Default Instances
-    , unitCylinder
-    )
+  -- Default Instances
+  , unitCylinder
+  )
 where
 
 import Control.Monad

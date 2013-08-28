@@ -1,6 +1,6 @@
 module Light.Math
-    ( quadratic 
-    )
+  ( quadratic 
+  )
 where
 
 import Data.Maybe

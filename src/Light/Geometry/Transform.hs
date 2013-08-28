@@ -1,20 +1,20 @@
 {-# LANGUAGE TypeFamilies, FlexibleInstances #-}
 
 module Light.Geometry.Transform
-	-- ADT
-	( Transform
+  -- ADT
+  ( Transform
 
-	-- Default Instances
+  -- Default Instances
   , identityTransform
 
-	-- Arithmetic
-	, inverse, compose, composeAll
+  -- Arithmetic
+  , inverse, compose, composeAll
   , translation, scaling, rotationQ, rotation, rotation3
   , translate, scale, rotate, rotate3, rotateQ
 
   -- Transformable(..)
   , Transformable(..)
-	)
+  )
 where
 
 import Control.Lens hiding (transform)

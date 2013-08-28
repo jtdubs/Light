@@ -1,21 +1,21 @@
 {-# LANGUAGE TypeFamilies, ParallelListComp #-}
 
 module Light.Geometry.Matrix
-	-- ADT
-	( Matrix, matrix, elems, ix, row, col, rows, cols
+  -- ADT
+  ( Matrix, matrix, elems, ix, row, col, rows, cols
 
-	-- Default Instances
-    , zeroMatrix, identityMatrix
+  -- Default Instances
+  , zeroMatrix, identityMatrix
 
-	-- Element Access
-    , (!!), (//)
+  -- Element Access
+  , (!!), (//)
 
-	-- Arithmetic
-    , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (|*!), (^*|), (.*|), (!*|)
+  -- Arithmetic
+  , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (|*!), (^*|), (.*|), (!*|)
 
-	-- Transformation Matricies
-	, scaleMatrix, translationMatrix, rotationMatrix, frustumMatrix, perspectiveMatrix, orthoMatrix
-	)
+  -- Transformation Matricies
+  , scaleMatrix, translationMatrix, rotationMatrix, frustumMatrix, perspectiveMatrix, orthoMatrix
+  )
 where
 
 import Prelude hiding ((!!))

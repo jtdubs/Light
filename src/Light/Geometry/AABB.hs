@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Light.Geometry.AABB
-	-- ADT
-	( AABB, aabb, emptyAABB, isEmpty, aabbMin, aabbMax, fromPoint, fromPoints
+  -- ADT
+  ( AABB, aabb, emptyAABB, isEmpty, aabbMin, aabbMax, fromPoint, fromPoints
 
-	-- Arithmetic
-	, addPoint, addPoints, aabbUnion, overlaps, isInside, surfaceArea, volume, corners
-	)
+  -- Arithmetic
+  , addPoint, addPoints, aabbUnion, overlaps, isInside, surfaceArea, volume, corners
+  )
 where
 
 import Control.Lens

@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Triangle
-    -- ADT
-    ( Triangle, triangle, triangleTransform, triangleVertices
+  -- ADT
+  ( Triangle, triangle, triangleTransform, triangleVertices
 
-    -- Default Instances
-    , unitTriangle
-    )
+  -- Default Instances
+  , unitTriangle
+  )
 where
 
 import Control.Monad

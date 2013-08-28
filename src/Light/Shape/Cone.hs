@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Cone
-    -- ADT
-    ( Cone, cone, coneTransform, coneRadius, coneHeight
+  -- ADT
+  ( Cone, cone, coneTransform, coneRadius, coneHeight
 
-    -- Default Instances
-    , unitCone
-    )
+  -- Default Instances
+  , unitCone
+  )
 where
 
 import Control.Monad

@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Shape.Disc
-    -- ADT
-    ( Disc, disc, discTransform, discRadius
+  -- ADT
+  ( Disc, disc, discTransform, discRadius
 
-    -- Default Instances
-    , unitDisc
-    )
+  -- Default Instances
+  , unitDisc
+  )
 where
 
 import Control.Monad

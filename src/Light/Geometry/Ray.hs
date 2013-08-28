@@ -1,15 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Geometry.Ray
-    -- ADT
-    ( Ray, ray, rayOrigin, rayDirection
+  -- ADT
+  ( Ray, ray, rayOrigin, rayDirection
 
-    -- Default Instances
-    , xAxisRay, yAxisRay, zAxisRay
+  -- Default Instances
+  , xAxisRay, yAxisRay, zAxisRay
 
-    -- Arithmetic
-    , atTime, negateRay
-    )
+  -- Arithmetic
+  , atTime, negateRay
+  )
 where
 
 import Control.Lens

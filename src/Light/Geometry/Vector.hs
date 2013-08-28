@@ -1,17 +1,17 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Geometry.Vector
-    -- ADT
-    ( Vector, vector, dx, dy, dz, ds
+  -- ADT
+  ( Vector, vector, dx, dy, dz, ds
 
-    -- Default Instances
-    , zeroVector, unitXVector, unitYVector, unitZVector
+  -- Default Instances
+  , zeroVector, unitXVector, unitYVector, unitZVector
 
-    -- Arithmetic
-    , (^+^), (^-^), (^.^), (*^), (^*), (^/)
-    , negateVector, magnitudeV, magnitudeSquaredV, normalizeV, cross
-    , angleBetween
-    )
+  -- Arithmetic
+  , (^+^), (^-^), (^.^), (*^), (^*), (^/)
+  , negateVector, magnitudeV, magnitudeSquaredV, normalizeV, cross
+  , angleBetween
+  )
 where
 
 import Control.Lens
