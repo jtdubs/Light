@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Triangle = Triangle { _triangleTransform :: Transform, _triangleVertices :: [Point] }
 
+triangle :: [Point] -> Triangle
 triangle = Triangle identityTransform
 
 makeLenses ''Triangle
 
+unitTriangle :: Triangle
 unitTriangle = triangle [originPoint, originPoint .+^ unitXVector, originPoint .+^ unitYVector]
 
 instance Show Triangle where

@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Float, _coneHeight :: Float }
 
+cone :: Float -> Float -> Cone
 cone = Cone identityTransform
 
 makeLenses ''Cone
 
+unitCone :: Cone
 unitCone = cone 1 1
 
 instance Show Cone where

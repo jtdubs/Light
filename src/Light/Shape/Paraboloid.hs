@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Float, _paraboloidHeight :: Float }
 
+paraboloid :: Float -> Float -> Paraboloid
 paraboloid = Paraboloid identityTransform
 
 makeLenses ''Paraboloid
 
+unitParaboloid :: Paraboloid
 unitParaboloid = paraboloid 1 1
 
 instance Show Paraboloid where

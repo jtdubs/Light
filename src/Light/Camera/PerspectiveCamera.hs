@@ -22,6 +22,7 @@ data PerspectiveCamera = PerspectiveCamera
 
 makeLenses ''PerspectiveCamera
 
+perspectiveCamera :: Film -> Float -> PerspectiveCamera
 perspectiveCamera = PerspectiveCamera identityTransform
 
 instance Show PerspectiveCamera where

@@ -6,6 +6,7 @@ where
 import Data.Maybe
 import Data.List
 
+quadratic :: Float -> Float -> Float -> Maybe [Float]
 quadratic a b c = if d < 0
                   then Nothing
                   else Just $ sort [ q/a, c/q ]

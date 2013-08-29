@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHeight :: Float }
 
+cylinder :: Float -> Float -> Cylinder
 cylinder = Cylinder identityTransform
 
 makeLenses ''Cylinder
 
+unitCylinder :: Cylinder
 unitCylinder = cylinder 1 1
 
 instance Show Cylinder where

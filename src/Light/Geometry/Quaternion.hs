@@ -16,21 +16,19 @@ module Light.Geometry.Quaternion
 where
 
 import Control.Lens
-import Control.Lens.TH
-import Data.List
 
-import Light.Geometry.Point
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
-import Light.Geometry.Normal
 
 data Quaternion = Quaternion { _qv :: Vector, _qw :: Float }
 
 makeLenses ''Quaternion
 
+normalizeQ :: Quaternion -> Quaternion
 normalizeQ q@(Quaternion v w) = Quaternion (v^/s) (w/s)
   where s = magnitudeSquaredQ q
 
+quaternion :: Float -> Float -> Float -> Float -> Quaternion
 quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
 
 instance Eq Quaternion where
@@ -39,8 +37,10 @@ instance Eq Quaternion where
 instance Show Quaternion where
   show (Quaternion v w) = concat ["#Q(", show v, ", ", show w, ")"]
 
+identityQuaternion :: Quaternion
 identityQuaternion = quaternion 0 0 0 1
 
+toRotationMatrix :: Quaternion -> Matrix
 toRotationMatrix (Quaternion v w) =
   matrix [ 1 - 2 * (yy + zz),     2 * (xy - wz),     2 * (xz + wy), 0
          , 2 * (xy + wz)    , 1 - 2 * (xx + zz),     2 * (yz - wx), 0
@@ -51,27 +51,37 @@ toRotationMatrix (Quaternion v w) =
         xy = x * y; xz = x * z; yz = y * z
         wx = w * x; wy = w * y; wz = w * z
 
-toAngleAxis q@(Quaternion v w) = (acos w * 2, normalizeV v)
+toAngleAxis :: Quaternion -> (Float, Vector)
+toAngleAxis (Quaternion v w) = (acos w * 2, normalizeV v)
 
+magnitudeQ, magnitudeSquaredQ :: Quaternion -> Float
 magnitudeQ = sqrt . magnitudeSquaredQ
 magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
 
+conjugate :: Quaternion -> Quaternion
 conjugate (Quaternion v w) = Quaternion (negateVector v) w
 
-(Quaternion qv qw) @*@ (Quaternion rv rw) =
-  Quaternion (cross qv rv ^+^ (qw *^ rv) ^+^ (rw *^ qv))
-             (qw*rw - (qv ^.^ rv))
+(@*@) :: Quaternion -> Quaternion -> Quaternion
+(Quaternion v w) @*@ (Quaternion x y) =
+  Quaternion (cross v x ^+^ (w *^ x) ^+^ (y *^ v))
+             (w*y - (v ^.^ x))
 
-(Quaternion qv qw) @+@ (Quaternion rv rw) = Quaternion (qv ^+^ rv) (qw+rw)
-(Quaternion qv qw) @-@ (Quaternion rv rw) = Quaternion (qv ^-^ rv) (qw+rw)
-(Quaternion qv qw) @.@ (Quaternion rv rw) = (qv ^.^ rv) + (qw*rw)
+(@+@), (@-@) :: Quaternion -> Quaternion -> Quaternion
+(Quaternion v w) @+@ (Quaternion x y) = Quaternion (v ^+^ x) (w+y)
+(Quaternion v w) @-@ (Quaternion x y) = Quaternion (v ^-^ x) (w+y)
 
+(@.@) :: Quaternion -> Quaternion -> Float
+(Quaternion v w) @.@ (Quaternion x y) = (v ^.^ x) + (w*y)
+
+(@*^) :: Quaternion -> Vector -> Vector
 q @*^ v
   | v == zeroVector = zeroVector
   | otherwise       = (q @*@ Quaternion v 0 @*@ conjugate q)^.qv
 
+rotationQuaternion :: Float -> Vector -> Quaternion
 rotationQuaternion angle axis = Quaternion (normalizeV axis ^* sin (angle/2)) (cos (angle/2))
 
+rotationQuaternion3 :: Float -> Float -> Float -> Quaternion
 rotationQuaternion3 pitch yaw roll = quaternion (cr*sp*cy + sr*cp*sy)
                                                 (cr*cp*sy - sr*sp*cy)
                                                 (sr*cp*cy - cr*sp*sy)

@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float }
 
+sphere :: Float -> Sphere
 sphere = Sphere identityTransform
 
 makeLenses ''Sphere
 
+unitSphere :: Sphere
 unitSphere = sphere 1
 
 instance Show Sphere where

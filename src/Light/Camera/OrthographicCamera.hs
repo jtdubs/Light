@@ -22,6 +22,7 @@ data OrthographicCamera = OrthographicCamera
 
 makeLenses ''OrthographicCamera
 
+orthographicCamera :: Film -> Float -> OrthographicCamera
 orthographicCamera = OrthographicCamera identityTransform
 
 instance Show OrthographicCamera where

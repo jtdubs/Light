@@ -1,28 +1,33 @@
 module Main
 where
 
-import Control.Lens hiding (transform)
-import Control.Monad
+import Control.Lens hiding (ix)
 import Data.List
 
 import Light.Geometry.Point
 import Light.Geometry.Ray
-import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Camera.Camera
 import Light.Camera.OrthographicCamera
 import Light.Camera.PerspectiveCamera
 import Light.Camera.Film
 
-f@(Film fx fy) = Film 16 12
+f :: Film
+f = Film 16 12
+
+p1, p2 :: PerspectiveCamera
 p1 = perspectiveCamera f (pi/3)
 p2 = perspectiveCamera f (pi/2)
+
+o :: OrthographicCamera
 o = orthographicCamera f 1
 
+getRays :: (Camera c) => c -> [Ray]
 getRays camera =
   let (Film fx fy) = camera^.cameraFilm
   in [cameraRay camera (fromIntegral x, fromIntegral y) | x <- [0..fx-1], y <- [0..fy-1]]
 
+main :: IO ()
 main = do
   putStrLn "graphics_toolkit (\"fltk\");"
   putStrLn "clf"
@@ -30,10 +35,12 @@ main = do
   drawPerspectivePlot  2 "Perspective (90)" p2
   drawOrthographicPlot 3 "Orthographic"     o 
 
+drawPerspectivePlot :: Int -> String -> PerspectiveCamera -> IO ()
 drawPerspectivePlot ix title camera = let fovY        = camera^.perspectiveVerticalFOV
                                           (Film _ fy) = camera^.cameraFilm
                                       in drawPlot ix title camera (fromIntegral fy / (2 * tan (fovY/2)))
 
+drawOrthographicPlot :: Int -> String -> OrthographicCamera -> IO ()
 drawOrthographicPlot ix title camera = let (Film fx fy) = camera^.cameraFilm
 									   in drawPlot ix title camera (fromIntegral (min fx fy))
 

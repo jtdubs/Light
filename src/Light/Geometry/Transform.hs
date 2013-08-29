@@ -32,34 +32,53 @@ data Transform = Transform { _m :: Matrix, _mInv :: Matrix } deriving (Eq)
 instance Show Transform where
   show = show . _m
 
+identityTransform :: Transform
 identityTransform = Transform identityMatrix identityMatrix
 
+inverse :: Transform -> Transform
 inverse (Transform m m') = Transform m' m
 
+compose :: Transform -> Transform -> Transform
 compose (Transform m m') (Transform n n') = Transform (m |*| n) (n' |*| m')
 
+composeAll :: [Transform] -> Transform
 composeAll = foldl compose identityTransform
 
+translation :: Vector -> Transform
 translation v = Transform m m'
   where m  = translationMatrix v
         m' = translationMatrix (negateVector v)
 
+scaling :: Vector -> Transform
 scaling v = Transform m m'
   where m  = scaleMatrix v
         m' = scaleMatrix (vector (1/v^.dx) (1/v^.dy) (1/v^.dz))
 
+rotationQ :: Quaternion -> Transform
 rotationQ q = Transform m m'
   where m  = toRotationMatrix q
         m' = toRotationMatrix $ conjugate q
 
-rotation  angle axis     = rotationQ $ rotationQuaternion angle axis
+rotation :: Float -> Vector -> Transform
+rotation  angle axis = rotationQ $ rotationQuaternion angle axis
+
+rotation3 :: Float -> Float -> Float -> Transform
 rotation3 pitch yaw roll = rotationQ $ rotationQuaternion3 pitch yaw roll
 
-translate t v   = transform (translation v) t
-scale t s       = transform (scaling s) t
-rotate t a x    = transform (rotation a x) t
+translate :: (Transformable t) => t -> Vector -> t
+translate t v = transform (translation v) t
+
+scale :: (Transformable t) => t -> Vector -> t
+scale t s = transform (scaling s) t
+
+rotate :: (Transformable t) => t -> Float -> Vector -> t
+rotate t a x = transform (rotation a x) t
+
+rotate3 :: (Transformable t) => t -> Float -> Float -> Float -> t
 rotate3 t p y r = transform (rotation3 p y r) t
-rotateQ t q     = transform (rotationQ q) t
+
+rotateQ :: (Transformable t) => t -> Quaternion -> t
+rotateQ t q = transform (rotationQ q) t
 
 class Transformable a where
   transform :: Transform -> a -> a

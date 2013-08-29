@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Disc = Disc { _discTransform :: Transform, _discRadius :: Float }
 
+disc :: Float -> Disc
 disc = Disc identityTransform
 
 makeLenses ''Disc
 
+unitDisc :: Disc
 unitDisc = disc 1
 
 instance Show Disc where

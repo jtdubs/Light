@@ -24,10 +24,12 @@ import Light.Shape.Shape
 
 data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Float, _planeHalfDepth :: Float }
 
+plane :: Float -> Float -> Plane
 plane = Plane identityTransform
 
 makeLenses ''Plane
 
+unitPlane :: Plane
 unitPlane = plane 1 1
 
 instance Show Plane where
