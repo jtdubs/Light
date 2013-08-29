@@ -59,7 +59,7 @@ magnitudeQ = sqrt . magnitudeSquaredQ
 magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
 
 conjugate :: Quaternion -> Quaternion
-conjugate (Quaternion v w) = Quaternion (negateVector v) w
+conjugate (Quaternion v w) = Quaternion (negateV v) w
 
 (@*@) :: Quaternion -> Quaternion -> Quaternion
 (Quaternion v w) @*@ (Quaternion x y) =

@@ -2,7 +2,7 @@
 
 module Light.Shape.Sphere
   -- ADT
-  ( Sphere, sphere, sphereTransform, sphereRadius
+  ( Sphere, sphere, sphereRadius
 
   -- Default Instances
   , unitSphere

@@ -5,7 +5,7 @@ module Light.Geometry.Normal
   ( Normal, normal, nx, ny, nz, fromVector, ns
 
   -- Arithmetic
-  , (!-!), (!+!), (!*), (!/), (*!), (!.!), negateNormal
+  , (!-!), (!+!), (!*), (!/), (*!), (!.!), negateN
   , normalizeN, magnitudeN, magnitudeSquaredN, faceForward
   )
 where
@@ -47,8 +47,8 @@ fromVector v = Normal (v^.dx) (v^.dy) (v^.dz)
 (*!) :: Float -> Normal -> Normal
 s *! (Normal x y z) = Normal (x*s) (y*s) (z*s)
 
-negateNormal :: Normal -> Normal
-negateNormal (Normal a b c) = Normal (-a) (-b) (-c)
+negateN :: Normal -> Normal
+negateN (Normal a b c) = Normal (-a) (-b) (-c)
 
 magnitudeN, magnitudeSquaredN :: Normal -> Float
 magnitudeN = sqrt . magnitudeSquaredN
@@ -60,4 +60,4 @@ normalizeN n
  | otherwise                = n !/ magnitudeN n
 
 faceForward :: Normal -> Vector -> Normal
-faceForward n v = if (n !.! fromVector v) < 0 then negateNormal n else n
+faceForward n v = if (n !.! fromVector v) < 0 then negateN n else n

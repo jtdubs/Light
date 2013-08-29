@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Camera.OrthographicCamera
-  ( OrthographicCamera, orthographicCamera, orthoTransform, orthoFilm, orthoScale
+  ( OrthographicCamera, orthographicCamera, orthoScale
   )
 where
 
@@ -31,8 +31,8 @@ instance Show OrthographicCamera where
 instance Camera OrthographicCamera where
   cameraTransform = orthoTransform
   cameraFilm = orthoFilm
-  cameraRay (OrthographicCamera t (Film fw fh) s) (fx, fy) = transform (inverse t) (ray o d)
+  cameraRay (OrthographicCamera t f s) (fx, fy) = transform (inverse t) (ray o d)
     where o = point (x*s) (y*s) 0
           d = unitZVector
-          x = fx - (fromIntegral (fw-1) / 2)
-          y = fy - (fromIntegral (fh-1) / 2)
+          x = fx - (fromIntegral ((f^.filmWidth)-1) / 2)
+          y = fy - (fromIntegral ((f^.filmHeight)-1) / 2)

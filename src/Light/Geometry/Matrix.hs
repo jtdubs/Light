@@ -14,7 +14,7 @@ module Light.Geometry.Matrix
   , transpose, (|+|), (|-|), (|*|), (|*), (|/), (|*^), (|*.), (|*!), (^*|), (.*|), (!*|)
 
   -- Transformation Matricies
-  , scaleMatrix, translationMatrix, rotationMatrix, frustumMatrix, perspectiveMatrix, orthoMatrix
+  , scalingMatrix, translationMatrix, rotationMatrix, frustumMatrix, perspectiveMatrix, orthoMatrix
   )
 where
 
@@ -120,11 +120,11 @@ m |*. p =  (ps .~ map (`dot` (p^.ps)) (m^.rows)) p
 (.*|) :: Point -> Matrix -> Point
 p .*| m =  (ps .~ map (`dot` (p^.ps)) (m^.cols)) p
 
-scaleMatrix :: Vector -> Matrix
-scaleMatrix v = matrix [ v^.dx,     0,     0, 0
-                       ,     0, v^.dy,     0, 0
-                       ,     0,     0, v^.dz, 0
-                       ,     0,     0,     0, 1 ]
+scalingMatrix :: Vector -> Matrix
+scalingMatrix v = matrix [ v^.dx,     0,     0, 0
+                         ,     0, v^.dy,     0, 0
+                         ,     0,     0, v^.dz, 0
+                         ,     0,     0,     0, 1 ]
 
 translationMatrix :: Vector -> Matrix
 translationMatrix v = matrix [ 1, 0, 0, v^.dx

@@ -8,7 +8,7 @@ module Light.Geometry.Ray
   , xAxisRay, yAxisRay, zAxisRay
 
   -- Arithmetic
-  , atTime, negateRay
+  , atTime, negateR
   )
 where
 
@@ -35,5 +35,5 @@ zAxisRay = Ray originPoint unitZVector
 atTime :: Ray -> Float -> Point
 atTime (Ray o d) t = o .+^ (d ^* t)
 
-negateRay :: Ray -> Ray
-negateRay = rayDirection %~ negateVector
+negateR :: Ray -> Ray
+negateR = rayDirection %~ negateV

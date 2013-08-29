@@ -13,7 +13,7 @@ import Light.Camera.PerspectiveCamera
 import Light.Camera.Film
 
 f :: Film
-f = Film 16 12
+f = film 16 12
 
 p1, p2 :: PerspectiveCamera
 p1 = perspectiveCamera f (pi/3)
@@ -24,7 +24,8 @@ o = orthographicCamera f 1
 
 getRays :: (Camera c) => c -> [Ray]
 getRays camera =
-  let (Film fx fy) = camera^.cameraFilm
+  let fx = camera^.cameraFilm.filmWidth
+      fy = camera^.cameraFilm.filmHeight
   in [cameraRay camera (fromIntegral x, fromIntegral y) | x <- [0..fx-1], y <- [0..fy-1]]
 
 main :: IO ()
@@ -36,19 +37,19 @@ main = do
   drawOrthographicPlot 3 "Orthographic"     o 
 
 drawPerspectivePlot :: Int -> String -> PerspectiveCamera -> IO ()
-drawPerspectivePlot ix title camera = let fovY        = camera^.perspectiveVerticalFOV
-                                          (Film _ fy) = camera^.cameraFilm
+drawPerspectivePlot ix title camera = let fovY = camera^.perspectiveVerticalFOV
+                                          fy   = camera^.cameraFilm.filmHeight
                                       in drawPlot ix title camera (fromIntegral fy / (2 * tan (fovY/2)))
 
 drawOrthographicPlot :: Int -> String -> OrthographicCamera -> IO ()
-drawOrthographicPlot ix title camera = let (Film fx fy) = camera^.cameraFilm
+drawOrthographicPlot ix title camera = let fx = camera^.cameraFilm.filmWidth
+                                           fy = camera^.cameraFilm.filmHeight
 									   in drawPlot ix title camera (fromIntegral (min fx fy))
 
 drawPlot :: (Camera c) => Int -> String -> c -> Float -> IO ()
 drawPlot ix title camera imagePlaneHeight = do
-  let (Film fx' fy') = camera^.cameraFilm
-  let fx             = fromIntegral fx'
-  let fy             = fromIntegral fy'
+  let fx             = fromIntegral $ camera^.cameraFilm.filmWidth
+  let fy             = fromIntegral $ camera^.cameraFilm.filmHeight
   let dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
   let rays           = getRays camera
   let ox             = map (^.rayOrigin.px) rays

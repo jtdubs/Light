@@ -2,7 +2,7 @@
 
 module Light.Shape.Triangle
   -- ADT
-  ( Triangle, triangle, triangleTransform, triangleVertices
+  ( Triangle, triangle, triangleVertices
 
   -- Default Instances
   , unitTriangle

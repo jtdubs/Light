@@ -2,7 +2,7 @@
 
 module Light.Shape.Cone
   -- ADT
-  ( Cone, cone, coneTransform, coneRadius, coneHeight
+  ( Cone, cone, coneRadius, coneHeight
 
   -- Default Instances
   , unitCone

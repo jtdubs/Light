@@ -2,7 +2,7 @@
 
 module Light.Shape.Cylinder
   -- ADT
-  ( Cylinder, cylinder, cylinderTransform, cylinderRadius, cylinderHeight
+  ( Cylinder, cylinder, cylinderRadius, cylinderHeight
 
   -- Default Instances
   , unitCylinder

@@ -2,7 +2,7 @@
 
 module Light.Shape.Disc
   -- ADT
-  ( Disc, disc, discTransform, discRadius
+  ( Disc, disc, discRadius
 
   -- Default Instances
   , unitDisc

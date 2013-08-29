@@ -47,12 +47,12 @@ composeAll = foldl compose identityTransform
 translation :: Vector -> Transform
 translation v = Transform m m'
   where m  = translationMatrix v
-        m' = translationMatrix (negateVector v)
+        m' = translationMatrix (negateV v)
 
 scaling :: Vector -> Transform
 scaling v = Transform m m'
-  where m  = scaleMatrix v
-        m' = scaleMatrix (vector (1/v^.dx) (1/v^.dy) (1/v^.dz))
+  where m  = scalingMatrix v
+        m' = scalingMatrix (vector (1/v^.dx) (1/v^.dy) (1/v^.dz))
 
 rotationQ :: Quaternion -> Transform
 rotationQ q = Transform m m'

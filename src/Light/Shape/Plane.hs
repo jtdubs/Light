@@ -2,7 +2,7 @@
 
 module Light.Shape.Plane
   -- ADT
-  ( Plane, plane, planeTransform, planeHalfWidth, planeHalfDepth
+  ( Plane, plane, planeHalfWidth, planeHalfDepth
 
   -- Default Instances
   , unitPlane

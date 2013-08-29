@@ -2,7 +2,7 @@
 
 module Light.Shape.Paraboloid
   -- ADT
-  ( Paraboloid, paraboloid, paraboloidTransform, paraboloidRadius, paraboloidHeight
+  ( Paraboloid, paraboloid, paraboloidRadius, paraboloidHeight
 
   -- Default Instances
   , unitParaboloid

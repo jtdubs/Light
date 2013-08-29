@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Light.Camera.PerspectiveCamera
-  ( PerspectiveCamera, perspectiveCamera, perspectiveTransform, perspectiveFilm, perspectiveVerticalFOV
+  ( PerspectiveCamera, perspectiveCamera, perspectiveVerticalFOV
   )
 where
 
@@ -31,9 +31,11 @@ instance Show PerspectiveCamera where
 instance Camera PerspectiveCamera where
   cameraTransform = perspectiveTransform
   cameraFilm = perspectiveFilm
-  cameraRay (PerspectiveCamera t (Film fw fh) fovY) (fx, fy) = transform (inverse t) (ray o d)
+  cameraRay (PerspectiveCamera t f fovY) (fx, fy) = transform (inverse t) (ray o d)
     where o = originPoint
           d = normalizeV $ vector (nx*sx) (ny*sy) 1
+          fw = f^.filmWidth
+          fh = f^.filmHeight
           sx = tan (fovY / 2) * (fromIntegral (fw-1) / fromIntegral fw) * (fromIntegral fw / fromIntegral fh)
           sy = tan (fovY / 2) * (fromIntegral (fh-1) / fromIntegral fh)
           nx = (fx / fromIntegral (fw-1)) * 2 - 1

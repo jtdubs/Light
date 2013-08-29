@@ -9,7 +9,7 @@ module Light.Geometry.Vector
 
   -- Arithmetic
   , (^+^), (^-^), (^.^), (*^), (^*), (^/)
-  , negateVector, magnitudeV, magnitudeSquaredV, normalizeV, cross
+  , negateV, magnitudeV, magnitudeSquaredV, normalizeV, cross
   , angleBetween
   )
 where
@@ -52,8 +52,8 @@ s *^ (Vector x y z) = Vector (x*s) (y*s) (z*s)
 (^.^) :: Vector -> Vector -> Float
 (Vector x y z) ^.^ (Vector a b c) = (x*a) + (y*b) + (z*c)
 
-negateVector :: Vector -> Vector
-negateVector (Vector x y z) = Vector (-x) (-y) (-z)
+negateV :: Vector -> Vector
+negateV (Vector x y z) = Vector (-x) (-y) (-z)
 
 magnitudeV, magnitudeSquaredV :: Vector -> Float
 magnitudeV = sqrt . magnitudeSquaredV
