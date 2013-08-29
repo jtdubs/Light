@@ -52,6 +52,9 @@ s *^ (Vector x y z) = Vector (x*s) (y*s) (z*s)
 (^.^) :: Vector -> Vector -> Float
 (Vector x y z) ^.^ (Vector a b c) = (x*a) + (y*b) + (z*c)
 
+infixl 6 ^+^, ^-^
+infixl 7 ^.^, ^*, ^/, *^
+
 negateV :: Vector -> Vector
 negateV (Vector x y z) = Vector (-x) (-y) (-z)
 

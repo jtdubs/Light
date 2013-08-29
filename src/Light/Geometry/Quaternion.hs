@@ -73,10 +73,15 @@ conjugate (Quaternion v w) = Quaternion (negateV v) w
 (@.@) :: Quaternion -> Quaternion -> Float
 (Quaternion v w) @.@ (Quaternion x y) = (v ^.^ x) + (w*y)
 
+infixl 6 @+@, @-@
+infixl 7 @*@, @.@
+
 (@*^) :: Quaternion -> Vector -> Vector
 q @*^ v
   | v == zeroVector = zeroVector
   | otherwise       = (q @*@ Quaternion v 0 @*@ conjugate q)^.qv
+
+infixl 7 @*^
 
 rotationQuaternion :: Float -> Vector -> Quaternion
 rotationQuaternion angle axis = Quaternion (normalizeV axis ^* sin (angle/2)) (cos (angle/2))

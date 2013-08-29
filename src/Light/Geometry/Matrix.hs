@@ -32,6 +32,10 @@ import Light.Geometry.Point
 import qualified Data.Array.IArray as A
 import qualified Data.List         as L
 
+infixl 9 !!, //
+infixl 6 |+|, |-|
+infixl 7 |*|, |*, |/, |*^, ^*|, |*!, !*|, |*., .*|
+
 data Matrix = Matrix (UArray Int Float)
 
 matrix :: [Float] -> Matrix
@@ -93,9 +97,11 @@ transpose m = (cols .~ (m^.rows)) m
 dot :: [Float] -> [Float] -> Float
 dot x y = sum $ zipWith (*) x y
 
-(|+|), (|-|), (|*|) :: Matrix -> Matrix -> Matrix
+(|+|), (|-|) :: Matrix -> Matrix -> Matrix
 m |+| n = matrix $ zipWith (+) (m^.elems) (n^.elems)
 m |-| n = matrix $ zipWith (-) (m^.elems) (n^.elems)
+
+(|*|) :: Matrix -> Matrix -> Matrix
 m |*| n = matrix [ r `dot` c | r <- m^.rows, c <- n^.cols ]
 
 (|*), (|/) :: Matrix -> Float -> Matrix

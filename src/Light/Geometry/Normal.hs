@@ -47,6 +47,9 @@ fromVector v = Normal (v^.dx) (v^.dy) (v^.dz)
 (*!) :: Float -> Normal -> Normal
 s *! (Normal x y z) = Normal (x*s) (y*s) (z*s)
 
+infixl 6 !+!, !-!
+infixl 7 !.!, !*, !/, *!
+
 negateN :: Normal -> Normal
 negateN (Normal a b c) = Normal (-a) (-b) (-c)
 

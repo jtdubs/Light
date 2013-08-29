@@ -45,6 +45,8 @@ originPoint = point 0 0 0
 (Point x y z) .-^ v = Point (x - v^.dx) (y - v^.dy) (z - v^.dz)
 (Point x y z) .+^ v = Point (x + v^.dx) (y + v^.dy) (z + v^.dz)
 
+infixl 6 .-., .+^, .-^
+
 distance, distanceSquared :: Point -> Point -> Float
 distance        p q = magnitudeV        (p .-. q)
 distanceSquared p q = magnitudeSquaredV (p .-. q)

@@ -25,8 +25,8 @@ prop_VectorAdditiveIdentity v = v == (v ^+^ zeroVector)
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool
 prop_CrossProductIsOrthogonal u v = u == zeroVector
                                  || v == zeroVector
-                                 || ( abs ((cross (normalizeV u) (normalizeV v)) ^.^ u) < 0.0001
-                                   && abs ((cross (normalizeV u) (normalizeV v)) ^.^ v) < 0.0001 )
+                                 || ( abs (cross (normalizeV u) (normalizeV v) ^.^ u) < 0.0001
+                                   && abs (cross (normalizeV u) (normalizeV v) ^.^ v) < 0.0001 )
 
 prop_MatrixMultiplicitiveIdentity :: Matrix -> Bool
 prop_MatrixMultiplicitiveIdentity m = m |*| identityMatrix == m
