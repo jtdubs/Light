@@ -24,7 +24,10 @@ point = Point
 makeLenses ''Point
 
 ps :: Lens' Point [Float]
-ps = lens (\ (Point x y z) -> [x, y, z, 1]) (\p [x, y, z, w] -> Point (x/w) (y/w) (z/w))
+ps = lens (\ (Point x y z) -> [x, y, z, 1])
+          (\p [x, y, z, w] -> if w == 0 
+                              then Point 0 0 0
+                              else Point (x/w) (y/w) (z/w))
 
 instance Eq Point where
   u == v = distanceSquared u v < 0.00001

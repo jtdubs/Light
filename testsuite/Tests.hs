@@ -1,19 +1,22 @@
-module Light.Data.Tests (main) where
+module Main where
 
-import qualified Test.QuickCheck as QC
 import Control.Monad
+import Test.Framework as TF (defaultMain, testGroup, Test)
+import Test.Framework.Providers.QuickCheck2 (testProperty)
+import qualified Test.QuickCheck as QC
 
-import Light.Geometry
+import Light.Geometry.Vector
+import Light.Geometry.Point
+import Light.Geometry.Matrix
 
-{-
 instance QC.Arbitrary Vector where
-  arbitrary = QC.vector 3 >>= return . V.fromList
+  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ vector a b c
 
 instance QC.Arbitrary Point where
-  arbitrary = QC.vector 3 >>= return . P.fromList
+  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ point a b c
 
 instance QC.Arbitrary Matrix where
-  arbitrary = QC.vector 16 >>= return . matrix
+  arbitrary = liftM matrix $ QC.vector 16
 
 prop_VectorAdditiveIdentity :: Vector -> Bool
 prop_VectorAdditiveIdentity v = v == (v ^+^ zeroVector)
@@ -22,8 +25,8 @@ prop_VectorAdditiveIdentity v = v == (v ^+^ zeroVector)
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool
 prop_CrossProductIsOrthogonal u v = u == zeroVector
                                  || v == zeroVector
-                                 || ( abs ((cross (normalize u) (normalize v)) ^.^ u) < 0.0001
-                                   && abs ((cross (normalize u) (normalize v)) ^.^ v) < 0.0001 )
+                                 || ( abs ((cross (normalizeV u) (normalizeV v)) ^.^ u) < 0.0001
+                                   && abs ((cross (normalizeV u) (normalizeV v)) ^.^ v) < 0.0001 )
 
 prop_MatrixMultiplicitiveIdentity :: Matrix -> Bool
 prop_MatrixMultiplicitiveIdentity m = m |*| identityMatrix == m
@@ -56,16 +59,20 @@ prop_PointTimesIdentity :: Point -> Bool
 prop_PointTimesIdentity p = p .*| identityMatrix == p
                          && identityMatrix |*. p == p
 
-main = do
-  QC.quickCheck prop_VectorAdditiveIdentity
-  QC.quickCheck prop_CrossProductIsOrthogonal
-  QC.quickCheck prop_MatrixMultiplicitiveIdentity 
-  QC.quickCheck prop_MatrixMultiplicitiveZero 
-  QC.quickCheck prop_MatrixAdditiveIdentity 
-  QC.quickCheck prop_MatrixTranspose
-  QC.quickCheck prop_VectorTimesZero
-  QC.quickCheck prop_PointTimesZero
-  QC.quickCheck prop_VectorTimesIdentity
-  QC.quickCheck prop_PointTimesIdentity
-  QC.quickCheck prop_MatrixTranspose
--}
+tests :: [TF.Test]
+tests = [ testGroup "QuickCheck Geometry"
+            [ testProperty "VectorAdditiveIdentity" prop_VectorAdditiveIdentity
+            , testProperty "CrossProductIsOrthogonal" prop_CrossProductIsOrthogonal
+            , testProperty "MatrixMultiplicitiveIdentity"  prop_MatrixMultiplicitiveIdentity 
+            , testProperty "MatrixMultiplicitiveZero"  prop_MatrixMultiplicitiveZero 
+            , testProperty "MatrixAdditiveIdentity"  prop_MatrixAdditiveIdentity 
+            , testProperty "MatrixTranspose" prop_MatrixTranspose
+            , testProperty "VectorTimesZero" prop_VectorTimesZero
+            , testProperty "PointTimesZero" prop_PointTimesZero
+            , testProperty "VectorTimesIdentity" prop_VectorTimesIdentity
+            , testProperty "PointTimesIdentity" prop_PointTimesIdentity
+            , testProperty "MatrixTranspose" prop_MatrixTranspose
+            ] ] 
+
+main :: IO ()
+main = defaultMain tests
