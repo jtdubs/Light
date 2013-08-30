@@ -14,7 +14,7 @@ import Control.Lens
 
 import Light.Geometry.Vector
 
-data Normal = Normal { _nx :: Float, _ny :: Float, _nz :: Float }
+data Normal = Normal { _nx :: Float, _ny :: Float, _nz :: Float } deriving (Show, Read)
 
 makeLenses ''Normal
 
@@ -26,9 +26,6 @@ ns = lens (\ (Normal x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Normal x y z)
 
 instance Eq Normal where
   u == v = magnitudeSquaredN (u !-! v) < 0.00001
-
-instance Show Normal where
-  show (Normal x y z) = concat ["#N(", show x, ", ", show y, ", ", show z, ")"]
 
 fromVector :: Vector -> Normal
 fromVector v = Normal (v^.dx) (v^.dy) (v^.dz)

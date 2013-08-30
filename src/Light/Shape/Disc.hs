@@ -19,7 +19,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Disc = Disc { _discTransform :: Transform, _discRadius :: Float }
+data Disc = Disc { _discTransform :: Transform, _discRadius :: Float } deriving (Show, Read)
 
 disc :: Float -> Disc
 disc = Disc identityTransform
@@ -28,9 +28,6 @@ makeLenses ''Disc
 
 unitDisc :: Disc
 unitDisc = disc 1
-
-instance Show Disc where
-  show (Disc t r) = concat ["#D(", show t, ", ", show r, ")"]
 
 instance Transformable Disc where
   transform t' (Disc t r) = Disc (compose t' t) r

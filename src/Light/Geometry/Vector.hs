@@ -16,7 +16,7 @@ where
 
 import Control.Lens
 
-data Vector = Vector { _dx :: Float, _dy :: Float, _dz :: Float }
+data Vector = Vector { _dx :: Float, _dy :: Float, _dz :: Float } deriving (Show, Read)
 
 vector :: Float -> Float -> Float -> Vector
 vector = Vector
@@ -29,15 +29,12 @@ ds = lens (\ (Vector x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Vector x y z)
 instance Eq Vector where
   u == v = magnitudeSquaredV (u ^-^ v) < 0.00001
 
-instance Show Vector where
-  show (Vector x y z) = concat ["#V(", show x, ", ", show y, ", ", show z, ")"]
-
 zeroVector, unitXVector, unitYVector, unitZVector :: Vector
 zeroVector  = Vector 0 0 0
 unitXVector = Vector 1 0 0
 unitYVector = Vector 0 1 0
 unitZVector = Vector 0 0 1
-
+ 
 (^+^), (^-^) :: Vector -> Vector -> Vector
 (Vector x y z) ^+^ (Vector a b c) = Vector (x+a) (y+b) (z+c)
 (Vector x y z) ^-^ (Vector a b c) = Vector (x-a) (y-b) (z-c)

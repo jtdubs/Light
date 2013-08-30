@@ -16,7 +16,7 @@ import Control.Lens
 
 import Light.Geometry.Vector
 
-data Point = Point { _px :: Float, _py :: Float, _pz :: Float }
+data Point = Point { _px :: Float, _py :: Float, _pz :: Float } deriving (Show, Read)
 
 point :: Float -> Float -> Float -> Point
 point = Point
@@ -31,9 +31,6 @@ ps = lens (\ (Point x y z) -> [x, y, z, 1])
 
 instance Eq Point where
   u == v = distanceSquared u v < 0.00001
-
-instance Show Point where
-  show (Point x y z) = concat ["#P(", show x, ", ", show y, ", ", show z, ")"]
 
 originPoint :: Point
 originPoint = point 0 0 0

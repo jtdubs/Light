@@ -20,7 +20,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHeight :: Float }
+data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHeight :: Float } deriving (Show, Read)
 
 cylinder :: Float -> Float -> Cylinder
 cylinder = Cylinder identityTransform
@@ -29,9 +29,6 @@ makeLenses ''Cylinder
 
 unitCylinder :: Cylinder
 unitCylinder = cylinder 1 1
-
-instance Show Cylinder where
-  show (Cylinder t r h) = concat ["#C(", show t, ", ", show r, ", ", show h, ")"]
 
 instance Transformable Cylinder where
   transform t' (Cylinder t r h) = Cylinder (compose t' t) r h

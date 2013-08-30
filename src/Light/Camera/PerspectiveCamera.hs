@@ -18,15 +18,12 @@ data PerspectiveCamera = PerspectiveCamera
                           { _perspectiveTransform   :: Transform
                           , _perspectiveFilm        :: Film
                           , _perspectiveVerticalFOV :: Float
-                          } deriving (Eq)
+                          } deriving (Eq, Show, Read)
 
 makeLenses ''PerspectiveCamera
 
 perspectiveCamera :: Film -> Float -> PerspectiveCamera
 perspectiveCamera = PerspectiveCamera identityTransform
-
-instance Show PerspectiveCamera where
-  show (PerspectiveCamera t f s) = concat ["#O(", show t, ", ", show f, ", ", show s, ")"]
 
 instance Camera PerspectiveCamera where
   cameraTransform = perspectiveTransform

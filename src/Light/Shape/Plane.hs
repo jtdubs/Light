@@ -19,7 +19,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Float, _planeHalfDepth :: Float }
+data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Float, _planeHalfDepth :: Float } deriving (Show, Read)
 
 plane :: Float -> Float -> Plane
 plane = Plane identityTransform
@@ -28,9 +28,6 @@ makeLenses ''Plane
 
 unitPlane :: Plane
 unitPlane = plane 1 1
-
-instance Show Plane where
-  show (Plane t w d) = concat ["#D(", show t, ", ", show w, ", ", show d, ")"]
 
 instance Transformable Plane where
   transform t' (Plane t w d) = Plane (compose t' t) w d

@@ -20,7 +20,7 @@ import Control.Lens
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
 
-data Quaternion = Quaternion { _qv :: Vector, _qw :: Float }
+data Quaternion = Quaternion { _qv :: Vector, _qw :: Float } deriving (Show, Read)
 
 makeLenses ''Quaternion
 
@@ -33,9 +33,6 @@ quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
 
 instance Eq Quaternion where
   u == v = (u^.qv == v^.qv) && abs (u^.qw - v^.qw) < 0.0001
-
-instance Show Quaternion where
-  show (Quaternion v w) = concat ["#Q(", show v, ", ", show w, ")"]
 
 identityQuaternion :: Quaternion
 identityQuaternion = quaternion 0 0 0 1

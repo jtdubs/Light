@@ -14,7 +14,7 @@ import Control.Lens
 import Light.Geometry.Point
 import Light.Geometry.Vector
 
-data AABB = EmptyAABB | AABB { _aabbMin :: Point, _aabbMax :: Point } deriving (Eq)
+data AABB = EmptyAABB | AABB { _aabbMin :: Point, _aabbMax :: Point } deriving (Eq, Show, Read)
 
 aabb :: Point -> Point -> AABB
 aabb = AABB
@@ -27,10 +27,6 @@ isEmpty EmptyAABB = True
 isEmpty _         = False
 
 makeLenses ''AABB
-
-instance Show AABB where
-  show EmptyAABB  = "#AABB()"
-  show (AABB n x) = "#AABB(" ++ show n ++ ", " ++ show x ++ ")"
 
 fromPoint :: Point -> AABB
 fromPoint  = addPoint  EmptyAABB

@@ -18,15 +18,12 @@ data OrthographicCamera = OrthographicCamera
                           { _orthoTransform :: Transform
                           , _orthoFilm      :: Film
                           , _orthoScale     :: Float
-                          } deriving (Eq)
+                          } deriving (Eq, Show, Read)
 
 makeLenses ''OrthographicCamera
 
 orthographicCamera :: Film -> Float -> OrthographicCamera
 orthographicCamera = OrthographicCamera identityTransform
-
-instance Show OrthographicCamera where
-  show (OrthographicCamera t f s) = concat ["#O(", show t, ", ", show f, ", ", show s, ")"]
 
 instance Camera OrthographicCamera where
   cameraTransform = orthoTransform

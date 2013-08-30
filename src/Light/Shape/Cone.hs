@@ -20,7 +20,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Float, _coneHeight :: Float }
+data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Float, _coneHeight :: Float } deriving (Show, Read)
 
 cone :: Float -> Float -> Cone
 cone = Cone identityTransform
@@ -29,9 +29,6 @@ makeLenses ''Cone
 
 unitCone :: Cone
 unitCone = cone 1 1
-
-instance Show Cone where
-  show (Cone t r h) = concat ["#S(", show t, ", ", show r, ", ", show h, ")"]
 
 instance Transformable Cone where
   transform t' (Cone t r h) = Cone (compose t' t) r h

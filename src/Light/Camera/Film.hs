@@ -8,15 +8,12 @@ where
 
 import Control.Lens
 
-data Film = Film { _filmWidth :: Int, _filmHeight :: Int } deriving (Eq)
+data Film = Film { _filmWidth :: Int, _filmHeight :: Int } deriving (Eq, Show, Read)
 
 film :: Int -> Int -> Film
 film = Film
 
 makeLenses ''Film
-
-instance Show Film where
-  show (Film w h) = concat ["#F(", show w, ", ", show h, ")"]
 
 film1080, film720, film480, film2k, film4k, film8k, filmQVGA, filmVGA :: Film
 film1080      = film 1920 1080

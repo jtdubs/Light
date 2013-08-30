@@ -20,7 +20,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Float, _paraboloidHeight :: Float }
+data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Float, _paraboloidHeight :: Float } deriving (Show, Read)
 
 paraboloid :: Float -> Float -> Paraboloid
 paraboloid = Paraboloid identityTransform
@@ -29,9 +29,6 @@ makeLenses ''Paraboloid
 
 unitParaboloid :: Paraboloid
 unitParaboloid = paraboloid 1 1
-
-instance Show Paraboloid where
-  show (Paraboloid t r h) = concat ["#P(", show t, ", ", show r, ", ", show h, ")"]
 
 instance Transformable Paraboloid where
   transform t' (Paraboloid t r h) = Paraboloid (compose t' t) r h

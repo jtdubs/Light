@@ -20,7 +20,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float }
+data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float } deriving (Show, Read)
 
 sphere :: Float -> Sphere
 sphere = Sphere identityTransform
@@ -29,9 +29,6 @@ makeLenses ''Sphere
 
 unitSphere :: Sphere
 unitSphere = sphere 1
-
-instance Show Sphere where
-  show (Sphere t r) = concat ["#S(", show t, ", ", show r, ")"]
 
 instance Transformable Sphere where
   transform t' (Sphere t r) = Sphere (compose t' t) r

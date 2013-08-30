@@ -19,7 +19,7 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Triangle = Triangle { _triangleTransform :: Transform, _triangleVertices :: [Point] }
+data Triangle = Triangle { _triangleTransform :: Transform, _triangleVertices :: [Point] } deriving (Show, Read)
 
 triangle :: [Point] -> Triangle
 triangle [a, b, c] = Triangle identityTransform [a, b, c]
@@ -29,9 +29,6 @@ makeLenses ''Triangle
 
 unitTriangle :: Triangle
 unitTriangle = triangle [originPoint, originPoint .+^ unitXVector, originPoint .+^ unitYVector]
-
-instance Show Triangle where
-  show (Triangle t points) = concat ["#T(", show t, ", ", show points, ")"]
 
 instance Transformable Triangle where
   transform t' (Triangle t points) = Triangle (compose t' t) points

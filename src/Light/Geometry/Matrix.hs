@@ -22,7 +22,6 @@ import Prelude hiding ((!!))
 
 import Data.Array.IArray hiding ((//), elems)
 import Data.Array.Unboxed hiding (elems, (//))
-import Data.List hiding (transpose, (!!))
 import Control.Lens hiding (ix)
 
 import Light.Geometry.Vector
@@ -37,6 +36,12 @@ infixl 6 |+|, |-|
 infixl 7 |*|, |*, |/, |*^, ^*|, |*!, !*|, |*., .*|
 
 data Matrix = Matrix (UArray Int Float)
+
+instance Show Matrix where
+  show = show . (^.elems)
+
+instance Read Matrix where
+  readsPrec n s = let [(fs, r)] = readsPrec n s in [(matrix fs, r)]
 
 matrix :: [Float] -> Matrix
 matrix = Matrix . array (0, 15) . zip [0..]
@@ -73,11 +78,6 @@ cols = lens (\m -> [m^.col i | i <- [0..3]])
 
 instance Eq Matrix where
   u == v = all (< 0.0001) $ map abs $ zipWith (-) (u^.elems) (v^.elems)
-
-instance Show Matrix where
-  show m = let showRow   = intercalate ", "    . map show .  (\n -> m^.row n)
-               showRows  = intercalate "\n   " $ map showRow [0..3]
-             in "#M(" ++ showRows ++ ")"
 
 zeroMatrix :: Matrix
 zeroMatrix = matrix [ 0, 0, 0, 0
