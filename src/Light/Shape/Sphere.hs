@@ -11,8 +11,6 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
 import Light.Math
 import Light.Geometry.AABB
@@ -45,11 +43,11 @@ instance Shape Sphere where
 
   surfaceArea (Sphere _ r) = 4 * pi * r * r
 
-  intersect ray (Sphere t r) = do
+  intersect theRay (Sphere t r) = do
     ts <- liftM (filter (> 0)) $ quadratic a b c
     guard  $ not (null ts)
     return $ head ts
-    where r' = transform (inverse t) ray
+    where r' = transform (inverse t) theRay
           a  = magnitudeSquaredV $ r'^.rayDirection
           b  = 2 * ((r'^.rayDirection) ^.^ ((r'^.rayOrigin) .-. originPoint))
           c  = distanceSquared (r'^.rayOrigin) originPoint - r*r

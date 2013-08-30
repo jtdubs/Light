@@ -11,8 +11,6 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
 import Light.Math
 import Light.Geometry.AABB
@@ -45,17 +43,17 @@ instance Shape Cylinder where
 
   surfaceArea (Cylinder _ r h) = 2 * pi * r * h
 
-  intersect ray (Cylinder t r h) = do
+  intersect theRay (Cylinder t r h) = do
     ts <- liftM (filter f) $ quadratic a b c
     guard  $ not (null ts)
     return $ head ts
-    where r' = transform (inverse t) ray
-          rdx = r'^.rayDirection.dx
-          rdy = r'^.rayDirection.dy
-          rox = r'^.rayOrigin.px
-          roy = r'^.rayOrigin.py
-          a  = (rdx*rdx) + (rdy*rdy)
-          b  = 2 * (rdx*rox) + (rdy*roy)
-          c  = (rox*rox) + (roy*roy) - r*r
-          f t = let rz = (r' `atTime` t)^.pz
-                in t > 0 && rz >= 0 && rz <= h
+    where r'     = transform (inverse t) theRay
+          rdx    = r'^.rayDirection.dx
+          rdy    = r'^.rayDirection.dy
+          rox    = r'^.rayOrigin.px
+          roy    = r'^.rayOrigin.py
+          a      = (rdx*rdx) + (rdy*rdy)
+          b      = 2 * (rdx*rox) + (rdy*roy)
+          c      = (rox*rox) + (roy*roy) - r*r
+          f time = let rz = (r' `atTime` time)^.pz
+                   in time > 0 && rz >= 0 && rz <= h

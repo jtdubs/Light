@@ -11,8 +11,6 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
 import Light.Math
 import Light.Geometry.AABB
@@ -45,19 +43,19 @@ instance Shape Cone where
 
   surfaceArea (Cone _ r h) = pi * r * sqrt (r*r + h*h)
 
-  intersect ray (Cone t r h) = do
+  intersect theRay (Cone t r h) = do
     ts <- liftM (filter f) $ quadratic a b c
     guard  $ not (null ts)
     return $ head ts
-    where r' = transform (inverse t) ray
-          rdx = r'^.rayDirection.dx
-          rdy = r'^.rayDirection.dy
-          rdz = r'^.rayDirection.dz
-          rox = r'^.rayOrigin.px
-          roy = r'^.rayOrigin.py
-          roz = r'^.rayOrigin.pz
-          a   = (  h*h*rdx*rdx +   h*h*rdy*rdy)/(r*r) + (  -rdz*rdz)
-          b   = (2*h*h*rox*rdx + 2*h*h*roy*rdy)/(r*r) + (-2*roz*rdz + 2*rdz*h)
-          c   = (  h*h*rox*rox +   h*h*roy*roy)/(r*r) + (  -roz*roz + 2*roz*h - h*h)
-          f t = let rz = (r' `atTime` t)^.pz
-                in t > 0 && rz >= 0 && rz <= h
+    where r'     = transform (inverse t) theRay
+          rdx    = r'^.rayDirection.dx
+          rdy    = r'^.rayDirection.dy
+          rdz    = r'^.rayDirection.dz
+          rox    = r'^.rayOrigin.px
+          roy    = r'^.rayOrigin.py
+          roz    = r'^.rayOrigin.pz
+          a      = (  h*h*rdx*rdx +   h*h*rdy*rdy)/(r*r) + (  -rdz*rdz)
+          b      = (2*h*h*rox*rdx + 2*h*h*roy*rdy)/(r*r) + (-2*roz*rdz + 2*rdz*h)
+          c      = (  h*h*rox*rox +   h*h*roy*roy)/(r*r) + (  -roz*roz + 2*roz*h - h*h)
+          f time = let rz = (r' `atTime` time)^.pz
+                   in time > 0 && rz >= 0 && rz <= h

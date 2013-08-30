@@ -11,10 +11,7 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
-import Light.Math
 import Light.Geometry.AABB
 import Light.Geometry.Point
 import Light.Geometry.Ray
@@ -25,7 +22,8 @@ import Light.Shape.Shape
 data Triangle = Triangle { _triangleTransform :: Transform, _triangleVertices :: [Point] }
 
 triangle :: [Point] -> Triangle
-triangle = Triangle identityTransform
+triangle [a, b, c] = Triangle identityTransform [a, b, c]
+triangle _         = error "triangles must have three vertices"
 
 makeLenses ''Triangle
 
@@ -33,25 +31,26 @@ unitTriangle :: Triangle
 unitTriangle = triangle [originPoint, originPoint .+^ unitXVector, originPoint .+^ unitYVector]
 
 instance Show Triangle where
-  show (Triangle t ps) = concat ["#T(", show t, ", ", show ps, ")"]
+  show (Triangle t points) = concat ["#T(", show t, ", ", show points, ")"]
 
 instance Transformable Triangle where
-  transform t' (Triangle t ps) = Triangle (compose t' t) ps
+  transform t' (Triangle t points) = Triangle (compose t' t) points
 
 instance Shape Triangle where
   shapeTransform = triangleTransform
 
-  bound (Triangle _ ps) = fromPoints ps
+  bound (Triangle _ points) = fromPoints points
 
   surfaceArea (Triangle _ [a, b, c]) = 0.5 * magnitudeV (cross (b .-. a) (c .-. a))
+  surfaceArea (Triangle _ _) = error "triangles must have three vertices"
 
-  intersect ray (Triangle t [v0, v1, v2]) = do
+  intersect theRay (Triangle t [v0, v1, v2]) = do
     guard $ a /= 0
     guard $ u >= 0 && u <= 1
     guard $ v >= 0 && (u + v) <= 1
     guard $ t' >= 0
     return t'
-    where r' = transform (inverse t) ray
+    where r' = transform (inverse t) theRay
           p  = r'^.rayOrigin
           d  = r'^.rayDirection
           e1 = v1 .-. v0
@@ -64,3 +63,4 @@ instance Shape Triangle where
           q  = cross s e1
           v  = f * (d ^.^ q)
           t' = f * (e2 ^.^ q)
+  intersect _ (Triangle _ _) = error "triangles must have three vertices"

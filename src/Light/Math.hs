@@ -3,7 +3,6 @@ module Light.Math
   )
 where
 
-import Data.Maybe
 import Data.List
 
 quadratic :: Float -> Float -> Float -> Maybe [Float]

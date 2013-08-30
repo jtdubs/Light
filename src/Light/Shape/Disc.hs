@@ -11,10 +11,7 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
-import Light.Math
 import Light.Geometry.AABB
 import Light.Geometry.Point
 import Light.Geometry.Ray
@@ -45,13 +42,13 @@ instance Shape Disc where
 
   surfaceArea (Disc _ r) = 2 * pi * r * r
 
-  intersect ray (Disc t r) = do
+  intersect theRay (Disc t r) = do
     guard $ abs rdz > 0.0001
-    let t = -roz / rdz
-    guard $ t >= 0
-    let d = distanceSquared (r' `atTime` t) originPoint
+    let time = -roz / rdz
+    guard $ time >= 0
+    let d = distanceSquared (r' `atTime` time) originPoint
     guard $ d <= r
-    return t
-    where r' = transform (inverse t) ray
+    return time
+    where r'  = transform (inverse t) theRay
           rdz = r'^.rayDirection.dz
           roz = r'^.rayOrigin.pz

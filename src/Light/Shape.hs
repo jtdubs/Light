@@ -1,4 +1,14 @@
-module Light.Shape where
+module Light.Shape
+  ( module Light.Shape.Shape      
+  , module Light.Shape.Sphere     
+  , module Light.Shape.Cylinder   
+  , module Light.Shape.Disc       
+  , module Light.Shape.Plane      
+  , module Light.Shape.Cone       
+  , module Light.Shape.Paraboloid 
+  , module Light.Shape.Triangle   
+  )
+where
 
 import Light.Shape.Shape
 import Light.Shape.Sphere

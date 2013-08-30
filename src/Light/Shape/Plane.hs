@@ -11,10 +11,7 @@ where
 
 import Control.Monad
 import Control.Lens hiding (transform)
-import Control.Lens.TH
-import Data.List
 
-import Light.Math
 import Light.Geometry.AABB
 import Light.Geometry.Point
 import Light.Geometry.Ray
@@ -45,14 +42,14 @@ instance Shape Plane where
 
   surfaceArea (Plane _ w d) = 4 * w *d
 
-  intersect ray (Plane t w d) = do
+  intersect theRay (Plane t w d) = do
     guard $ abs rdz > 0.0001
-    let t = -roz / rdz
-    guard $ t >= 0
-    let rt = r' `atTime` t
+    let time = -roz / rdz
+    guard $ time >= 0
+    let rt = r' `atTime` time
     guard $ abs (rt^.px) <= w
     guard $ abs (rt^.py) <= d
-    return t
-    where r' = transform (inverse t) ray
+    return time
+    where r'  = transform (inverse t) theRay
           rdz = r'^.rayDirection.dz
           roz = r'^.rayOrigin.pz
