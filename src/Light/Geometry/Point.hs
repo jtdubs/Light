@@ -30,7 +30,7 @@ ps = lens (\ (Point x y z) -> [x, y, z, 1])
                               else Point (x/w) (y/w) (z/w))
 
 instance Eq Point where
-  u == v = distanceSquared u v < 0.00001
+  u == v = distanceSquared u v < 0.000001
 
 originPoint :: Point
 originPoint = point 0 0 0

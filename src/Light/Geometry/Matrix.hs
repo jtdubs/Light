@@ -77,7 +77,7 @@ cols = lens (\m -> [m^.col i | i <- [0..3]])
             (\_ vs -> matrix $ concat $ L.transpose vs)
 
 instance Eq Matrix where
-  u == v = all (< 0.0001) $ map abs $ zipWith (-) (u^.elems) (v^.elems)
+  u == v = all (< 0.000001) $ map abs $ zipWith (-) (u^.elems) (v^.elems)
 
 zeroMatrix :: Matrix
 zeroMatrix = matrix [ 0, 0, 0, 0

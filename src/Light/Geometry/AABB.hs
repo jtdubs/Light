@@ -5,7 +5,7 @@ module Light.Geometry.AABB
   ( AABB, aabb, emptyAABB, isEmpty, aabbMin, aabbMax, fromPoint, fromPoints
 
   -- Arithmetic
-  , addPoint, addPoints, aabbUnion, overlaps, isInside, surfaceArea, volume, corners
+  , addPoint, addPoints, aabbUnion, overlaps, isInside, aabbSurfaceArea, volume, corners
   )
 where
 
@@ -59,9 +59,9 @@ isInside (AABB n x) p = ((p^.px) >= (n^.px) && (p^.px) <= (x^.px))
                      && ((p^.py) >= (n^.py) && (p^.py) <= (x^.py))
                      && ((p^.pz) >= (n^.pz) && (p^.pz) <= (x^.pz))
 
-surfaceArea :: AABB -> Double
-surfaceArea EmptyAABB = 0
-surfaceArea (AABB n x) = 2 * ((d^.dx * d^.dy) + (d^.dx * d^.dz) + (d^.dy * d^.dz))
+aabbSurfaceArea :: AABB -> Double
+aabbSurfaceArea EmptyAABB = 0
+aabbSurfaceArea (AABB n x) = 2 * ((d^.dx * d^.dy) + (d^.dx * d^.dz) + (d^.dy * d^.dz))
   where d = x .-. n
 
 volume :: AABB -> Double

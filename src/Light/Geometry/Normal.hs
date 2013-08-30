@@ -25,7 +25,7 @@ ns :: Lens' Normal [Double]
 ns = lens (\ (Normal x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Normal x y z)
 
 instance Eq Normal where
-  u == v = magnitudeSquaredN (u !-! v) < 0.00001
+  u == v = magnitudeSquaredN (u !-! v) < 0.000001
 
 fromVector :: Vector -> Normal
 fromVector v = Normal (v^.dx) (v^.dy) (v^.dz)

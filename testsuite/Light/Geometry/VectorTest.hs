@@ -32,16 +32,16 @@ prop_DoubleNegation :: Vector -> Bool
 prop_DoubleNegation v = negateV (negateV v) == v
 
 prop_NormalizeIsUnitLength :: Vector -> Bool
-prop_NormalizeIsUnitLength v = v == zeroVector || abs (magnitudeV (normalizeV v) - 1) < 0.0001
+prop_NormalizeIsUnitLength v = v == zeroVector || abs (magnitudeV (normalizeV v) - 1) < 0.000001
 
 prop_ScalarMultiplicationIsMagnitude :: Double -> Bool
-prop_ScalarMultiplicationIsMagnitude s = abs (magnitudeV (vector 1 0 0 ^* s) - abs s) < 0.0001
+prop_ScalarMultiplicationIsMagnitude s = abs (magnitudeV (vector 1 0 0 ^* s) - abs s) < 0.000001
 
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool
 prop_CrossProductIsOrthogonal u v = u == zeroVector
                                  || v == zeroVector
-                                 || ( abs (cross (normalizeV u) (normalizeV v) ^.^ u) < 0.0001
-                                   && abs (cross (normalizeV u) (normalizeV v) ^.^ v) < 0.0001 )
+                                 || ( abs (cross (normalizeV u) (normalizeV v) ^.^ u) < 0.000001
+                                   && abs (cross (normalizeV u) (normalizeV v) ^.^ v) < 0.000001 )
 
 tests :: [Test]
 tests = [ testProperty "VectorAdditiveIdentity" prop_VectorAdditiveIdentity

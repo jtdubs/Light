@@ -20,7 +20,7 @@ prop_PointMinusSelfIsZero :: Point -> Bool
 prop_PointMinusSelfIsZero p = p .-. p == zeroVector
 
 prop_PointDistance :: Point -> Vector -> Bool
-prop_PointDistance p v = abs (distance p (p .+^ v) - magnitudeV v) < 0.001
+prop_PointDistance p v = abs (distance p (p .+^ v) - magnitudeV v) < 0.00001
 
 tests :: [Test]
 tests = [ testProperty "PointAdditiveIdentity" prop_PointAdditiveIdentity

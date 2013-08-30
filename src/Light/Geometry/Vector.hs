@@ -27,7 +27,7 @@ ds :: Lens' Vector [Double]
 ds = lens (\ (Vector x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Vector x y z)
 
 instance Eq Vector where
-  u == v = magnitudeSquaredV (u ^-^ v) < 0.00001
+  u == v = magnitudeSquaredV (u ^-^ v) < 0.000001
 
 zeroVector, unitXVector, unitYVector, unitZVector :: Vector
 zeroVector  = Vector 0 0 0

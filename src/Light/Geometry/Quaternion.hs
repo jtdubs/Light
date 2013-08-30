@@ -32,7 +32,7 @@ quaternion :: Double -> Double -> Double -> Double -> Quaternion
 quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
 
 instance Eq Quaternion where
-  u == v = (u^.qv == v^.qv) && abs (u^.qw - v^.qw) < 0.0001
+  u == v = (u^.qv == v^.qv) && abs (u^.qw - v^.qw) < 0.000001
 
 identityQuaternion :: Quaternion
 identityQuaternion = quaternion 0 0 0 1
