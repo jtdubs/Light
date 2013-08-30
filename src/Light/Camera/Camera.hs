@@ -12,4 +12,4 @@ import Light.Geometry.Ray
 class Camera a where
   cameraTransform :: Lens' a Transform
   cameraFilm :: Lens' a Film
-  cameraRay :: a -> (Float, Float) -> Ray
+  cameraRay :: a -> (Double, Double) -> Ray

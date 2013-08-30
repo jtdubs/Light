@@ -18,7 +18,7 @@ prop_MultiplicativeIdentity v = (v ^* 1) == v
                              && (1 *^ v) == v
                              && (v ^/ 1) == v
 
-prop_MultiplicativeCommutivity :: Vector -> Float -> Bool
+prop_MultiplicativeCommutivity :: Vector -> Double -> Bool
 prop_MultiplicativeCommutivity v s = (v ^* s) == (s *^ v)
 
 prop_MultiplicationIsRepeatedAddition :: Vector -> Bool
@@ -34,7 +34,7 @@ prop_DoubleNegation v = negateV (negateV v) == v
 prop_NormalizeIsUnitLength :: Vector -> Bool
 prop_NormalizeIsUnitLength v = v == zeroVector || abs (magnitudeV (normalizeV v) - 1) < 0.0001
 
-prop_ScalarMultiplicationIsMagnitude :: Float -> Bool
+prop_ScalarMultiplicationIsMagnitude :: Double -> Bool
 prop_ScalarMultiplicationIsMagnitude s = abs (magnitudeV (vector 1 0 0 ^* s) - abs s) < 0.0001
 
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool

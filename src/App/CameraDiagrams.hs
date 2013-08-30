@@ -46,7 +46,7 @@ drawOrthographicPlot ix title camera = let fx = camera^.cameraFilm.filmWidth
                                            fy = camera^.cameraFilm.filmHeight
 									   in drawPlot ix title camera (fromIntegral (min fx fy))
 
-drawPlot :: (Camera c) => Int -> String -> c -> Float -> IO ()
+drawPlot :: (Camera c) => Int -> String -> c -> Double -> IO ()
 drawPlot ix title camera imagePlaneHeight = do
   let fx             = fromIntegral $ camera^.cameraFilm.filmWidth
   let fy             = fromIntegral $ camera^.cameraFilm.filmHeight

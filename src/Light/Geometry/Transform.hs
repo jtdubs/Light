@@ -56,10 +56,10 @@ rotationQ q = Transform m m'
   where m  = toRotationMatrix q
         m' = toRotationMatrix $ conjugate q
 
-rotation :: Float -> Vector -> Transform
+rotation :: Double -> Vector -> Transform
 rotation  angle axis = rotationQ $ rotationQuaternion angle axis
 
-rotation3 :: Float -> Float -> Float -> Transform
+rotation3 :: Double -> Double -> Double -> Transform
 rotation3 pitch yaw roll = rotationQ $ rotationQuaternion3 pitch yaw roll
 
 translate :: (Transformable t) => t -> Vector -> t
@@ -68,10 +68,10 @@ translate t v = transform (translation v) t
 scale :: (Transformable t) => t -> Vector -> t
 scale t s = transform (scaling s) t
 
-rotate :: (Transformable t) => t -> Float -> Vector -> t
+rotate :: (Transformable t) => t -> Double -> Vector -> t
 rotate t a x = transform (rotation a x) t
 
-rotate3 :: (Transformable t) => t -> Float -> Float -> Float -> t
+rotate3 :: (Transformable t) => t -> Double -> Double -> Double -> t
 rotate3 t p y r = transform (rotation3 p y r) t
 
 rotateQ :: (Transformable t) => t -> Quaternion -> t

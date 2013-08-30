@@ -20,7 +20,7 @@ import Control.Lens
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
 
-data Quaternion = Quaternion { _qv :: Vector, _qw :: Float } deriving (Show, Read)
+data Quaternion = Quaternion { _qv :: Vector, _qw :: Double } deriving (Show, Read)
 
 makeLenses ''Quaternion
 
@@ -28,7 +28,7 @@ normalizeQ :: Quaternion -> Quaternion
 normalizeQ q@(Quaternion v w) = Quaternion (v^/s) (w/s)
   where s = magnitudeSquaredQ q
 
-quaternion :: Float -> Float -> Float -> Float -> Quaternion
+quaternion :: Double -> Double -> Double -> Double -> Quaternion
 quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
 
 instance Eq Quaternion where
@@ -48,10 +48,10 @@ toRotationMatrix (Quaternion v w) =
         xy = x * y; xz = x * z; yz = y * z
         wx = w * x; wy = w * y; wz = w * z
 
-toAngleAxis :: Quaternion -> (Float, Vector)
+toAngleAxis :: Quaternion -> (Double, Vector)
 toAngleAxis (Quaternion v w) = (acos w * 2, normalizeV v)
 
-magnitudeQ, magnitudeSquaredQ :: Quaternion -> Float
+magnitudeQ, magnitudeSquaredQ :: Quaternion -> Double
 magnitudeQ = sqrt . magnitudeSquaredQ
 magnitudeSquaredQ (Quaternion v w) = (v ^.^ v) + (w*w)
 
@@ -67,7 +67,7 @@ conjugate (Quaternion v w) = Quaternion (negateV v) w
 (Quaternion v w) @+@ (Quaternion x y) = Quaternion (v ^+^ x) (w+y)
 (Quaternion v w) @-@ (Quaternion x y) = Quaternion (v ^-^ x) (w+y)
 
-(@.@) :: Quaternion -> Quaternion -> Float
+(@.@) :: Quaternion -> Quaternion -> Double
 (Quaternion v w) @.@ (Quaternion x y) = (v ^.^ x) + (w*y)
 
 infixl 6 @+@, @-@
@@ -80,10 +80,10 @@ q @*^ v
 
 infixl 7 @*^
 
-rotationQuaternion :: Float -> Vector -> Quaternion
+rotationQuaternion :: Double -> Vector -> Quaternion
 rotationQuaternion angle axis = Quaternion (normalizeV axis ^* sin (angle/2)) (cos (angle/2))
 
-rotationQuaternion3 :: Float -> Float -> Float -> Quaternion
+rotationQuaternion3 :: Double -> Double -> Double -> Quaternion
 rotationQuaternion3 pitch yaw roll = quaternion (cr*sp*cy + sr*cp*sy)
                                                 (cr*cp*sy - sr*sp*cy)
                                                 (sr*cp*cy - cr*sp*sy)

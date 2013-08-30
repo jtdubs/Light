@@ -29,7 +29,7 @@ xAxisRay = Ray originPoint unitXVector
 yAxisRay = Ray originPoint unitYVector
 zAxisRay = Ray originPoint unitZVector
 
-atTime :: Ray -> Float -> Point
+atTime :: Ray -> Double -> Point
 atTime (Ray o d) t = o .+^ (d ^* t)
 
 negateR :: Ray -> Ray

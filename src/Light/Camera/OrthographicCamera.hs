@@ -17,12 +17,12 @@ import Light.Geometry.Vector
 data OrthographicCamera = OrthographicCamera
                           { _orthoTransform :: Transform
                           , _orthoFilm      :: Film
-                          , _orthoScale     :: Float
+                          , _orthoScale     :: Double
                           } deriving (Eq, Show, Read)
 
 makeLenses ''OrthographicCamera
 
-orthographicCamera :: Film -> Float -> OrthographicCamera
+orthographicCamera :: Film -> Double -> OrthographicCamera
 orthographicCamera = OrthographicCamera identityTransform
 
 instance Camera OrthographicCamera where

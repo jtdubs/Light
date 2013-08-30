@@ -20,9 +20,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Float } deriving (Show, Read)
+data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Double } deriving (Show, Read)
 
-sphere :: Float -> Sphere
+sphere :: Double -> Sphere
 sphere = Sphere identityTransform
 
 makeLenses ''Sphere

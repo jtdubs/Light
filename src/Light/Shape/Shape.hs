@@ -15,8 +15,8 @@ class Shape a where
   bound :: a -> AABB
   worldBound :: a -> AABB
   intersects :: Ray -> a -> Bool
-  intersect :: Ray -> a -> Maybe Float
-  surfaceArea :: a -> Float
+  intersect :: Ray -> a -> Maybe Double
+  surfaceArea :: a -> Double
 
   worldBound s = transform (inverse (s^.shapeTransform)) (bound s)
   intersects r s = isJust $ intersect r s

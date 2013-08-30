@@ -19,9 +19,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Disc = Disc { _discTransform :: Transform, _discRadius :: Float } deriving (Show, Read)
+data Disc = Disc { _discTransform :: Transform, _discRadius :: Double } deriving (Show, Read)
 
-disc :: Float -> Disc
+disc :: Double -> Disc
 disc = Disc identityTransform
 
 makeLenses ''Disc

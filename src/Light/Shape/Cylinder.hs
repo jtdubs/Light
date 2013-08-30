@@ -20,9 +20,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Float, _cylinderHeight :: Float } deriving (Show, Read)
+data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Double, _cylinderHeight :: Double } deriving (Show, Read)
 
-cylinder :: Float -> Float -> Cylinder
+cylinder :: Double -> Double -> Cylinder
 cylinder = Cylinder identityTransform
 
 makeLenses ''Cylinder

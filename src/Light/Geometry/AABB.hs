@@ -59,12 +59,12 @@ isInside (AABB n x) p = ((p^.px) >= (n^.px) && (p^.px) <= (x^.px))
                      && ((p^.py) >= (n^.py) && (p^.py) <= (x^.py))
                      && ((p^.pz) >= (n^.pz) && (p^.pz) <= (x^.pz))
 
-surfaceArea :: AABB -> Float
+surfaceArea :: AABB -> Double
 surfaceArea EmptyAABB = 0
 surfaceArea (AABB n x) = 2 * ((d^.dx * d^.dy) + (d^.dx * d^.dz) + (d^.dy * d^.dz))
   where d = x .-. n
 
-volume :: AABB -> Float
+volume :: AABB -> Double
 volume EmptyAABB = 0
 volume (AABB x n) = d^.dx * d^.dy * d^.dz
   where d = x .-. n

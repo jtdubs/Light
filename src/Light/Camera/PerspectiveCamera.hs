@@ -17,12 +17,12 @@ import Light.Geometry.Vector
 data PerspectiveCamera = PerspectiveCamera
                           { _perspectiveTransform   :: Transform
                           , _perspectiveFilm        :: Film
-                          , _perspectiveVerticalFOV :: Float
+                          , _perspectiveVerticalFOV :: Double
                           } deriving (Eq, Show, Read)
 
 makeLenses ''PerspectiveCamera
 
-perspectiveCamera :: Film -> Float -> PerspectiveCamera
+perspectiveCamera :: Film -> Double -> PerspectiveCamera
 perspectiveCamera = PerspectiveCamera identityTransform
 
 instance Camera PerspectiveCamera where

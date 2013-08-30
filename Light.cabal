@@ -15,7 +15,7 @@ cabal-version:       >=1.8
 
 library
   build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*
-  ghc-options:         -Wall -O -fllvm
+  ghc-options:         -Wall -O
   hs-source-dirs:      src
   exposed-modules:     Light.Camera.Camera
                        Light.Camera.Film
@@ -44,19 +44,19 @@ library
 
 executable Light
   hs-source-dirs:      src
-  ghc-options:         -O -Wall -fllvm
+  ghc-options:         -O -Wall
   main-is:             App\Light.hs
   build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*
 
 executable CameraDiagrams
   hs-source-dirs:      src
-  ghc-options:         -O -Wall -fllvm
+  ghc-options:         -O -Wall
   main-is:             App\CameraDiagrams.hs
   build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*
 
 test-suite Tests
   type:            exitcode-stdio-1.0
   build-depends:   base ==4.5.*, lens ==3.9.*, array ==0.4.*, QuickCheck ==2.5.1.1, test-framework >=0.4.1, test-framework-quickcheck2
-  ghc-options:     -O -Wall -fllvm -fno-warn-orphans
+  ghc-options:     -O -Wall -fno-warn-orphans
   hs-source-dirs:  src, testsuite
   main-is:         Tests.hs

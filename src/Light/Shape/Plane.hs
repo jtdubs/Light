@@ -19,9 +19,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Float, _planeHalfDepth :: Float } deriving (Show, Read)
+data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Double, _planeHalfDepth :: Double } deriving (Show, Read)
 
-plane :: Float -> Float -> Plane
+plane :: Double -> Double -> Plane
 plane = Plane identityTransform
 
 makeLenses ''Plane

@@ -20,9 +20,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Float, _paraboloidHeight :: Float } deriving (Show, Read)
+data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Double, _paraboloidHeight :: Double } deriving (Show, Read)
 
-paraboloid :: Float -> Float -> Paraboloid
+paraboloid :: Double -> Double -> Paraboloid
 paraboloid = Paraboloid identityTransform
 
 makeLenses ''Paraboloid

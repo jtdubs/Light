@@ -16,14 +16,14 @@ import Control.Lens
 
 import Light.Geometry.Vector
 
-data Point = Point { _px :: Float, _py :: Float, _pz :: Float } deriving (Show, Read)
+data Point = Point { _px :: Double, _py :: Double, _pz :: Double } deriving (Show, Read)
 
-point :: Float -> Float -> Float -> Point
+point :: Double -> Double -> Double -> Point
 point = Point
 
 makeLenses ''Point
 
-ps :: Lens' Point [Float]
+ps :: Lens' Point [Double]
 ps = lens (\ (Point x y z) -> [x, y, z, 1])
           (\_ [x, y, z, w] -> if w == 0 
                               then Point 0 0 0
@@ -44,6 +44,6 @@ originPoint = point 0 0 0
 
 infixl 6 .-., .+^, .-^
 
-distance, distanceSquared :: Point -> Point -> Float
+distance, distanceSquared :: Point -> Point -> Double
 distance        p q = magnitudeV        (p .-. q)
 distanceSquared p q = magnitudeSquaredV (p .-. q)

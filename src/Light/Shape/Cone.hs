@@ -20,9 +20,9 @@ import Light.Geometry.Transform
 import Light.Geometry.Vector
 import Light.Shape.Shape
 
-data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Float, _coneHeight :: Float } deriving (Show, Read)
+data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Double, _coneHeight :: Double } deriving (Show, Read)
 
-cone :: Float -> Float -> Cone
+cone :: Double -> Double -> Cone
 cone = Cone identityTransform
 
 makeLenses ''Cone
