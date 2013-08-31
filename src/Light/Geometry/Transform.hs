@@ -17,8 +17,6 @@ module Light.Geometry.Transform
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Geometry.AABB
 import Light.Geometry.Ray
 import Light.Geometry.Point
@@ -27,7 +25,7 @@ import Light.Geometry.Vector
 import Light.Geometry.Matrix
 import Light.Geometry.Quaternion
 
-data Transform = Transform { _m :: Matrix, _mInv :: Matrix } deriving (Eq, Show, Read)
+data Transform = Transform { _m :: !Matrix, _mInv :: !Matrix } deriving (Eq, Show, Read)
 
 identityTransform :: Transform
 identityTransform = Transform identityMatrix identityMatrix
@@ -49,7 +47,7 @@ translation v = Transform m m'
 scaling :: Vector -> Transform
 scaling v = Transform m m'
   where m  = scalingMatrix v
-        m' = scalingMatrix (vector (1/v^.dx) (1/v^.dy) (1/v^.dz))
+        m' = scalingMatrix (Vector (1/dx v) (1/dy v) (1/dz v))
 
 rotationQ :: Quaternion -> Transform
 rotationQ q = Transform m m'
@@ -90,7 +88,7 @@ instance Transformable Normal where
   transform t n = transpose (_mInv t) |*! n
 
 instance Transformable Ray where
-  transform t r = ray (transform t $ r^.rayOrigin) (transform t $ r^.rayDirection)
+  transform t r = Ray (transform t $ rayOrigin r) (transform t $ rayDirection r)
 
 instance Transformable AABB where
   transform t b = fromPoints $ map (transform t) (corners b)

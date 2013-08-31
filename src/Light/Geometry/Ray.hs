@@ -1,8 +1,6 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Geometry.Ray
   -- ADT
-  ( Ray, ray, rayOrigin, rayDirection
+  ( Ray(..)
 
   -- Default Instances
   , xAxisRay, yAxisRay, zAxisRay
@@ -12,17 +10,10 @@ module Light.Geometry.Ray
   )
 where
 
-import Control.Lens
-
 import Light.Geometry.Point
 import Light.Geometry.Vector
 
-data Ray = Ray { _rayOrigin :: Point, _rayDirection :: Vector } deriving (Eq, Show, Read)
-
-ray :: Point -> Vector -> Ray
-ray = Ray
-
-makeLenses ''Ray
+data Ray = Ray { rayOrigin :: !Point, rayDirection :: !Vector } deriving (Eq, Show, Read)
 
 xAxisRay, yAxisRay, zAxisRay :: Ray
 xAxisRay = Ray originPoint unitXVector
@@ -33,4 +24,4 @@ atTime :: Ray -> Double -> Point
 atTime (Ray o d) t = o .+^ (d ^* t)
 
 negateR :: Ray -> Ray
-negateR = rayDirection %~ negateV
+negateR (Ray o d) = Ray o (negateV d)

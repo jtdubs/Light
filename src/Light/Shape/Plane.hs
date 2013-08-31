@@ -35,7 +35,7 @@ instance Transformable Plane where
 instance Shape Plane where
   shapeTransform = planeTransform
 
-  bound (Plane _ w d) = fromPoints [ point (-w) (-d) 0, point w d 0 ]
+  bound (Plane _ w d) = fromPoints [ Point (-w) (-d) 0, Point w d 0 ]
 
   surfaceArea (Plane _ w d) = 4 * w *d
 
@@ -44,9 +44,9 @@ instance Shape Plane where
     let time = -roz / rdz
     guard $ time >= 0
     let rt = r' `atTime` time
-    guard $ abs (rt^.px) <= w
-    guard $ abs (rt^.py) <= d
+    guard $ abs (px rt) <= w
+    guard $ abs (py rt) <= d
     return time
     where r'  = transform (inverse t) theRay
-          rdz = r'^.rayDirection.dz
-          roz = r'^.rayOrigin.pz
+          rdz = dz $ rayDirection r'
+          roz = pz $ rayOrigin r'

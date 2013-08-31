@@ -36,7 +36,7 @@ instance Transformable Cone where
 instance Shape Cone where
   shapeTransform = coneTransform
 
-  bound (Cone _ r h) = fromPoints [ point (-r) (-r) 0, point r r h ]
+  bound (Cone _ r h) = fromPoints [ Point (-r) (-r) 0, Point r r h ]
 
   surfaceArea (Cone _ r h) = pi * r * sqrt (r*r + h*h)
 
@@ -45,14 +45,14 @@ instance Shape Cone where
     guard  $ not (null ts)
     return $ head ts
     where r'     = transform (inverse t) theRay
-          rdx    = r'^.rayDirection.dx
-          rdy    = r'^.rayDirection.dy
-          rdz    = r'^.rayDirection.dz
-          rox    = r'^.rayOrigin.px
-          roy    = r'^.rayOrigin.py
-          roz    = r'^.rayOrigin.pz
+          rdx    = dx $ rayDirection r'
+          rdy    = dy $ rayDirection r'
+          rdz    = dz $ rayDirection r'
+          rox    = px $ rayOrigin r'
+          roy    = py $ rayOrigin r'
+          roz    = pz $ rayOrigin r'
           a      = (  h*h*rdx*rdx +   h*h*rdy*rdy)/(r*r) + (  -rdz*rdz)
           b      = (2*h*h*rox*rdx + 2*h*h*roy*rdy)/(r*r) + (-2*roz*rdz + 2*rdz*h)
           c      = (  h*h*rox*rox +   h*h*roy*roy)/(r*r) + (  -roz*roz + 2*roz*h - h*h)
-          f time = let rz = (r' `atTime` time)^.pz
+          f time = let rz = pz (r' `atTime` time)
                    in time > 0 && rz >= 0 && rz <= h

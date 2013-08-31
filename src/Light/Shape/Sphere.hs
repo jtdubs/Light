@@ -36,7 +36,7 @@ instance Transformable Sphere where
 instance Shape Sphere where
   shapeTransform = sphereTransform
 
-  bound (Sphere _ r) = fromPoints [ point (-r) (-r) (-r), point r r r ]
+  bound (Sphere _ r) = fromPoints [ Point (-r) (-r) (-r), Point r r r ]
 
   surfaceArea (Sphere _ r) = 4 * pi * r * r
 
@@ -45,6 +45,6 @@ instance Shape Sphere where
     guard  $ not (null ts)
     return $ head ts
     where r' = transform (inverse t) theRay
-          a  = magnitudeSquaredV $ r'^.rayDirection
-          b  = 2 * ((r'^.rayDirection) ^.^ ((r'^.rayOrigin) .-. originPoint))
-          c  = distanceSquared (r'^.rayOrigin) originPoint - r*r
+          a  = magnitudeSquaredV $ rayDirection r'
+          b  = 2 * (rayDirection r' ^.^ (rayOrigin r' .-. originPoint))
+          c  = distanceSquared (rayOrigin r') originPoint - r*r

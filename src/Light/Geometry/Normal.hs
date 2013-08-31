@@ -1,8 +1,6 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-
 module Light.Geometry.Normal
   -- ADT
-  ( Normal, normal, nx, ny, nz, fromVector, ns
+  ( Normal(..), fromVector
 
   -- Arithmetic
   , (!-!), (!+!), (!*), (!/), (*!), (!.!), negateN
@@ -10,25 +8,15 @@ module Light.Geometry.Normal
   )
 where
 
-import Control.Lens
-
 import Light.Geometry.Vector
 
-data Normal = Normal { _nx :: Double, _ny :: Double, _nz :: Double } deriving (Show, Read)
-
-makeLenses ''Normal
-
-normal :: Double -> Double -> Double -> Normal
-normal = Normal
-
-ns :: Lens' Normal [Double]
-ns = lens (\ (Normal x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Normal x y z)
+data Normal = Normal { nx :: !Double, ny :: !Double, nz :: !Double } deriving (Show, Read)
 
 instance Eq Normal where
   u == v = magnitudeSquaredN (u !-! v) < 0.000001
 
 fromVector :: Vector -> Normal
-fromVector v = Normal (v^.dx) (v^.dy) (v^.dz)
+fromVector v = Normal (dx v) (dy v) (dz v)
 
 (!+!), (!-!) :: Normal -> Normal -> Normal
 (Normal x y z) !+! (Normal a b c) = Normal (x+a) (y+b) (z+c)

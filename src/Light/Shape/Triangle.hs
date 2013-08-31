@@ -48,8 +48,8 @@ instance Shape Triangle where
     guard $ t' >= 0
     return t'
     where r' = transform (inverse t) theRay
-          p  = r'^.rayOrigin
-          d  = r'^.rayDirection
+          p  = rayOrigin r'
+          d  = rayDirection r'
           e1 = v1 .-. v0
           e2 = v2 .-. v0
           h  = cross d e2

@@ -36,7 +36,7 @@ instance Transformable Paraboloid where
 instance Shape Paraboloid where
   shapeTransform = paraboloidTransform
 
-  bound (Paraboloid _ r h) = fromPoints [ point (-r) (-r) 0, point r r h ]
+  bound (Paraboloid _ r h) = fromPoints [ Point (-r) (-r) 0, Point r r h ]
 
   surfaceArea (Paraboloid _ r h) = (pi/6) * (r/(h*h)) * ((r*r + 4*h*h) * 3/2 - r*r*r)
 
@@ -45,14 +45,14 @@ instance Shape Paraboloid where
     guard  $ not (null ts)
     return $ head ts
     where r'     = transform (inverse t) theRay
-          rdx    = r'^.rayDirection.dx
-          rdy    = r'^.rayDirection.dy
-          rdz    = r'^.rayDirection.dz
-          rox    = r'^.rayOrigin.px
-          roy    = r'^.rayOrigin.py
-          roz    = r'^.rayOrigin.pz
+          rdx    = dx $ rayDirection r'
+          rdy    = dy $ rayDirection r'
+          rdz    = dz $ rayDirection r'
+          rox    = px $ rayOrigin r'
+          roy    = py $ rayOrigin r'
+          roz    = pz $ rayOrigin r'
           a      = (  h*rdx*rdx +   h*rdy*rdy)/(r*r)
           b      = (2*h*rox*rdx + 2*h*roy*rdy)/(r*r) - rdz
           c      = (  h*rox*rox +   h*roy*roy)/(r*r) - roz
-          f time = let rz = (r' `atTime` time)^.pz
+          f time = let rz = pz (r' `atTime` time)
                    in time > 0 && rz >= 0 && rz <= h

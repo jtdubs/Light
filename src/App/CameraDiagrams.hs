@@ -52,12 +52,12 @@ drawPlot ix title camera imagePlaneHeight = do
   let fy             = fromIntegral $ camera^.cameraFilm.filmHeight
   let dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
   let rays           = getRays camera
-  let ox             = map (^.rayOrigin.px) rays
-  let oy             = map (^.rayOrigin.py) rays
-  let oz             = map (^.rayOrigin.pz) rays
-  let vx             = map (\r -> (r^.rayDirection.dx)*imagePlaneHeight*1.2/(r^.rayDirection.dz)) rays
-  let vy             = map (\r -> (r^.rayDirection.dy)*imagePlaneHeight*1.2/(r^.rayDirection.dz)) rays
-  let vz             = map (\r -> (r^.rayDirection.dz)*imagePlaneHeight*1.2/(r^.rayDirection.dz)) rays
+  let ox             = map (px.rayOrigin) rays
+  let oy             = map (py.rayOrigin) rays
+  let oz             = map (pz.rayOrigin) rays
+  let vx             = map (\r -> (dx $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
+  let vy             = map (\r -> (dy $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
+  let vz             = map (\r -> (dz $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
 
   putStrLn $ "figure (" ++ show ix ++ ");"
   putStrLn $ "x = linspace (" ++ intercalate ", " (map show [-fx/2, fx/2, fx+1]) ++ ");"

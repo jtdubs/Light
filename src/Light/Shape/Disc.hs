@@ -35,7 +35,7 @@ instance Transformable Disc where
 instance Shape Disc where
   shapeTransform = discTransform
 
-  bound (Disc _ r) = fromPoints [ point (-r) (-r) 0, point r r 0 ]
+  bound (Disc _ r) = fromPoints [ Point (-r) (-r) 0, Point r r 0 ]
 
   surfaceArea (Disc _ r) = 2 * pi * r * r
 
@@ -47,5 +47,5 @@ instance Shape Disc where
     guard $ d <= r
     return time
     where r'  = transform (inverse t) theRay
-          rdz = r'^.rayDirection.dz
-          roz = r'^.rayOrigin.pz
+          rdz = dz $ rayDirection r'
+          roz = pz $ rayOrigin r'

@@ -19,7 +19,7 @@ render s = BS.writeFile "out.png" image
     film   = camera^.cameraFilm
     fw     = film^.filmWidth
     fh     = film^.filmHeight
-    pixels = [(x, y) | y <- [0..fh-1], x <- [0..fw-1]]
+    pixels = [(x, y) | y <- [fh-1,fh-2..0], x <- [0..fw-1]]
     image  = encodePng $ (Image fw fh (V.fromList $ map renderPixel pixels) :: Image Pixel8)
 
     renderPixel (x, y) = let r = cameraRay camera (fromIntegral x, fromIntegral y)

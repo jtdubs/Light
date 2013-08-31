@@ -1,8 +1,6 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Geometry.Vector
   -- ADT
-  ( Vector, vector, dx, dy, dz, ds
+  ( Vector(..)
 
   -- Default Instances
   , zeroVector, unitXVector, unitYVector, unitZVector
@@ -14,17 +12,7 @@ module Light.Geometry.Vector
   )
 where
 
-import Control.Lens
-
-data Vector = Vector { _dx :: Double, _dy :: Double, _dz :: Double } deriving (Show, Read)
-
-vector :: Double -> Double -> Double -> Vector
-vector = Vector
-
-makeLenses ''Vector
-
-ds :: Lens' Vector [Double]
-ds = lens (\ (Vector x y z) -> [x, y, z, 0]) (\_ [x, y, z, 0] -> Vector x y z)
+data Vector = Vector { dx :: !Double, dy :: !Double, dz :: !Double } deriving (Show, Read)
 
 instance Eq Vector where
   u == v = magnitudeSquaredV (u ^-^ v) < 0.000001

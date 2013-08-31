@@ -28,8 +28,8 @@ orthographicCamera = OrthographicCamera identityTransform
 instance Camera OrthographicCamera where
   cameraTransform = orthoTransform
   cameraFilm = orthoFilm
-  cameraRay (OrthographicCamera t f s) (fx, fy) = transform (inverse t) (ray o d)
-    where o = point (x*s) (y*s) 0
+  cameraRay (OrthographicCamera t f s) (fx, fy) = transform (inverse t) (Ray o d)
+    where o = Point (x*s) (y*s) 0
           d = unitZVector
           x = fx - (fromIntegral ((f^.filmWidth)-1) / 2)
           y = fy - (fromIntegral ((f^.filmHeight)-1) / 2)

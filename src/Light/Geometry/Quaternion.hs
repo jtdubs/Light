@@ -1,8 +1,6 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-
 module Light.Geometry.Quaternion
   -- ADT
-  ( Quaternion, quaternion, qv, qw, toRotationMatrix, toAngleAxis
+  ( Quaternion, quaternion, toRotationMatrix, toAngleAxis
 
   -- Default Instances
   , identityQuaternion
@@ -15,24 +13,20 @@ module Light.Geometry.Quaternion
   )
 where
 
-import Control.Lens
-
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
 
-data Quaternion = Quaternion { _qv :: Vector, _qw :: Double } deriving (Show, Read)
-
-makeLenses ''Quaternion
+data Quaternion = Quaternion { qv :: !Vector, qw :: !Double } deriving (Show, Read)
 
 normalizeQ :: Quaternion -> Quaternion
 normalizeQ q@(Quaternion v w) = Quaternion (v^/s) (w/s)
   where s = magnitudeSquaredQ q
 
 quaternion :: Double -> Double -> Double -> Double -> Quaternion
-quaternion x y z w = normalizeQ $ Quaternion (vector x y z) w
+quaternion x y z w = normalizeQ $ Quaternion (Vector x y z) w
 
 instance Eq Quaternion where
-  u == v = (u^.qv == v^.qv) && abs (u^.qw - v^.qw) < 0.000001
+  u == v = (qv u == qv v) && abs (qw u - qw v) < 0.000001
 
 identityQuaternion :: Quaternion
 identityQuaternion = quaternion 0 0 0 1
@@ -43,7 +37,7 @@ toRotationMatrix (Quaternion v w) =
          , 2 * (xy + wz)    , 1 - 2 * (xx + zz),     2 * (yz - wx), 0
          , 2 * (xz - wy)    ,     2 * (yz + wx), 1 - 2 * (xx + yy), 0
          , 0                ,                 0,                 0, 1 ]
-  where x = v^.dx; y = v^.dy; z = v^.dz
+  where x = dx v; y = dy v; z = dz v
         xx = x * x; yy = y * y; zz = z * z
         xy = x * y; xz = x * z; yz = y * z
         wx = w * x; wy = w * y; wz = w * z
@@ -76,7 +70,7 @@ infixl 7 @*@, @.@
 (@*^) :: Quaternion -> Vector -> Vector
 q @*^ v
   | v == zeroVector = zeroVector
-  | otherwise       = (q @*@ Quaternion v 0 @*@ conjugate q)^.qv
+  | otherwise       = qv (q @*@ Quaternion v 0 @*@ conjugate q)
 
 infixl 7 @*^
 
