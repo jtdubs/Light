@@ -5,6 +5,7 @@ where
 
 import Codec.Picture
 import Control.Lens
+import Control.Parallel.Strategies
 import qualified Data.Vector.Storable as V
 import qualified Data.ByteString.Lazy as BS
 
