@@ -10,7 +10,7 @@ import Light.Geometry.Vector
 import Light.Geometry.VectorTest ()
 
 instance QC.Arbitrary Point where
-  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ point a b c
+  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ Point a b c
 
 prop_PointAdditiveIdentity :: Point -> Bool
 prop_PointAdditiveIdentity p = p == (p .+^ zeroVector)

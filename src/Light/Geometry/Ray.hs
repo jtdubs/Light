@@ -13,7 +13,8 @@ where
 import Light.Geometry.Point
 import Light.Geometry.Vector
 
-data Ray = Ray { rayOrigin :: !Point, rayDirection :: !Vector } deriving (Eq, Show, Read)
+data Ray = Ray { rayOrigin :: !Point, rayDirection :: !Vector }
+         deriving (Eq, Show, Read)
 
 xAxisRay, yAxisRay, zAxisRay :: Ray
 xAxisRay = Ray originPoint unitXVector

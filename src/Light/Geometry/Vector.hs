@@ -12,7 +12,8 @@ module Light.Geometry.Vector
   )
 where
 
-data Vector = Vector { dx :: !Double, dy :: !Double, dz :: !Double } deriving (Show, Read)
+data Vector = Vector { dx :: !Double, dy :: !Double, dz :: !Double }
+            deriving (Show, Read)
 
 instance Eq Vector where
   u == v = magnitudeSquaredV (u ^-^ v) < 0.000001

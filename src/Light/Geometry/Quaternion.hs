@@ -16,7 +16,8 @@ where
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
 
-data Quaternion = Quaternion { qv :: !Vector, qw :: !Double } deriving (Show, Read)
+data Quaternion = Quaternion { qv :: !Vector, qw :: !Double }
+                deriving (Show, Read)
 
 normalizeQ :: Quaternion -> Quaternion
 normalizeQ q@(Quaternion v w) = Quaternion (v^/s) (w/s)
@@ -33,10 +34,10 @@ identityQuaternion = quaternion 0 0 0 1
 
 toRotationMatrix :: Quaternion -> Matrix
 toRotationMatrix (Quaternion v w) =
-  matrix [ 1 - 2 * (yy + zz),     2 * (xy - wz),     2 * (xz + wy), 0
-         , 2 * (xy + wz)    , 1 - 2 * (xx + zz),     2 * (yz - wx), 0
-         , 2 * (xz - wy)    ,     2 * (yz + wx), 1 - 2 * (xx + yy), 0
-         , 0                ,                 0,                 0, 1 ]
+  Matrix (1 - 2 * (yy + zz))      (2 * (xy - wz))      (2 * (xz + wy))  0
+             (2 * (xy + wz))  (1 - 2 * (xx + zz))      (2 * (yz - wx))  0
+             (2 * (xz - wy))      (2 * (yz + wx))  (1 - 2 * (xx + yy))  0
+                           0                    0                    0  1
   where x = dx v; y = dy v; z = dz v
         xx = x * x; yy = y * y; zz = z * z
         xy = x * y; xz = x * z; yz = y * z

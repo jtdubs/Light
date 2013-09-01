@@ -1,7 +1,5 @@
 module Light.Geometry.MatrixTest (tests) where
 
-import Control.Monad
-
 import Test.Framework (Test)
 import Test.Framework.Providers.QuickCheck2 (testProperty)
 import qualified Test.QuickCheck as QC
@@ -14,7 +12,7 @@ import Light.Geometry.VectorTest ()
 import Light.Geometry.PointTest ()
 
 instance QC.Arbitrary Matrix where
-  arbitrary = liftM matrix $ QC.vector 16
+  arbitrary = QC.vector 16 >>= \ [a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p] -> (return $ Matrix a b c d e f g h i j k l m n o p)
 
 prop_MatrixMultiplicitiveIdentity :: Matrix -> Bool
 prop_MatrixMultiplicitiveIdentity m = m |*| identityMatrix == m

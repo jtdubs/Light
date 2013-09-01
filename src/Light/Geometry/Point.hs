@@ -12,7 +12,8 @@ where
 
 import Light.Geometry.Vector
 
-data Point = Point { px :: !Double, py :: !Double, pz :: !Double } deriving (Show, Read)
+data Point = Point { px :: !Double, py :: !Double, pz :: !Double }
+           deriving (Show, Read)
 
 instance Eq Point where
   u == v = distanceSquared u v < 0.000001

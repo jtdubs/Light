@@ -25,7 +25,8 @@ import Light.Geometry.Vector
 import Light.Geometry.Matrix
 import Light.Geometry.Quaternion
 
-data Transform = Transform { _m :: !Matrix, _mInv :: !Matrix } deriving (Eq, Show, Read)
+data Transform = Transform { _m :: !Matrix, _mInv :: !Matrix }
+               deriving (Eq, Show, Read)
 
 identityTransform :: Transform
 identityTransform = Transform identityMatrix identityMatrix

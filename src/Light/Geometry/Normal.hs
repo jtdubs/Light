@@ -10,7 +10,8 @@ where
 
 import Light.Geometry.Vector
 
-data Normal = Normal { nx :: !Double, ny :: !Double, nz :: !Double } deriving (Show, Read)
+data Normal = Normal { nx :: !Double, ny :: !Double, nz :: !Double }
+            deriving (Show, Read)
 
 instance Eq Normal where
   u == v = magnitudeSquaredN (u !-! v) < 0.000001

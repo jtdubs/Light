@@ -7,7 +7,7 @@ import qualified Test.QuickCheck as QC
 import Light.Geometry.Vector
 
 instance QC.Arbitrary Vector where
-  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ vector a b c
+  arbitrary = QC.vector 3 >>= \ [a, b, c] -> return $ Vector a b c
 
 prop_VectorAdditiveIdentity :: Vector -> Bool
 prop_VectorAdditiveIdentity v = v == (v ^+^ zeroVector)
@@ -35,7 +35,7 @@ prop_NormalizeIsUnitLength :: Vector -> Bool
 prop_NormalizeIsUnitLength v = v == zeroVector || abs (magnitudeV (normalizeV v) - 1) < 0.000001
 
 prop_ScalarMultiplicationIsMagnitude :: Double -> Bool
-prop_ScalarMultiplicationIsMagnitude s = abs (magnitudeV (vector 1 0 0 ^* s) - abs s) < 0.000001
+prop_ScalarMultiplicationIsMagnitude s = abs (magnitudeV (Vector 1 0 0 ^* s) - abs s) < 0.000001
 
 prop_CrossProductIsOrthogonal :: Vector -> Vector -> Bool
 prop_CrossProductIsOrthogonal u v = u == zeroVector
