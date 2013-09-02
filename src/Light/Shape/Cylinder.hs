@@ -50,7 +50,7 @@ instance Shape Cylinder where
           rox    = px $ rayOrigin r'
           roy    = py $ rayOrigin r'
           a      = (rdx*rdx) + (rdy*rdy)
-          b      = 2 * (rdx*rox) + (rdy*roy)
+          b      = 2 * ((rdx*rox) + (rdy*roy))
           c      = (rox*rox) + (roy*roy) - r*r
           f time = let rz = pz (r' `atTime` time)
                    in time > 0 && rz >= 0 && rz <= h

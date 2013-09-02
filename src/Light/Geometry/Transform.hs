@@ -67,11 +67,11 @@ translate t v = transform (translation v) t
 scale :: (Transformable t) => t -> Vector -> t
 scale t s = transform (scaling s) t
 
-rotate :: (Transformable t) => t -> Double -> Vector -> t
-rotate t a x = transform (rotation a x) t
+rotate :: (Transformable t) => t -> (Double, Vector) -> t
+rotate t (a, x) = transform (rotation a x) t
 
-rotate3 :: (Transformable t) => t -> Double -> Double -> Double -> t
-rotate3 t p y r = transform (rotation3 p y r) t
+rotate3 :: (Transformable t) => t -> (Double, Double, Double) -> t
+rotate3 t (p, y, r) = transform (rotation3 p y r) t
 
 rotateQ :: (Transformable t) => t -> Quaternion -> t
 rotateQ t q = transform (rotationQ q) t
