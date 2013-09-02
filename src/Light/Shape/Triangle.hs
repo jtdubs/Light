@@ -28,7 +28,10 @@ triangle _         = error "triangles must have three vertices"
 makeLenses ''Triangle
 
 unitTriangle :: Triangle
-unitTriangle = triangle [originPoint, originPoint .+^ unitXVector, originPoint .+^ unitYVector]
+unitTriangle = triangle [ originPoint .-^ unitXVector .-^ unitYVector
+                        , originPoint .+^ unitXVector .-^ unitYVector
+                        , originPoint .+^ unitYVector
+                        ]
 
 instance Transformable Triangle where
   transform t' (Triangle t points) = Triangle (compose t' t) points

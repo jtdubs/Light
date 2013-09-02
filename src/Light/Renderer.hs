@@ -5,13 +5,15 @@ where
 
 import Codec.Picture
 import Control.Lens
-import Control.Parallel.Strategies
 import qualified Data.Vector.Storable as V
 import qualified Data.ByteString.Lazy as BS
 
 import Light.Scene
 import Light.Camera.Film
 import Light.Camera.Camera
+import Light.Geometry.Vector
+import Light.Geometry.Point
+import Light.Geometry.Ray
 
 render :: Scene -> IO ()
 render s = BS.writeFile "out.png" image 
@@ -24,6 +26,6 @@ render s = BS.writeFile "out.png" image
     image  = encodePng $ (Image fw fh (V.fromList $ map renderPixel pixels) :: Image Pixel8)
 
     renderPixel (x, y) = let r = cameraRay camera (fromIntegral x, fromIntegral y)
-                         in if sceneIntersects r s
-                              then 255 :: Pixel8
-                              else 0   :: Pixel8
+                         in case sceneIntersect r s of
+                              (Just t) -> max 0 (round (255 - 120*((pz $ r `atTime` t) - 9))) :: Pixel8
+                              Nothing  -> 0                                                  :: Pixel8
