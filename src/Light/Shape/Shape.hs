@@ -20,7 +20,7 @@ class Shape a where
   intersect :: Ray -> a -> Maybe Double
   surfaceArea :: a -> Double
 
-  worldBound s = transform (inverse (s^.shapeTransform)) (bound s)
+  worldBound s = transform (s^.shapeTransform) (bound s)
   intersects r s = isJust $ intersect r s
 
 data ShapeBox = forall s. (Shape s, Show s) => ShapeBox s
