@@ -9,7 +9,6 @@ module Light.Shape.Sphere
   )
 where
 
-import Control.Monad
 import Control.Lens hiding (transform)
 
 import Light.Math
@@ -40,10 +39,7 @@ instance Shape Sphere where
 
   surfaceArea (Sphere _ r) = 4 * pi * r * r
 
-  intersect theRay (Sphere t r) = do
-    ts <- liftM (filter (> 0)) $ quadratic a b c
-    guard  $ not (null ts)
-    return $ head ts
+  intersections theRay (Sphere t r) = filter (> 0) $ quadratic a b c
     where r' = transform (inverse t) theRay
           a  = magnitudeSquaredV $ rayDirection r'
           b  = 2 * (rayDirection r' ^.^ (rayOrigin r' .-. originPoint))

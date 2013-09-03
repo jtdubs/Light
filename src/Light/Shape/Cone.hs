@@ -9,7 +9,6 @@ module Light.Shape.Cone
   )
 where
 
-import Control.Monad
 import Control.Lens hiding (transform)
 
 import Light.Math
@@ -40,10 +39,7 @@ instance Shape Cone where
 
   surfaceArea (Cone _ r h) = pi * r * sqrt (r*r + h*h)
 
-  intersect theRay (Cone t r h) = do
-    ts <- liftM (filter f) $ quadratic a b c
-    guard  $ not (null ts)
-    return $ head ts
+  intersections theRay (Cone t r h) = filter f $ quadratic a b c
     where r'     = transform (inverse t) theRay
           rdx    = dx $ rayDirection r'
           rdy    = dy $ rayDirection r'

@@ -9,7 +9,6 @@ module Light.Shape.Paraboloid
   )
 where
 
-import Control.Monad
 import Control.Lens hiding (transform)
 
 import Light.Math
@@ -40,10 +39,7 @@ instance Shape Paraboloid where
 
   surfaceArea (Paraboloid _ r h) = (pi/6) * (r/(h*h)) * ((r*r + 4*h*h) * 3/2 - r*r*r)
 
-  intersect theRay (Paraboloid t r h) = do
-    ts <- liftM (filter f) $ quadratic a b c
-    guard  $ not (null ts)
-    return $ head ts
+  intersections theRay (Paraboloid t r h) = filter f $ quadratic a b c
     where r'     = transform (inverse t) theRay
           rdx    = dx $ rayDirection r'
           rdy    = dy $ rayDirection r'
