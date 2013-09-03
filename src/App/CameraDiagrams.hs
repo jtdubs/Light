@@ -26,7 +26,7 @@ getRays :: (Camera c) => c -> [Ray]
 getRays camera =
   let fx = camera^.cameraFilm.filmWidth
       fy = camera^.cameraFilm.filmHeight
-  in [cameraRay camera (fromIntegral x, fromIntegral y) | x <- [0..fx-1], y <- [0..fy-1]]
+  in [cameraRay camera (fromIntegral x + 0.5, fromIntegral y + 0.5) | x <- [0..fx-1], y <- [0..fy-1]]
 
 main :: IO ()
 main = do

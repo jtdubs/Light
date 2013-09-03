@@ -33,7 +33,7 @@ instance Camera PerspectiveCamera where
           d = normalizeV $ Vector (nx*sx) (ny*sy) 1
           fw = f^.filmWidth
           fh = f^.filmHeight
-          sx = tan (fovY / 2) * (fromIntegral (fw-1) / fromIntegral fw) * (fromIntegral fw / fromIntegral fh)
-          sy = tan (fovY / 2) * (fromIntegral (fh-1) / fromIntegral fh)
-          nx = (fx / fromIntegral (fw-1)) * 2 - 1
-          ny = (fy / fromIntegral (fh-1)) * 2 - 1
+          sx = tan (fovY / 2) * (fromIntegral fw / fromIntegral fh)
+          sy = tan (fovY / 2)
+          nx = (fx / fromIntegral fw) * 2 - 1
+          ny = (fy / fromIntegral fh) * 2 - 1
