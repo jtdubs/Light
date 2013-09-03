@@ -32,7 +32,7 @@ instance Shape IntersectionShape where
 
   surfaceArea (IntersectionShape _ s) = sum $ map surfaceArea s
 
-  intersections theRay (IntersectionShape tr s) = if (any null hits)
+  intersections theRay (IntersectionShape tr s) = if any null hits
                                                   then []
                                                   else helper [] (order hits)
     where helper []         []          = []

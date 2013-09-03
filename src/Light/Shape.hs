@@ -10,6 +10,7 @@ module Light.Shape
   , module Light.Shape.Box
   , module Light.Shape.UnionShape
   , module Light.Shape.IntersectionShape
+  , module Light.Shape.DisjunctionShape
   )
 where
 
@@ -24,3 +25,4 @@ import Light.Shape.Triangle
 import Light.Shape.Box
 import Light.Shape.UnionShape
 import Light.Shape.IntersectionShape
+import Light.Shape.DisjunctionShape
