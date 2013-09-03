@@ -32,12 +32,14 @@ instance Shape UnionShape where
 
   surfaceArea (UnionShape _ s) = sum $ map surfaceArea s
 
+  -- TODO: missing time for exit from last element of union
   intersections theRay (UnionShape tr s) =
     helper [] $ (order . map (intersections (transform (inverse tr) theRay))) s
     where helper []         []         = []
           helper []         ((t:ts):r) = t : helper [ts] r
           helper ((_:ts):r) []         = helper r [ts]
           helper ((t:ts):r) ((q:qs):f)
-            | t <= q    = helper r                     (order $ ts:(q:qs):f)
-            | otherwise = helper (order $ qs:(t:ts):r) f
+            | q <= t    =     helper (order $ qs:(t:ts):r) f
+            | null r    = t : helper r (order $ ts:(q:qs):f)
+            | otherwise =     helper r (order $ ts:(q:qs):f)
           order = sortBy (comparing head) . filter (not . null)

@@ -1,5 +1,5 @@
-- Solid shapes
-- CSG Shapes (Union, Intersection, Disjunction, ...)
+- Disjunction Shape
 - Aggregate Shapes (eventually accelerated)
 - Camera w/ aperture
 - Camera w/ tilt/shift lens
+- Samplers
