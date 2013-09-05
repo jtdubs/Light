@@ -7,21 +7,25 @@ import Data.List
 import Light.Sampler.Sampler
 
 circleSamples :: (RandomGen g) => Rand g [(Float, Float)]
-circleSamples = sequence $ replicate 64 sampleCircle
+circleSamples = sequence $ replicate 900 sampleCircle
 
 squareSamples :: (RandomGen g) => Rand g [(Float, Float)]
-squareSamples = sequence $ replicate 64 sampleSquare
+squareSamples = sequence $ replicate 900 sampleSquare
 
-strataSamples :: (RandomGen g) => Rand g [(Float, Float)]
-strataSamples = sampleStrata2D 8 8
+squareStrataSamples :: (RandomGen g) => Rand g [(Float, Float)]
+squareStrataSamples = sampleStrata2D 30 30
+
+circleStrataSamples :: (RandomGen g) => Rand g [(Float, Float)]
+circleStrataSamples = sampleStrataCircle 30 30
 
 main :: IO ()
 main = do
   putStrLn "graphics_toolkit (\"fltk\");"
   putStrLn "clf"
-  drawCircleSamples 1 "Circle" circleSamples
-  drawSquareSamples 2 "Square" squareSamples
-  drawStrataSamples 3 "Strata" strataSamples
+  drawCircleSamples 1 "Circle (Random)" circleSamples
+  drawCircleSamples 2 "Circle (Strata)" circleStrataSamples
+  drawSquareSamples 3 "Square (Random)" squareSamples
+  drawSquareSamples 4 "Square (Strata)" squareStrataSamples
 
 drawCircleSamples :: Int -> String -> Rand StdGen [(Float, Float)] -> IO ()
 drawCircleSamples ix title samples = do
@@ -32,12 +36,6 @@ drawCircleSamples ix title samples = do
 
 drawSquareSamples :: Int -> String ->  Rand StdGen [(Float, Float)] -> IO ()
 drawSquareSamples ix title samples = do
-  putStrLn $ "figure (" ++ show ix ++ ");"
-  putStrLn $ "rectangle ();"
-  drawSamples title samples
-
-drawStrataSamples :: Int -> String ->  Rand StdGen [(Float, Float)] -> IO ()
-drawStrataSamples ix title samples = do
   putStrLn $ "figure (" ++ show ix ++ ");"
   putStrLn $ "rectangle ();"
   drawSamples title samples
