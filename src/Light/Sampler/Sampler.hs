@@ -1,11 +1,12 @@
 module Light.Sampler.Sampler
   ( sample1D, sampleStrata1D, sampleStrataCenters1D, sampleHalton1D, sampleHammersley1D
-  , sample2D, sampleStrata2D, sampleStrataCenters2D, sampleHalton2D, sampleHammersley2D, sampleLHC2D
+  , sample2D, sampleStrata2D, sampleStrataCenters2D, sampleHalton2D, sampleHammersley2D, sampleLHC2D, sample022D
   , toCircle, toCircles
   )
 where
 
 import Control.Monad
+import Data.Word
 import Data.Random
 import Light.Math
 
@@ -46,14 +47,17 @@ sampleStrataCenters2D n m = sequence [helper (fromIntegral x) (fromIntegral y) |
         h = 1 / fromIntegral m
         helper x y = return (w*x + w/2, h*y + h/2)
 
-sampleLHC2D :: Int -> RVar [(Double, Double)]
-sampleLHC2D n = liftM2 (zipWith (,)) (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
-
 sampleHalton2D :: Int -> RVar [(Double, Double)]
 sampleHalton2D n = return [(radicalInverse i 2, radicalInverse i 3) | i <- [1..n]]
 
 sampleHammersley2D :: Int -> RVar [(Double, Double)]
 sampleHammersley2D n = return [(radicalInverse i 2, fromIntegral (i-1) / fromIntegral n) | i <- [1..n]]
+
+sampleLHC2D :: Int -> RVar [(Double, Double)]
+sampleLHC2D n = liftM2 (zipWith (,)) (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
+
+sample022D :: Word32 -> Word32 -> Word32 -> RVar [(Double, Double)]
+sample022D s1 s2 n = return [(vanDerCorput i s1, sobol i s2) | i <- [1..n]]
 
 
 toCircle :: (Double, Double) -> (Double, Double)
