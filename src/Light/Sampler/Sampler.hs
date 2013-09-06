@@ -1,75 +1,51 @@
 module Light.Sampler.Sampler
-  ( sampleLine, samplePolar, sampleCircle, sampleSquare
-  , sampleStrataLine, sampleStrataSquare, sampleStrataCircle, sampleStrataPolar
-  , sampleStrataCentersLine, sampleStrataCentersSquare, sampleStrataCentersCircle, sampleStrataCentersPolar
+  ( sample1D, sampleStrata1D, sampleStrataCenters1D
+  , sample2D, sampleStrata2D, sampleStrataCenters2D, sampleLHC2D
+  , toCircle, toCircles
   )
 where
 
-import Control.Monad.Random
 import Control.Monad
+import Data.Random
 
-sampleStrataCentersLine :: (RandomGen g) => Int -> Rand g [Float]
-sampleStrataCentersLine n = let w = 1 / fromIntegral n
-                            in return $ map (\i -> (w * fromIntegral i) + (w / 2)) [0..n-1]
+sample1D :: RVar Double
+sample1D = uniform 0 1
 
-sampleStrataCentersSquare :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataCentersSquare n m = sequence [helper (fromIntegral x) (fromIntegral y) | x <- [0..n-1], y <- [0..m-1]]
+sampleStrata1D :: Int -> RVar [Double]
+sampleStrata1D n = sequence [helper (fromIntegral x) | x <- [0..n-1]]
+  where w = 1 / fromIntegral n
+        helper x = uniform (w*x) (w*(x+1))
+
+sampleStrataCenters1D :: Int -> RVar [Double]
+sampleStrataCenters1D n = sequence [helper (fromIntegral x) | x <- [0..n-1]]
+  where w = 1 / fromIntegral n
+        helper x = return $ w*x + w/2
+
+
+sample2D :: RVar (Double, Double)
+sample2D = liftM2 (,) sample1D sample1D
+
+sampleStrata2D :: Int -> Int -> RVar [(Double, Double)]
+sampleStrata2D n m = sequence [helper (fromIntegral x) (fromIntegral y) | x <- [0..n-1], y <- [0..m-1]]
+  where w = 1 / fromIntegral n
+        h = 1 / fromIntegral m
+        helper x y = do px <- uniform (w*x) (w*(x+1))
+                        py <- uniform (h*y) (h*(y+1))
+                        return (px, py)
+
+sampleStrataCenters2D :: Int -> Int -> RVar [(Double, Double)]
+sampleStrataCenters2D n m = sequence [helper (fromIntegral x) (fromIntegral y) | x <- [0..n-1], y <- [0..m-1]]
   where w = 1 / fromIntegral n
         h = 1 / fromIntegral m
         helper x y = return (w*x + w/2, h*y + h/2)
 
-sampleStrataCentersCircle :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataCentersCircle n m = do s <- sampleStrataCentersPolar n m
-                                   return $ map (\ (t, r) -> (r * cos t, r * sin t)) s
 
-sampleStrataCentersPolar :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataCentersPolar n m = sequence [helper (fromIntegral t) (fromIntegral r) | t <- [0..n-1], r <- [0..m-1]]
-  where w = (2 * pi) / fromIntegral n
-        h = 1 / fromIntegral m
-        helper t r = return (w*t + w/2, sqrt (h*r + h/2))
+sampleLHC2D :: Int -> RVar [(Double, Double)]
+sampleLHC2D n = liftM2 (zipWith (,)) (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
 
-sampleStrataLine :: (RandomGen g) => Int -> Rand g [Float]
-sampleStrataLine n = let w = 1 / fromIntegral n
-                     in mapM (\i -> getRandomR (w * fromIntegral i, w * fromIntegral (i+1))) [0..n-1]
+toCircle :: (Double, Double) -> (Double, Double)
+toCircle (x, y) = let (t, r) = (x * 2 * pi, sqrt y)
+                  in (r * cos t, r * sin t)
 
-sampleStrataSquare :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataSquare n m = sequence [helper (fromIntegral x) (fromIntegral y) | x <- [0..n-1], y <- [0..m-1]]
-  where w = 1 / fromIntegral n
-        h = 1 / fromIntegral m
-        helper x y = do px <- getRandomR (w*x, w*(x+1))
-                        py <- getRandomR (h*y, h*(y+1))
-                        return (px, py)
-
-sampleStrataCircle :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataCircle n m = do s <- sampleStrataPolar n m
-                            return $ map (\ (t, r) -> (r * cos t, r * sin t)) s
-
-sampleStrataPolar :: (RandomGen g) => Int -> Int -> Rand g [(Float, Float)]
-sampleStrataPolar n m = sequence [helper (fromIntegral t) (fromIntegral r) | t <- [0..n-1], r <- [0..m-1]]
-  where w = (2 * pi) / fromIntegral n
-        h = 1 / fromIntegral m
-        helper t r = do pt <- getRandomR (w*t, w*(t+1))
-                        pr <- getRandomR (h*r, h*(r+1))
-                        return (pt, sqrt pr)
-
-sampleLine :: (RandomGen g) => Rand g Float
-sampleLine = getRandomR (0, 1)
-
-sampleSquare :: (RandomGen g) => Rand g (Float, Float)
-sampleSquare = do
-  x <- getRandomR (0, 1)
-  y <- getRandomR (0, 1)
-  return (x, y)
-
-sampleCircle :: (RandomGen g) => Rand g (Float, Float)
-sampleCircle = do
-  (theta, r) <- samplePolar
-  let x = r * cos theta
-  let y = r * sin theta
-  return (x, y)
-
-samplePolar :: (RandomGen g) => Rand g (Float, Float)
-samplePolar = do
-  theta <- getRandomR (0, 2*pi)
-  r     <- liftM sqrt $ getRandomR (0, 1)
-  return (theta, r)
+toCircles :: [(Double, Double)] -> [(Double, Double)]
+toCircles = map toCircle

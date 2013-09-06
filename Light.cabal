@@ -14,7 +14,7 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, MonadRandom ==0.1.*
+  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   hs-source-dirs:      src
   exposed-modules:     Light.Camera.Camera
@@ -50,23 +50,23 @@ executable Light
   hs-source-dirs:      src
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   main-is:             App\Light.hs
-  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, MonadRandom ==0.1.*
+  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*
 
 executable CameraDiagrams
   hs-source-dirs:      src
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   main-is:             App\CameraDiagrams.hs
-  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, MonadRandom ==0.1.*
+  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*
 
 executable SamplerDiagrams
   hs-source-dirs:      src
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   main-is:             App\SamplerDiagrams.hs
-  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, MonadRandom ==0.1.*
+  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*
 
 test-suite Tests
   type:                exitcode-stdio-1.0
-  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, QuickCheck ==2.5.1.1, MonadRandom ==0.1.*, test-framework >=0.4.1, test-framework-quickcheck2
+  build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, QuickCheck ==2.5.1.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*, test-framework >=0.4.1, test-framework-quickcheck2
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   hs-source-dirs:      src, testsuite
   main-is:             Tests.hs
