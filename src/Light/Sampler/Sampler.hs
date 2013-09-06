@@ -39,9 +39,9 @@ sampleStrataCenters2D n m = sequence [helper (fromIntegral x) (fromIntegral y) |
         h = 1 / fromIntegral m
         helper x y = return (w*x + w/2, h*y + h/2)
 
-
 sampleLHC2D :: Int -> RVar [(Double, Double)]
 sampleLHC2D n = liftM2 (zipWith (,)) (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
+
 
 toCircle :: (Double, Double) -> (Double, Double)
 toCircle (x, y) = let (t, r) = (x * 2 * pi, sqrt y)

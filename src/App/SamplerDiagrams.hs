@@ -13,12 +13,14 @@ main = do
   -- putStrLn "graphics_toolkit (\"fltk\");"
   r <- create
   putStrLn "clf"
-  sampleFrom r (liftM toCircles (sampleStrataCenters2D 30 30))       >>= drawCircleSamples 2 3 1 "Circle (Center)"
-  sampleFrom r (liftM toCircles (sampleStrata2D 30 30))              >>= drawCircleSamples 2 3 2 "Circle (Strata)"
-  sampleFrom r (liftM toCircles (sequence $ replicate 900 sample2D)) >>= drawCircleSamples 2 3 3 "Circle (Random)"
-  sampleFrom r (sampleStrataCenters2D 30 30)                         >>= drawSquareSamples 2 3 4 "Square (Center)"
-  sampleFrom r (sampleStrata2D 30 30)                                >>= drawSquareSamples 2 3 5 "Square (Strata)"
-  sampleFrom r (sequence $ replicate 900 sample2D)                   >>= drawSquareSamples 2 3 6 "Square (Random)"
+  sampleFrom r (liftM toCircles (sampleStrataCenters2D 16 16))        >>= drawCircleSamples 2 4 1 "Circle (Center)"
+  sampleFrom r (liftM toCircles (sequence $ replicate 256 sample2D))  >>= drawCircleSamples 2 4 2 "Circle (Random)"
+  sampleFrom r (liftM toCircles (sampleLHC2D 256))                    >>= drawCircleSamples 2 4 3 "Circle (LHC)"
+  sampleFrom r (liftM toCircles (sampleStrata2D 16 16))               >>= drawCircleSamples 2 4 4 "Circle (Strata)"
+  sampleFrom r (sampleStrataCenters2D 16 16)                          >>= drawSquareSamples 2 4 5 "Square (Center)"
+  sampleFrom r (sequence $ replicate 256 sample2D)                    >>= drawSquareSamples 2 4 6 "Square (Random)"
+  sampleFrom r (sampleLHC2D 256)                                      >>= drawSquareSamples 2 4 7 "Square (LHC)"
+  sampleFrom r (sampleStrata2D 16 16)                                 >>= drawSquareSamples 2 4 8 "Square (Strata)"
 
 drawCircleSamples :: Int -> Int -> Int -> String -> [(Double, Double)] -> IO ()
 drawCircleSamples w h ix title samples = do
@@ -38,7 +40,6 @@ drawSamples title (w, h) samples = do
   let fw = w / sqrt ((w*w) + (h*h))
   let fh = h / sqrt ((w*w) + (h*h))
   putStrLn   "hold on;"
-  -- putStrLn $ "daspect ([" ++ show fw ++ ", " ++ show fh ++ "]);"
   putStrLn $ "pbaspect ([" ++ show fw ++ ", " ++ show fh ++ "]);"
   putStrLn $ "axis (\"off\", \"nolabel\");"
   putStrLn $ "title (\"" ++ title ++ "\");"
