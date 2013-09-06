@@ -13,26 +13,40 @@ main = do
   -- putStrLn "graphics_toolkit (\"fltk\");"
   r <- create
   putStrLn "clf"
-  sampleFrom r (liftM toCircles (sampleStrataCenters2D 16 16))        >>= drawCircleSamples 2 4 1 "Circle (Center)"
-  sampleFrom r (liftM toCircles (sequence $ replicate 256 sample2D))  >>= drawCircleSamples 2 4 2 "Circle (Random)"
-  sampleFrom r (liftM toCircles (sampleLHC2D 256))                    >>= drawCircleSamples 2 4 3 "Circle (LHC)"
-  sampleFrom r (liftM toCircles (sampleStrata2D 16 16))               >>= drawCircleSamples 2 4 4 "Circle (Strata)"
-  sampleFrom r (sampleStrataCenters2D 16 16)                          >>= drawSquareSamples 2 4 5 "Square (Center)"
-  sampleFrom r (sequence $ replicate 256 sample2D)                    >>= drawSquareSamples 2 4 6 "Square (Random)"
-  sampleFrom r (sampleLHC2D 256)                                      >>= drawSquareSamples 2 4 7 "Square (LHC)"
-  sampleFrom r (sampleStrata2D 16 16)                                 >>= drawSquareSamples 2 4 8 "Square (Strata)"
+  sampleFrom r (liftM toCircles (sampleStrataCenters2D 10 10))       >>= drawCircleSamples 1 2 3 1 Nothing "Circle (Center)"
+  sampleFrom r (liftM toCircles (sequence $ replicate 100 sample2D)) >>= drawCircleSamples 1 2 3 2 Nothing "Circle (Random)"
+  sampleFrom r (liftM toCircles (sampleLHC2D 100))                   >>= drawCircleSamples 1 2 3 3 Nothing "Circle (LHC)"
+  sampleFrom r (liftM toCircles (sampleStrata2D 10 10))              >>= drawCircleSamples 1 2 3 4 Nothing "Circle (Strata)"
+  sampleFrom r (liftM toCircles (sampleHalton2D 100))                >>= drawCircleSamples 1 2 3 5 Nothing "Circle (Halton)"
+  sampleFrom r (liftM toCircles (sampleHammersley2D 100))            >>= drawCircleSamples 1 2 3 6 Nothing "Circle (Hammersley)"
+  sampleFrom r (sampleStrataCenters2D 10 10)                         >>= drawSquareSamples 2 2 3 1 Nothing "Square (Center)"
+  sampleFrom r (sequence $ replicate 100 sample2D)                   >>= drawSquareSamples 2 2 3 2 Nothing "Square (Random)"
+  sampleFrom r (sampleLHC2D 100)                                     >>= drawSquareSamples 2 2 3 3 Nothing "Square (LHC)"
+  sampleFrom r (sampleStrata2D 10 10)                                >>= drawSquareSamples 2 2 3 4 Nothing "Square (Strata)"
+  sampleFrom r (sampleHalton2D 100)                                  >>= drawSquareSamples 2 2 3 5 Nothing "Square (Halton)"
+  sampleFrom r (sampleHammersley2D 100)                              >>= drawSquareSamples 2 2 3 6 Nothing "Square (Hammersley)"
 
-drawCircleSamples :: Int -> Int -> Int -> String -> [(Double, Double)] -> IO ()
-drawCircleSamples w h ix title samples = do
+drawCircleSamples :: Int -> Int -> Int -> Int -> Maybe (Int, Int) -> String -> [(Double, Double)] -> IO ()
+drawCircleSamples f w h ix _ title samples = do
+  putStrLn $ "figure (" ++ show f ++ ");"
   putStrLn $ "subplot (" ++ show w ++ ", " ++ show h ++ ", " ++ show ix ++ ");"
   putStrLn $ "t = linspace(0, 2*pi, 100);"
   putStrLn $ "plot(cos(t), sin(t));"
   drawSamples title (1, 1) samples
 
-drawSquareSamples :: Int -> Int -> Int -> String -> [(Double, Double)] -> IO ()
-drawSquareSamples w h ix title samples = do
+drawSquareSamples :: Int -> Int -> Int -> Int -> Maybe (Int, Int) -> String -> [(Double, Double)] -> IO ()
+drawSquareSamples f w h ix g title samples = do
+  putStrLn $ "figure (" ++ show f ++ ");"
   putStrLn $ "subplot (" ++ show w ++ ", " ++ show h ++ ", " ++ show ix ++ ");"
-  putStrLn $ "rectangle ();"
+  case g of
+    Nothing     -> putStrLn $ "rectangle ();"
+    Just (x, y) -> do putStrLn $ "w = " ++ show x ++ ";"
+                      putStrLn $ "h = " ++ show y ++ ";"
+                      putStrLn   "for x = 0:w-1"
+                      putStrLn   "  for y = 0:h-1"
+                      putStrLn   "    rectangle (\"position\", [x*(1/w), y*(1/h), 1/w, 1/h]);"
+                      putStrLn   "  endfor"
+                      putStrLn   "endfor"
   drawSamples title (1, 1) samples
 
 drawSamples :: String -> (Double, Double) -> [(Double, Double)] -> IO ()
