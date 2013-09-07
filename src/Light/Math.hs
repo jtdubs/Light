@@ -25,7 +25,9 @@ radicalInverse n b = helper 0 n (1 / fromIntegral b) (1 / fromIntegral b)
                                    in helper (r + (fromIntegral di) * invBi) (truncate $ (fromIntegral i) * invBase) (invBi * invBase) invBase
 
 vanDerCorput :: Word32 -> Word32 -> Double
-vanDerCorput n scramble = fromIntegral ((((reverseBits n) `xor` scramble) `shiftR` 8) .&. 0xFFFFFF) / fromIntegral ((1 :: Word32) `shiftL` 24)
+vanDerCorput n scramble = fromIntegral num / fromIntegral denom
+  where num   = ((reverseBits n `xor` scramble) `shiftR` 8) .&. 0xFFFFFF
+        denom = (1 :: Word32) `shiftL` 24
 
 sobol :: Word32 -> Word32 -> Double
 sobol n scramble = fromIntegral ((scramble' `shiftR` 8) .&. 0xFFFFFF) / fromIntegral ((1 :: Word32) `shiftL` 24)
