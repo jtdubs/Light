@@ -4,13 +4,8 @@ where
 import Control.Lens hiding (ix)
 import Data.List
 
-import Light.Geometry.Point
-import Light.Geometry.Ray
-import Light.Geometry.Vector
-import Light.Camera.Camera
-import Light.Camera.OrthographicCamera
-import Light.Camera.PerspectiveCamera
-import Light.Camera.Film
+import Light.Geometry
+import Light.Cameras
 
 f :: Film
 f = film 16 12

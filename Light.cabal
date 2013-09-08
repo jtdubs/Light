@@ -17,10 +17,12 @@ library
   build-depends:       base ==4.5.*, lens ==3.9.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*, NumberSieves ==0.1.*
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   hs-source-dirs:      src
-  exposed-modules:     Light.Camera.Camera
+  exposed-modules:     Light.Camera
                        Light.Camera.Film
                        Light.Camera.OrthographicCamera
                        Light.Camera.PerspectiveCamera
+                       Light.Cameras
+                       Light.Geometry
                        Light.Geometry.AABB
                        Light.Geometry.Matrix
                        Light.Geometry.Normal
@@ -29,19 +31,17 @@ library
                        Light.Geometry.Ray
                        Light.Geometry.Transform
                        Light.Geometry.Vector
+                       Light.Shape
                        Light.Shape.Cone
                        Light.Shape.Cylinder
                        Light.Shape.Disc
                        Light.Shape.Paraboloid
                        Light.Shape.Plane
-                       Light.Shape.Shape
                        Light.Shape.Sphere
                        Light.Shape.Triangle
-                       Light.Sampler.Sampler
-                       Light.Camera
-                       Light.Geometry
+                       Light.Shapes
+                       Light.Sampler
                        Light.Math
-                       Light.Shape
                        Light.Primitive
                        Light.Scene
                        Light.Renderer

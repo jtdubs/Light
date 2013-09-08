@@ -38,7 +38,7 @@ sobol n scramble = fromIntegral ((scramble' `shiftR` 8) .&. 0xFFFFFF) / fromInte
 reverseBits :: Word32 -> Word32
 reverseBits = r1 . r2 . r4 . r8 . r16
   where r16 n = (n `shiftL` 16) .|. (n `shiftR` 16)
-        r8  n = ((n .&. 0x00FF00FF) `shiftL` 8 .|. (n .&. 0xFF00FF00) `shiftR` 8)
-        r4  n = ((n .&. 0x0F0F0F0F) `shiftL` 4 .|. (n .&. 0xF0F0F0F0) `shiftR` 4)
-        r2  n = ((n .&. 0x33333333) `shiftL` 2 .|. (n .&. 0xCCCCCCCC) `shiftR` 2)
-        r1  n = ((n .&. 0x55555555) `shiftL` 1 .|. (n .&. 0xAAAAAAAA) `shiftR` 1)
+        r8  n = (n .&. 0x00FF00FF) `shiftL` 8 .|. (n .&. 0xFF00FF00) `shiftR` 8
+        r4  n = (n .&. 0x0F0F0F0F) `shiftL` 4 .|. (n .&. 0xF0F0F0F0) `shiftR` 4
+        r2  n = (n .&. 0x33333333) `shiftL` 2 .|. (n .&. 0xCCCCCCCC) `shiftR` 2
+        r1  n = (n .&. 0x55555555) `shiftL` 1 .|. (n .&. 0xAAAAAAAA) `shiftR` 1

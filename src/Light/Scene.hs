@@ -9,10 +9,10 @@ where
 import Control.Lens
 import Data.Maybe
 
-import Light.Camera.Camera
-import Light.Shape.Shape
+import Light.Camera
+import Light.Shape
 import Light.Primitive
-import Light.Geometry.Ray
+import Light.Geometry
 
 data Scene = Scene { _sceneCamera :: CameraBox, _scenePrimitives :: [Primitive] } deriving (Show)
 
@@ -25,6 +25,6 @@ sceneIntersects :: Ray -> Scene -> Bool
 sceneIntersects r (Scene _ ps) = any (intersects r) ps
 
 sceneIntersect :: Ray -> Scene -> Maybe Double
-sceneIntersect r (Scene _ ps) = case catMaybes $ map (intersect r) ps
-                         of [] -> Nothing
-                            ts -> Just $ minimum ts
+sceneIntersect r (Scene _ ps) = case mapMaybe (intersect r) ps
+                                of [] -> Nothing
+                                   ts -> Just $ minimum ts

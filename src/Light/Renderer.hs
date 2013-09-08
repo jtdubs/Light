@@ -11,6 +11,7 @@ import qualified Data.ByteString.Lazy as BS
 import Light.Scene
 import Light.Shape
 import Light.Camera
+import Light.Camera.Film
 import Light.Geometry
 
 render :: Scene -> IO ()
@@ -21,7 +22,7 @@ render s = BS.writeFile "out.png" image
     fw     = film^.filmWidth
     fh     = film^.filmHeight
     pixels = [(x, y) | y <- [fh-1,fh-2..0], x <- [0..fw-1]]
-    image  = encodePng $ (Image fw fh (V.fromList $ map renderPixel pixels) :: Image Pixel8)
+    image  = encodePng (Image fw fh (V.fromList $ map renderPixel pixels) :: Image Pixel8)
     bounds = foldl aabbUnion EmptyAABB (map worldBound $ s^.scenePrimitives)
     minZ   = pz $ aabbMin bounds
     maxZ   = pz $ aabbMax bounds

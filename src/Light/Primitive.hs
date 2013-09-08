@@ -8,7 +8,7 @@ where
 
 import Control.Lens
 
-import Light.Shape.Shape
+import Light.Shape
 
 data Material = Material deriving (Eq, Show, Read)
 

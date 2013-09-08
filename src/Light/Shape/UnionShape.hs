@@ -10,9 +10,8 @@ import Control.Lens hiding (transform)
 import Data.List
 import Data.Ord
 
-import Light.Geometry.AABB
-import Light.Geometry.Transform
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 
 data UnionShape = UnionShape { _unionTransform :: Transform, _unionShapes :: [ShapeBox] }
                 deriving (Show)

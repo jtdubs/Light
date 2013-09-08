@@ -12,12 +12,8 @@ where
 import Control.Lens hiding (transform)
 
 import Light.Math
-import Light.Geometry.AABB
-import Light.Geometry.Point
-import Light.Geometry.Ray
-import Light.Geometry.Transform
-import Light.Geometry.Vector
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 
 data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Double, _cylinderHeight :: Double } deriving (Show, Read)
 

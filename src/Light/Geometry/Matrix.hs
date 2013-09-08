@@ -1,5 +1,3 @@
-{-# LANGUAGE UnboxedTuples #-}
-
 module Light.Geometry.Matrix
   -- ADT
   ( Matrix(..)
@@ -93,7 +91,7 @@ transpose (Matrix a b c d e f g h i j k l m n o p) = Matrix a e i m b f j n c g 
 
 (|*.) :: Matrix -> Point -> Point
 (Matrix a b c d e f g h i j k l m n o p) |*. (Point x y z) =
-  case (m*x+n*y+o*z+p) of 
+  case m*x+n*y+o*z+p of 
     0 -> originPoint
     w -> Point ((a*x+b*y+c*z+d)/w) ((e*x+f*y+g*z+h)/w) ((i*x+j*y+k*z+l)/w)
 
@@ -107,7 +105,7 @@ transpose (Matrix a b c d e f g h i j k l m n o p) = Matrix a e i m b f j n c g 
 
 (.*|) :: Point -> Matrix -> Point
 (Point x y z) .*| (Matrix a b c d e f g h i j k l m n o p) =
-  case (d*x+h*y+l*z+p) of
+  case d*x+h*y+l*z+p of
     0 -> originPoint
     w -> Point ((a*x+e*y+i*z+m)/w) ((b*x+f*y+j*z+n)/w) ((c*x+g*y+k*z+o)/w)
 

@@ -25,8 +25,8 @@ originPoint = Point 0 0 0
 (Point x y z) .-. (Point  a b c) = Vector (x-a) (y-b) (z-c)
 
 (.+^), (.-^) :: Point -> Vector -> Point
-(Point x y z) .-^ (Vector dx dy dz) = Point (x - dx) (y - dy) (z - dz)
-(Point x y z) .+^ (Vector dx dy dz) = Point (x + dx) (y + dy) (z + dz)
+(Point x y z) .-^ (Vector vx vy vz) = Point (x - vx) (y - vy) (z - vz)
+(Point x y z) .+^ (Vector vx vy vz) = Point (x + vx) (y + vy) (z + vz)
 
 infixl 6 .-., .+^, .-^
 

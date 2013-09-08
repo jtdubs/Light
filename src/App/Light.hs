@@ -3,8 +3,8 @@ where
 
 import Light.Renderer
 import Light.Scene
-import Light.Camera
-import Light.Shape
+import Light.Cameras
+import Light.Shapes
 import Light.Geometry
 import Light.Primitive
 

@@ -10,9 +10,8 @@ import Control.Lens hiding (transform)
 import Data.List
 import Data.Ord
 
-import Light.Geometry.AABB
-import Light.Geometry.Transform
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 
 data IntersectionShape = IntersectionShape { _intersectionTransform :: Transform, _intersectionShapes :: [ShapeBox] }
                 deriving (Show)
@@ -35,9 +34,9 @@ instance Shape IntersectionShape where
   intersections theRay (IntersectionShape tr s) = if any null hits
                                                   then []
                                                   else helper [] (order hits)
-    where helper []         []          = []
+    where helper []         []          =     []
           helper []         ((t:ts):[]) = t : helper [ts] []   -- on entering the last object, we enter the union
-          helper []         ((_:ts):r)  = helper [ts] r
+          helper []         ((_:ts):r)  =     helper [ts] r
           helper ((t:[]):_) []          = t : []               -- on completing the first object, we are done with the union
           helper ((t:ts):r) []          = t : helper r [ts]    -- on exiting the first object, we exit the union
           helper ((t:[]):_) ((q:_):_)                          -- on completing the first object, we are done with the union
@@ -50,4 +49,3 @@ instance Shape IntersectionShape where
 
           hits  = map (intersections (transform (inverse tr) theRay)) s
           order = sortBy (comparing head) . filter (not . null)
-

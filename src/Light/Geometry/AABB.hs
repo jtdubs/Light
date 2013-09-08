@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module Light.Geometry.AABB
   -- ADT
@@ -46,9 +46,9 @@ overlaps b (AABB n x) = isInside b n || isInside b x
 
 isInside :: AABB -> Point -> Bool
 isInside EmptyAABB  _ = False
-isInside (AABB n x) p = ((px p) >= (px n) && (px p) <= (px x))
-                     && ((py p) >= (py n) && (py p) <= (py x))
-                     && ((pz p) >= (pz n) && (pz p) <= (pz x))
+isInside (AABB n x) p = px p >= px n && px p <= px x
+                     && py p >= py n && py p <= py x
+                     && pz p >= pz n && pz p <= pz x
 
 aabbSurfaceArea :: AABB -> Double
 aabbSurfaceArea EmptyAABB = 0

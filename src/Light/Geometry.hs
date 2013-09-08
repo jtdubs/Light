@@ -1,20 +1,11 @@
-module Light.Geometry
-  ( module Light.Geometry.AABB       
-  , module Light.Geometry.Matrix     
-  , module Light.Geometry.Normal     
-  , module Light.Geometry.Point      
-  , module Light.Geometry.Quaternion 
-  , module Light.Geometry.Ray        
-  , module Light.Geometry.Transform  
-  , module Light.Geometry.Vector     
-  )
+module Light.Geometry (module X) 
 where
 
-import Light.Geometry.AABB
-import Light.Geometry.Matrix
-import Light.Geometry.Normal
-import Light.Geometry.Point
-import Light.Geometry.Quaternion
-import Light.Geometry.Ray
-import Light.Geometry.Transform
-import Light.Geometry.Vector
+import Light.Geometry.AABB as X
+import Light.Geometry.Matrix as X
+import Light.Geometry.Normal as X
+import Light.Geometry.Point as X
+import Light.Geometry.Quaternion as X
+import Light.Geometry.Ray as X
+import Light.Geometry.Transform as X
+import Light.Geometry.Vector as X

@@ -12,12 +12,8 @@ where
 import Control.Monad
 import Control.Lens hiding (transform)
 
-import Light.Geometry.AABB
-import Light.Geometry.Point
-import Light.Geometry.Ray
-import Light.Geometry.Transform
-import Light.Geometry.Vector
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 
 data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Double, _planeHalfDepth :: Double } deriving (Show, Read)
 

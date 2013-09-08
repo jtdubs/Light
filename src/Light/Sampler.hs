@@ -1,4 +1,4 @@
-module Light.Sampler.Sampler
+module Light.Sampler
   ( sample1D, sampleStrata1D, sampleStrataCenters1D, sampleHalton1D, sampleHammersley1D
   , sample2D, sampleStrata2D, sampleStrataCenters2D, sampleHalton2D, sampleHammersley2D, sampleLHC2D, sample022D
   , toCircle, toCircles
@@ -54,7 +54,7 @@ sampleHammersley2D :: Int -> RVar [(Double, Double)]
 sampleHammersley2D n = return [(radicalInverse i 2, fromIntegral (i-1) / fromIntegral n) | i <- [1..n]]
 
 sampleLHC2D :: Int -> RVar [(Double, Double)]
-sampleLHC2D n = liftM2 (zipWith (,)) (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
+sampleLHC2D n = liftM2 zip (sampleStrata1D n) (sampleStrata1D n >>= shuffle)
 
 sample022D :: Word32 -> Word32 -> Word32 -> RVar [(Double, Double)]
 sample022D s1 s2 n = return [(vanDerCorput i s1, sobol i s2) | i <- [1..n]]

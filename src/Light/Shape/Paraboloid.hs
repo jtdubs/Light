@@ -12,12 +12,8 @@ where
 import Control.Lens hiding (transform)
 
 import Light.Math
-import Light.Geometry.AABB
-import Light.Geometry.Point
-import Light.Geometry.Ray
-import Light.Geometry.Transform
-import Light.Geometry.Vector
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 
 data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Double, _paraboloidHeight :: Double } deriving (Show, Read)
 

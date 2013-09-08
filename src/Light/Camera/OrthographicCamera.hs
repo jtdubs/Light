@@ -7,12 +7,9 @@ where
 
 import Control.Lens hiding (transform)
 
+import Light.Camera
 import Light.Camera.Film
-import Light.Camera.Camera
-import Light.Geometry.Transform
-import Light.Geometry.Ray
-import Light.Geometry.Point
-import Light.Geometry.Vector
+import Light.Geometry
 
 data OrthographicCamera = OrthographicCamera
                           { _orthoTransform :: Transform

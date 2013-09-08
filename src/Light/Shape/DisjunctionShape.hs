@@ -7,12 +7,9 @@ module Light.Shape.DisjunctionShape
 where
 
 import Control.Lens hiding (transform)
-import Data.List
-import Data.Ord
 
-import Light.Geometry.AABB
-import Light.Geometry.Transform
-import Light.Shape.Shape
+import Light.Geometry
+import Light.Shape
 import Light.Shape.IntersectionShape
 
 data DisjunctionShape = DisjunctionShape
@@ -35,11 +32,11 @@ instance Transformable DisjunctionShape where
 instance Shape DisjunctionShape where
   shapeTransform = disjunctionTransform
 
-  bound (DisjunctionShape _ p n) = bound p
+  bound (DisjunctionShape _ p _) = bound p
 
-  surfaceArea (DisjunctionShape _ p n) = surfaceArea p
+  surfaceArea (DisjunctionShape _ p _) = surfaceArea p
 
-  intersections theRay (DisjunctionShape tr p n) = if null pts
+  intersections theRay (DisjunctionShape tr pos neg) = if null pts
                                                    then []
                                                    else helper Outside pts nts
     where helper _        []     []     = []
@@ -58,5 +55,5 @@ instance Shape DisjunctionShape where
             | p <= n    =     helper InsideN  (  ps) (n:ns)
             | otherwise = n : helper InsideP  (p:ps) (  ns)
 
-          pts  = intersections (transform (inverse tr) theRay) p
-          nts  = intersections (transform (inverse tr) theRay) n
+          pts  = intersections (transform (inverse tr) theRay) pos
+          nts  = intersections (transform (inverse tr) theRay) neg

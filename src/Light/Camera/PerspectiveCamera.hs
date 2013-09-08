@@ -7,12 +7,9 @@ where
 
 import Control.Lens hiding (transform)
 
+import Light.Camera
 import Light.Camera.Film
-import Light.Camera.Camera
-import Light.Geometry.Transform
-import Light.Geometry.Ray
-import Light.Geometry.Point
-import Light.Geometry.Vector
+import Light.Geometry
 
 data PerspectiveCamera = PerspectiveCamera
                           { _perspectiveTransform   :: Transform
@@ -29,11 +26,11 @@ instance Camera PerspectiveCamera where
   cameraTransform = perspectiveTransform
   cameraFilm = perspectiveFilm
   cameraRay (PerspectiveCamera t f fovY) (fx, fy) = transform (inverse t) (Ray o d)
-    where o = originPoint
-          d = normalizeV $ Vector (nx*sx) (ny*sy) 1
+    where o  = originPoint
+          d  = normalizeV $ Vector (x*sx) (y*sy) 1
           fw = f^.filmWidth
           fh = f^.filmHeight
           sx = tan (fovY / 2) * (fromIntegral fw / fromIntegral fh)
           sy = tan (fovY / 2)
-          nx = (fx / fromIntegral fw) * 2 - 1
-          ny = (fy / fromIntegral fh) * 2 - 1
+          x  = (fx / fromIntegral fw) * 2 - 1
+          y  = (fy / fromIntegral fh) * 2 - 1
