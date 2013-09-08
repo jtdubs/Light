@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Light.Camera.Film
+module Light.Film
   ( Film, film, filmWidth, filmHeight
   , film1080, film720, film480, film2k, film4k, film8k, filmQVGA, filmVGA
   )

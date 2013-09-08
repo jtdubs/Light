@@ -18,10 +18,10 @@ library
   ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
   hs-source-dirs:      src
   exposed-modules:     Light.Camera
-                       Light.Camera.Film
                        Light.Camera.OrthographicCamera
                        Light.Camera.PerspectiveCamera
                        Light.Cameras
+                       Light.Film
                        Light.Filter
                        Light.Filter.Box
                        Light.Filter.Gaussian
@@ -37,6 +37,11 @@ library
                        Light.Geometry.Ray
                        Light.Geometry.Transform
                        Light.Geometry.Vector
+                       Light.Math
+                       Light.Primitive
+                       Light.Renderer
+                       Light.Sampler
+                       Light.Scene
                        Light.Shape
                        Light.Shape.Cone
                        Light.Shape.Cylinder
@@ -46,11 +51,6 @@ library
                        Light.Shape.Sphere
                        Light.Shape.Triangle
                        Light.Shapes
-                       Light.Sampler
-                       Light.Math
-                       Light.Primitive
-                       Light.Scene
-                       Light.Renderer
 
 executable Light
   hs-source-dirs:      src

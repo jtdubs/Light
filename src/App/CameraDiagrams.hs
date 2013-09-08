@@ -4,8 +4,9 @@ where
 import Control.Lens hiding (ix)
 import Data.List
 
-import Light.Geometry
 import Light.Cameras
+import Light.Film
+import Light.Geometry
 
 f :: Film
 f = film 16 12
@@ -43,17 +44,6 @@ drawOrthographicPlot ix title camera = let fx = camera^.cameraFilm.filmWidth
 
 drawPlot :: (Camera c) => Int -> String -> c -> Double -> IO ()
 drawPlot ix title camera imagePlaneHeight = do
-  let fx             = fromIntegral $ camera^.cameraFilm.filmWidth
-  let fy             = fromIntegral $ camera^.cameraFilm.filmHeight
-  let dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
-  let rays           = getRays camera
-  let ox             = map (px.rayOrigin) rays
-  let oy             = map (py.rayOrigin) rays
-  let oz             = map (pz.rayOrigin) rays
-  let vx             = map (\r -> (dx $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
-  let vy             = map (\r -> (dy $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
-  let vz             = map (\r -> (dz $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
-
   putStrLn $ "figure (" ++ show ix ++ ");"
   putStrLn $ "x = linspace (" ++ intercalate ", " (map show [-fx/2, fx/2, fx+1]) ++ ");"
   putStrLn $ "y = linspace (" ++ intercalate ", " (map show [-fy/2, fy/2, fy+1]) ++ ");"
@@ -76,3 +66,13 @@ drawPlot ix title camera imagePlaneHeight = do
   putStrLn   "q = quiver3 (ox, oy, oz, dx, dy, dz, 0);"
   putStrLn   "set (q, \"maxheadsize\", 0);"
   putStrLn   "hold off;"
+  where fx             = fromIntegral $ camera^.cameraFilm.filmWidth
+        fy             = fromIntegral $ camera^.cameraFilm.filmHeight
+        dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
+        rays           = getRays camera
+        ox             = map (px.rayOrigin) rays
+        oy             = map (py.rayOrigin) rays
+        oz             = map (pz.rayOrigin) rays
+        vx             = map (\r -> (dx $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
+        vy             = map (\r -> (dy $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays
+        vz             = map (\r -> (dz $ rayDirection r)*imagePlaneHeight*1.2/(dz $ rayDirection r)) rays

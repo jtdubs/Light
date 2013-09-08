@@ -1,12 +1,13 @@
 module Main
 where
 
-import Light.Renderer
-import Light.Scene
 import Light.Cameras
-import Light.Shapes
+import Light.Film
 import Light.Geometry
 import Light.Primitive
+import Light.Renderer
+import Light.Scene
+import Light.Shapes
 
 theCamera :: CameraBox
 theCamera = cameraBox $ perspectiveCamera film720 (pi/3)

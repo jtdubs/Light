@@ -8,11 +8,11 @@ import Control.Lens
 import qualified Data.Vector.Storable as V
 import qualified Data.ByteString.Lazy as BS
 
-import Light.Scene
-import Light.Shape
-import Light.Camera
-import Light.Camera.Film
+import Light.Cameras
+import Light.Film
 import Light.Geometry
+import Light.Scene
+import Light.Shapes
 
 render :: Scene -> IO ()
 render s = BS.writeFile "out.png" image 

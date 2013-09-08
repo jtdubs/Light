@@ -7,7 +7,7 @@ where
 
 import Control.Lens
 
-import Light.Camera.Film
+import Light.Film
 import Light.Geometry
 
 class Camera a where

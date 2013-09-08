@@ -8,7 +8,7 @@ where
 import Control.Lens hiding (transform)
 
 import Light.Camera
-import Light.Camera.Film
+import Light.Film
 import Light.Geometry
 
 data PerspectiveCamera = PerspectiveCamera
