@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Paraboloid
   -- ADT
   ( Paraboloid, paraboloid, paraboloidRadius, paraboloidHeight
@@ -9,18 +7,18 @@ module Light.Shape.Paraboloid
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Math
 import Light.Geometry
 import Light.Shape
 
-data Paraboloid = Paraboloid { _paraboloidTransform :: Transform, _paraboloidRadius :: Double, _paraboloidHeight :: Double } deriving (Show, Read)
+data Paraboloid = Paraboloid { paraboloidTransform :: Transform
+                             , paraboloidRadius    :: Double
+                             , paraboloidHeight    :: Double
+                             }
+                deriving (Show, Read)
 
 paraboloid :: Double -> Double -> Paraboloid
 paraboloid = Paraboloid identityTransform
-
-makeLenses ''Paraboloid
 
 unitParaboloid :: Paraboloid
 unitParaboloid = paraboloid 1 1

@@ -16,7 +16,9 @@ where
 import Light.Geometry.Matrix
 import Light.Geometry.Vector
 
-data Quaternion = Quaternion { qv :: !Vector, qw :: !Double }
+data Quaternion = Quaternion { qv :: !Vector
+                             , qw :: !Double
+                             }
                 deriving (Show, Read)
 
 normalizeQ :: Quaternion -> Quaternion

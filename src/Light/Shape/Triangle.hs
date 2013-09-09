@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Triangle
   -- ADT
   ( Triangle, triangle, triangleVertices
@@ -10,18 +8,18 @@ module Light.Shape.Triangle
 where
 
 import Control.Monad
-import Control.Lens hiding (transform)
 
 import Light.Geometry
 import Light.Shape
 
-data Triangle = Triangle { _triangleTransform :: Transform, _triangleVertices :: [Point] } deriving (Show, Read)
+data Triangle = Triangle { triangleTransform :: Transform
+                         , triangleVertices  :: [Point]
+                         }
+              deriving (Show, Read)
 
 triangle :: [Point] -> Triangle
 triangle [a, b, c] = Triangle identityTransform [a, b, c]
 triangle _         = error "triangles must have three vertices"
-
-makeLenses ''Triangle
 
 unitTriangle :: Triangle
 unitTriangle = triangle [ originPoint .-^ unitXVector .-^ unitYVector

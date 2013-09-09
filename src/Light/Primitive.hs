@@ -6,23 +6,23 @@ module Light.Primitive
   )
 where
 
-import Control.Lens
-
 import Light.Shape
+import Light.Geometry.Transform
 
 data Material = Material deriving (Eq, Show, Read)
 
-data Primitive = Primitive { _primitiveShape :: ShapeBox, _primitiveMaterial :: Material } deriving (Show)
+data Primitive = Primitive { primitiveShape    :: ShapeBox
+                           , primitiveMaterial :: Material
+                           }
+               deriving (Show)
 
-makeLenses ''Primitive
-
-primitive :: (Shape s, Show s) => s -> Material -> Primitive
+primitive :: (Shape s, Transformable s, Show s) => s -> Material -> Primitive
 primitive s = Primitive (shapeBox s)
 
 instance Shape Primitive where
-  shapeTransform = primitiveShape.shapeTransform
-  bound          = bound       . _primitiveShape
-  worldBound     = worldBound  . _primitiveShape
-  intersects r s = intersects r (s^.primitiveShape)
-  intersect  r s = intersect  r (s^.primitiveShape)
-  surfaceArea    = surfaceArea . _primitiveShape
+  shapeTransform = shapeTransform . primitiveShape
+  bound          = bound          . primitiveShape
+  worldBound     = worldBound     . primitiveShape
+  surfaceArea    = surfaceArea    . primitiveShape
+  intersects r s = intersects r (primitiveShape s)
+  intersect  r s = intersect  r (primitiveShape s)

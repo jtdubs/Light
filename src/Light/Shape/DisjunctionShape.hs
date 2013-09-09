@@ -1,28 +1,21 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.DisjunctionShape
   -- ADT
   ( DisjunctionShape, disjunctionShape, positiveShape, negativeShape
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Geometry
 import Light.Shape
 import Light.Shape.IntersectionShape
 
-data DisjunctionShape = DisjunctionShape
-                       { _disjunctionTransform :: Transform
-                       , _positiveShape        :: ShapeBox
-                       , _negativeShape        :: ShapeBox
-                       }
-                       deriving (Show)
+data DisjunctionShape = DisjunctionShape { disjunctionTransform :: Transform
+                                         , positiveShape        :: ShapeBox
+                                         , negativeShape        :: ShapeBox
+                                         }
+                      deriving (Show)
 
 disjunctionShape :: [ShapeBox] -> [ShapeBox] -> DisjunctionShape
 disjunctionShape ps ns = DisjunctionShape identityTransform (shapeBox $ intersectionShape ps) (shapeBox $ intersectionShape ns)
-
-makeLenses ''DisjunctionShape
 
 data State = Outside | InsideP | InsideN | InsidePN
 

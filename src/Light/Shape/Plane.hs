@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Plane
   -- ADT
   ( Plane, plane, planeHalfWidth, planeHalfDepth
@@ -10,17 +8,18 @@ module Light.Shape.Plane
 where
 
 import Control.Monad
-import Control.Lens hiding (transform)
 
 import Light.Geometry
 import Light.Shape
 
-data Plane = Plane { _planeTransform :: Transform, _planeHalfWidth :: Double, _planeHalfDepth :: Double } deriving (Show, Read)
+data Plane = Plane { planeTransform :: Transform
+                   , planeHalfWidth :: Double
+                   , planeHalfDepth :: Double
+                   }
+           deriving (Show, Read)
 
 plane :: Double -> Double -> Plane
 plane = Plane identityTransform
-
-makeLenses ''Plane
 
 unitPlane :: Plane
 unitPlane = plane 1 1

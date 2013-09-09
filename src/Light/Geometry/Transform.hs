@@ -25,7 +25,9 @@ import Light.Geometry.Vector
 import Light.Geometry.Matrix
 import Light.Geometry.Quaternion
 
-data Transform = Transform { _m :: !Matrix, _mInv :: !Matrix }
+data Transform = Transform { transformMatrix        :: !Matrix
+                           , transformInverseMatrix :: !Matrix
+                           }
                deriving (Eq, Show, Read)
 
 identityTransform :: Transform
@@ -80,13 +82,13 @@ class Transformable a where
   transform :: Transform -> a -> a
 
 instance Transformable Point where
-  transform t p = _m t |*. p
+  transform t p = transformMatrix t |*. p
 
 instance Transformable Vector where
-  transform t v = _m t |*^ v
+  transform t v = transformMatrix t |*^ v
 
 instance Transformable Normal where
-  transform t n = transpose (_mInv t) |*! n
+  transform t n = transpose (transformInverseMatrix t) |*! n
 
 instance Transformable Ray where
   transform t r = Ray (transform t $ rayOrigin r) (transform t $ rayDirection r)

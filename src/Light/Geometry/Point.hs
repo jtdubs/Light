@@ -12,7 +12,10 @@ where
 
 import Light.Geometry.Vector
 
-data Point = Point { px :: !Double, py :: !Double, pz :: !Double }
+data Point = Point { px :: !Double
+                   , py :: !Double
+                   , pz :: !Double
+                   }
            deriving (Show, Read)
 
 instance Eq Point where

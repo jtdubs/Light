@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Disc
   -- ADT
   ( Disc, disc, discRadius
@@ -10,17 +8,17 @@ module Light.Shape.Disc
 where
 
 import Control.Monad
-import Control.Lens hiding (transform)
 
 import Light.Geometry
 import Light.Shape
 
-data Disc = Disc { _discTransform :: Transform, _discRadius :: Double } deriving (Show, Read)
+data Disc = Disc { discTransform :: Transform
+                 , discRadius :: Double
+                 }
+          deriving (Show, Read)
 
 disc :: Double -> Disc
 disc = Disc identityTransform
-
-makeLenses ''Disc
 
 unitDisc :: Disc
 unitDisc = disc 1

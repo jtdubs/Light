@@ -12,7 +12,10 @@ where
 import Light.Geometry.Point
 import Light.Geometry.Vector
 
-data AABB = EmptyAABB | AABB { aabbMin :: !Point, aabbMax :: !Point }
+data AABB = EmptyAABB
+          | AABB { aabbMin :: !Point
+                 , aabbMax :: !Point
+                 }
           deriving (Eq, Show, Read)
 
 isEmpty :: AABB -> Bool

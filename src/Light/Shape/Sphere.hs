@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Sphere
   -- ADT
   ( Sphere, sphere, sphereRadius
@@ -9,18 +7,17 @@ module Light.Shape.Sphere
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Math
 import Light.Geometry
 import Light.Shape
 
-data Sphere = Sphere { _sphereTransform :: Transform, _sphereRadius :: Double } deriving (Show, Read)
+data Sphere = Sphere { sphereTransform :: Transform
+                     , sphereRadius    :: Double
+                     }
+            deriving (Show, Read)
 
 sphere :: Double -> Sphere
 sphere = Sphere identityTransform
-
-makeLenses ''Sphere
 
 unitSphere :: Sphere
 unitSphere = sphere 1

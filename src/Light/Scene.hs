@@ -1,12 +1,9 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Scene
   ( Scene, scene, sceneCamera, scenePrimitives
   , sceneIntersects, sceneIntersect
   )
 where
 
-import Control.Lens
 import Data.Maybe
 
 import Light.Camera
@@ -14,12 +11,13 @@ import Light.Shape
 import Light.Primitive
 import Light.Geometry
 
-data Scene = Scene { _sceneCamera :: CameraBox, _scenePrimitives :: [Primitive] } deriving (Show)
+data Scene = Scene { sceneCamera     :: CameraBox
+                   , scenePrimitives :: [Primitive]
+                   }
+           deriving (Show)
 
-scene :: (Camera c, Show c) => c -> [Primitive] -> Scene
+scene :: (Camera c, Transformable c, Show c) => c -> [Primitive] -> Scene
 scene c = Scene (cameraBox c)
-
-makeLenses ''Scene
 
 sceneIntersects :: Ray -> Scene -> Bool
 sceneIntersects r (Scene _ ps) = any (intersects r) ps

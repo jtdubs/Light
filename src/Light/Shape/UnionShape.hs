@@ -1,25 +1,22 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.UnionShape
   -- ADT
   ( UnionShape, unionShape, unionShapes
   )
 where
 
-import Control.Lens hiding (transform)
 import Data.List
 import Data.Ord
 
 import Light.Geometry
 import Light.Shape
 
-data UnionShape = UnionShape { _unionTransform :: Transform, _unionShapes :: [ShapeBox] }
+data UnionShape = UnionShape { unionTransform :: Transform
+                             , unionShapes    :: [ShapeBox]
+                             }
                 deriving (Show)
 
 unionShape :: [ShapeBox] -> UnionShape
 unionShape = UnionShape identityTransform
-
-makeLenses ''UnionShape
 
 instance Transformable UnionShape where
   transform t' (UnionShape t s) = UnionShape (compose t' t) s

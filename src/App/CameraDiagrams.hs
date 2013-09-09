@@ -1,7 +1,6 @@
 module Main
 where
 
-import Control.Lens hiding (ix)
 import Data.List
 
 import Light.Cameras
@@ -20,8 +19,8 @@ o = orthographicCamera f 1
 
 getRays :: (Camera c) => c -> [Ray]
 getRays camera =
-  let fx = camera^.cameraFilm.filmWidth
-      fy = camera^.cameraFilm.filmHeight
+  let fx = (filmWidth .cameraFilm) camera
+      fy = (filmHeight.cameraFilm) camera
   in [cameraRay camera (fromIntegral x + 0.5, fromIntegral y + 0.5) | x <- [0..fx-1], y <- [0..fy-1]]
 
 main :: IO ()
@@ -33,13 +32,13 @@ main = do
   drawOrthographicPlot 3 "Orthographic"     o 
 
 drawPerspectivePlot :: Int -> String -> PerspectiveCamera -> IO ()
-drawPerspectivePlot ix title camera = let fovY = camera^.perspectiveVerticalFOV
-                                          fy   = camera^.cameraFilm.filmHeight
+drawPerspectivePlot ix title camera = let fovY = perspectiveVerticalFOV  camera
+                                          fy   = (filmHeight.cameraFilm) camera
                                       in drawPlot ix title camera (fromIntegral fy / (2 * tan (fovY/2)))
 
 drawOrthographicPlot :: Int -> String -> OrthographicCamera -> IO ()
-drawOrthographicPlot ix title camera = let fx = camera^.cameraFilm.filmWidth
-                                           fy = camera^.cameraFilm.filmHeight
+drawOrthographicPlot ix title camera = let fx = (filmWidth .cameraFilm) camera
+                                           fy = (filmHeight.cameraFilm) camera
 									   in drawPlot ix title camera (fromIntegral (min fx fy))
 
 drawPlot :: (Camera c) => Int -> String -> c -> Double -> IO ()
@@ -66,8 +65,8 @@ drawPlot ix title camera imagePlaneHeight = do
   putStrLn   "q = quiver3 (ox, oy, oz, dx, dy, dz, 0);"
   putStrLn   "set (q, \"maxheadsize\", 0);"
   putStrLn   "hold off;"
-  where fx             = fromIntegral $ camera^.cameraFilm.filmWidth
-        fy             = fromIntegral $ camera^.cameraFilm.filmHeight
+  where fx             = fromIntegral $ (filmWidth .cameraFilm) camera
+        fy             = fromIntegral $ (filmHeight.cameraFilm) camera
         dim            = foldl max 0 [fx, fy, imagePlaneHeight] + 4
         rays           = getRays camera
         ox             = map (px.rayOrigin) rays

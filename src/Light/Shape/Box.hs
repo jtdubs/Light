@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Box
   -- ADT
   ( Box, box, boxHalfWidth, boxHalfDepth, boxHalfHeight
@@ -10,22 +8,19 @@ module Light.Shape.Box
 where
 
 import Control.Monad
-import Control.Lens hiding (transform)
 import Data.List
 
 import Light.Geometry
 import Light.Shape
 
-data Box = Box { _boxTransform    :: Transform
-               , _boxHalfWidth    :: Double
-               , _boxHalfHeight   :: Double
-               , _boxHalfDepth    :: Double
+data Box = Box { boxTransform    :: Transform
+               , boxHalfWidth    :: Double
+               , boxHalfHeight   :: Double
+               , boxHalfDepth    :: Double
                } deriving (Show, Read)
 
 box :: Double -> Double -> Double -> Box
 box = Box identityTransform
-
-makeLenses ''Box
 
 unitBox :: Box
 unitBox = box 1 1 1

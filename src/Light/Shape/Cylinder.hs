@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Cylinder
   -- ADT
   ( Cylinder, cylinder, cylinderRadius, cylinderHeight
@@ -9,18 +7,18 @@ module Light.Shape.Cylinder
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Math
 import Light.Geometry
 import Light.Shape
 
-data Cylinder = Cylinder { _cylinderTransform :: Transform, _cylinderRadius :: Double, _cylinderHeight :: Double } deriving (Show, Read)
+data Cylinder = Cylinder { cylinderTransform :: Transform
+                         , cylinderRadius    :: Double
+                         , cylinderHeight    :: Double
+                         }
+              deriving (Show, Read)
 
 cylinder :: Double -> Double -> Cylinder
 cylinder = Cylinder identityTransform
-
-makeLenses ''Cylinder
 
 unitCylinder :: Cylinder
 unitCylinder = cylinder 1 1

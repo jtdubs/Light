@@ -12,7 +12,10 @@ module Light.Geometry.Vector
   )
 where
 
-data Vector = Vector { dx :: !Double, dy :: !Double, dz :: !Double }
+data Vector = Vector { dx :: !Double
+                     , dy :: !Double
+                     , dz :: !Double
+                     }
             deriving (Show, Read)
 
 instance Eq Vector where

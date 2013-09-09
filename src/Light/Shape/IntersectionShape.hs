@@ -1,25 +1,22 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.IntersectionShape
   -- ADT
   ( IntersectionShape, intersectionShape, intersectionShapes
   )
 where
 
-import Control.Lens hiding (transform)
 import Data.List
 import Data.Ord
 
 import Light.Geometry
 import Light.Shape
 
-data IntersectionShape = IntersectionShape { _intersectionTransform :: Transform, _intersectionShapes :: [ShapeBox] }
-                deriving (Show)
+data IntersectionShape = IntersectionShape { intersectionTransform :: Transform
+                                           , intersectionShapes    :: [ShapeBox]
+                                           }
+                       deriving (Show)
 
 intersectionShape :: [ShapeBox] -> IntersectionShape
 intersectionShape = IntersectionShape identityTransform
-
-makeLenses ''IntersectionShape
 
 instance Transformable IntersectionShape where
   transform t' (IntersectionShape t s) = IntersectionShape (compose t' t) s

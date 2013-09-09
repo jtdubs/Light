@@ -5,21 +5,20 @@ module Light.Shape
   )
 where
 
-import Control.Lens hiding (transform)
 import Data.Maybe
 
 import Light.Geometry
 
 class Shape a where
-  shapeTransform :: Lens' a Transform
-  bound :: a -> AABB
-  worldBound :: a -> AABB
-  intersect :: Ray -> a -> Maybe Double
-  intersects :: Ray -> a -> Bool
-  intersections :: Ray -> a -> [Double]
-  surfaceArea :: a -> Double
+  shapeTransform :: a -> Transform
+  bound          :: a -> AABB
+  worldBound     :: a -> AABB
+  intersect      :: Ray -> a -> Maybe Double
+  intersects     :: Ray -> a -> Bool
+  intersections  :: Ray -> a -> [Double]
+  surfaceArea    :: a -> Double
 
-  worldBound s = transform (s^.shapeTransform) (bound s)
+  worldBound s = transform (shapeTransform s) (bound s)
   intersect r s = let ts = intersections r s
                   in if null ts
                      then Nothing
@@ -29,20 +28,22 @@ class Shape a where
                         Just t  -> [t]
                         Nothing -> []
 
-data ShapeBox = forall s. (Shape s, Show s) => ShapeBox s
+data ShapeBox = forall s. (Shape s, Transformable s, Show s) => ShapeBox s
 
-shapeBox :: (Shape s, Show s) => s -> ShapeBox
+shapeBox :: (Shape s, Transformable s, Show s) => s -> ShapeBox
 shapeBox = ShapeBox
 
 instance Show ShapeBox where
   show (ShapeBox s) = show s
 
 instance Shape ShapeBox where
-  shapeTransform = lens (\ (ShapeBox s)   -> s^.shapeTransform)
-                        (\ (ShapeBox s) t -> ShapeBox $ (shapeTransform .~ t) s)
+  shapeTransform (ShapeBox s) = shapeTransform s
   bound (ShapeBox s) = bound s
   worldBound (ShapeBox s) = worldBound s
   intersect r (ShapeBox s) = intersect r s
   intersects r (ShapeBox s) = intersects r s
   intersections r (ShapeBox s) = intersections r s
   surfaceArea (ShapeBox s) = surfaceArea s
+
+instance Transformable ShapeBox where
+  transform t' (ShapeBox s) = ShapeBox (transform t' s)

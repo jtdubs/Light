@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Light.Shape.Cone
   -- ADT
   ( Cone, cone, coneRadius, coneHeight
@@ -9,18 +7,18 @@ module Light.Shape.Cone
   )
 where
 
-import Control.Lens hiding (transform)
-
 import Light.Math
 import Light.Geometry
 import Light.Shape
 
-data Cone = Cone { _coneTransform :: Transform, _coneRadius :: Double, _coneHeight :: Double } deriving (Show, Read)
+data Cone = Cone { coneTransform :: Transform
+                 , coneRadius    :: Double
+                 , coneHeight    :: Double
+                 }
+          deriving (Show, Read)
 
 cone :: Double -> Double -> Cone
 cone = Cone identityTransform
-
-makeLenses ''Cone
 
 unitCone :: Cone
 unitCone = cone 1 1

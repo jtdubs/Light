@@ -4,7 +4,6 @@ module Light.Renderer
 where
 
 import Codec.Picture
-import Control.Lens
 import qualified Data.Vector.Storable as V
 import qualified Data.ByteString.Lazy as BS
 
@@ -17,13 +16,13 @@ import Light.Shapes
 render :: Scene -> IO ()
 render s = BS.writeFile "out.png" image 
   where
-    camera = s^.sceneCamera
-    film   = camera^.cameraFilm
-    fw     = film^.filmWidth
-    fh     = film^.filmHeight
+    camera = sceneCamera s
+    film   = cameraFilm camera
+    fw     = filmWidth  film
+    fh     = filmHeight film
     pixels = [(x, y) | y <- [fh-1,fh-2..0], x <- [0..fw-1]]
     image  = encodePng (Image fw fh (V.fromList $ map renderPixel pixels) :: Image Pixel8)
-    bounds = foldl aabbUnion EmptyAABB (map worldBound $ s^.scenePrimitives)
+    bounds = foldl aabbUnion EmptyAABB (map worldBound $ scenePrimitives s)
     minZ   = pz $ aabbMin bounds
     maxZ   = pz $ aabbMax bounds
     pToC p = min 255 $ max 0 $ round $ 255 - (255/(maxZ-minZ))*(pz p - minZ)
