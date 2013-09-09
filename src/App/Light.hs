@@ -3,6 +3,7 @@ where
 
 import Light.Cameras
 import Light.Film
+import Light.Filters
 import Light.Geometry
 import Light.Primitive
 import Light.Renderer
@@ -10,7 +11,7 @@ import Light.Scene
 import Light.Shapes
 
 theCamera :: CameraBox
-theCamera = cameraBox $ perspectiveCamera film720 (pi/3)
+theCamera = cameraBox $ perspectiveCamera (film720 $ gaussianFilter (2, 2) 0.25) (pi/3)
 
 union :: UnionShape
 union = unionShape [ shapeBox $ unitSphere      `translate` Vector 0 0 0
