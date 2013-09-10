@@ -19,13 +19,16 @@ main = do
   -- sampleFrom r (liftM toCircles (sampleStrata2D 10 10))              >>= drawCircleSamples 1 2 3 4 Nothing "Strata"
   -- sampleFrom r (liftM toCircles (sampleHalton2D 100))                >>= drawCircleSamples 1 2 3 5 Nothing "Halton"
   -- sampleFrom r (liftM toCircles (sampleHammersley2D 100))            >>= drawCircleSamples 1 2 3 6 Nothing "Hammersley"
-  sampleFrom r (sampleStrataCenters2D 10 10) >>= drawSquareSamples 1 3 3 1 Nothing "Center"
-  sampleFrom r (replicateM 100 sample2D)     >>= drawSquareSamples 1 3 3 2 Nothing "Random"
-  sampleFrom r (sampleLHC2D 100)             >>= drawSquareSamples 1 3 3 3 Nothing "LHC"
-  sampleFrom r (sampleStrata2D 10 10)        >>= drawSquareSamples 1 3 3 4 Nothing "Strata"
-  sampleFrom r (sampleHalton2D 100)          >>= drawSquareSamples 1 3 3 5 Nothing "Halton"
-  sampleFrom r (sampleHammersley2D 100)      >>= drawSquareSamples 1 3 3 6 Nothing "Hammersley"
-  sampleFrom r (sample022D 0 0 100)          >>= drawSquareSamples 1 3 3 7 Nothing "(0,2)"
+  -- sampleFrom r (sampleStrataCenters2D 10 10) >>= drawSquareSamples 1 3 3 1 Nothing "Center"
+  -- sampleFrom r (replicateM 100 sample2D)     >>= drawSquareSamples 1 3 3 2 Nothing "Random"
+  -- sampleFrom r (sampleLHC2D 100)             >>= drawSquareSamples 1 3 3 3 Nothing "LHC"
+  -- sampleFrom r (sampleStrata2D 10 10)        >>= drawSquareSamples 1 3 3 4 Nothing "Strata"
+  -- sampleFrom r (sampleHalton2D 100)          >>= drawSquareSamples 1 3 3 5 Nothing "Halton"
+  -- sampleFrom r (sampleHammersley2D 100)      >>= drawSquareSamples 1 3 3 6 Nothing "Hammersley"
+  -- sampleFrom r (sample022D 0 0 100)          >>= drawSquareSamples 1 3 3 7 Nothing "(0,2)"
+  sampleFrom r (sample022D   0   0 100)          >>= drawSquareSamples 1 3 3 1 Nothing "(0,2)"
+  sampleFrom r (sample022D  18  18 100)          >>= drawSquareSamples 1 3 3 2 Nothing "(0,2)"
+  sampleFrom r (sample022D 618 618 100)          >>= drawSquareSamples 1 3 3 3 Nothing "(0,2)"
 
 drawCircleSamples :: Int -> Int -> Int -> Int -> Maybe (Int, Int) -> String -> [(Double, Double)] -> IO ()
 drawCircleSamples f w h ix _ title samples = do

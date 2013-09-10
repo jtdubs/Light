@@ -54,7 +54,7 @@ library
 
 executable Light
   hs-source-dirs:      src
-  ghc-options:         -Wall -O2 -threaded -fprof-auto-exported
+  ghc-options:         -Wall -O2 -threaded -fprof-auto-exported -rtsopts
   main-is:             App\Light.hs
   build-depends:       base ==4.5.*, array ==0.4.*, bytestring ==0.9.*, vector ==0.10.*, parallel ==3.2.*, JuicyPixels ==3.1, random-fu ==0.2.*, random-extras ==0.19.*, mwc-random ==0.12.*, NumberSieves ==0.1.*
 

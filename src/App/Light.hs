@@ -1,6 +1,10 @@
 module Main
 where
 
+import Data.Random
+import qualified Data.ByteString.Lazy as BS
+import System.Random.MWC (create)
+
 import Light.Cameras
 import Light.Film
 import Light.Filters
@@ -11,7 +15,7 @@ import Light.Scene
 import Light.Shapes
 
 theCamera :: CameraBox
-theCamera = cameraBox $ perspectiveCamera (film720 $ gaussianFilter (2, 2) 0.25) (pi/3)
+theCamera = cameraBox $ perspectiveCamera (film (90, 60) $ gaussianFilter (2, 2) 0.25) (pi/3)
 
 union :: UnionShape
 union = unionShape [ shapeBox $ unitSphere      `translate` Vector 0 0 0
@@ -43,4 +47,7 @@ theScene = scene theCamera
                  ]
 
 main :: IO ()
-main = render theScene
+main = do
+  r    <- create
+  film <- sampleFrom r (render theScene)
+  BS.writeFile "out.png" (toPNG film)
